@@ -1,0 +1,9 @@
+pandas
+numpy
+yfinance
+tensorflow
+torch
+pennylane
+streamlit
+plotly
+alpaca-trade-api
