@@ -69,3 +69,7 @@ Thumbs.db
 .pytest_cache/
 .coverage
 htmlcov/
+
+#index
+\=0.2.65
+=*.*.*=0.2.65
