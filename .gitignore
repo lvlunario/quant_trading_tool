@@ -1,5 +1,71 @@
-*.pyc
+# Python
 __pycache__/
-/data/*.csv
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
 venv/
+env/
+ENV/
 trading_env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Data files
+data/raw/*.csv
+data/processed/*.csv
+*.db
+*.sqlite
+
+# API Keys and Secrets
+.env
+secrets.json
+config/api_keys.json
+
+# Logs
+logs/
+*.log
+
+# Model files
+models/saved_models/*.pth
+models/saved_models/*.pkl
+*.joblib
+*.h5
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Pytest
+.pytest_cache/
+.coverage
+htmlcov/
