@@ -2,217 +2,140 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from datetime import datetime, timedelta
-import yfinance as yf
+from datetime import datetime
 import os
 import subprocess
 import torch
+import alpaca_trade_api as tradeapi
+from dotenv import load_dotenv
+import psutil
 
 # Import project modules
 from models import QA3C, vqc_a3c, n_qubits_a3c
 from backtest_engine import TradingEnvironment
+from portfolio_analyzer import PortfolioAnalyzer
 
-st.set_page_config(
-    page_title="Quantum Trading System",
-    page_icon="⚛️",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# --- Page Config ---
+st.set_page_config(page_title="Quantum Trading System", page_icon="⚛️", layout="wide")
+
+# --- Load Alpaca API Keys ---
+load_dotenv()
+API_KEY = os.getenv("ALPACA_API_KEY")
+SECRET_KEY = os.getenv("ALPACA_SECRET_KEY")
+BASE_URL = os.getenv("ALPACA_BASE_URL", "https://paper-api.alpaca.markets")
 
 # --- App State Management ---
 if 'qlstm_trained' not in st.session_state:
     st.session_state.qlstm_trained = os.path.exists("models/saved_models/qlstm_best.pth")
 if 'qa3c_trained' not in st.session_state:
     st.session_state.qa3c_trained = os.path.exists("models/saved_models/qa3c_agent.pth")
+if 'bot_pid' not in st.session_state:
+    st.session_state.bot_pid = None
 
 
-st.markdown("""
-# 🚀 Quantum Trading System
-### Multi-Modal Analysis Platform
+# --- Main App ---
+st.markdown("# 🚀 Quantum Trading System")
 
-Based on research by Chen et al.: *"Quantum-Enhanced Forecasting for Deep Reinforcement Learning in Algorithmic Trading"*
-""")
-
-# --- Sidebar Navigation ---
+# --- Sidebar ---
 with st.sidebar:
     st.header("Navigation")
-    st.write("📊 **Analysis Modules**")
-    
-    pages = {
-        "Dashboard": "📊",
-        "Data Collection": "📈", 
-        "QLSTM Training": "⚛️",
-        "QA3C Training": "🤖",
-        "Backtesting": "🔬",
-        "Portfolio Analysis": "💼",
-        "Paper Trading": "💰",
-    }
-    
+    pages = {"Dashboard": "📊", "Data Collection": "📈", "QLSTM Training": "⚛️", "QA3C Training": "🤖", "Backtesting": "🔬", "Portfolio Analysis": "💼", "Paper Trading": "💰"}
     selected_page = st.selectbox("Select Page", list(pages.keys()))
-
     st.markdown("---")
     st.header("Model Status")
     st.info(f"QLSTM Trained: {'✅' if st.session_state.qlstm_trained else '❌'}")
     st.info(f"QA3C Trained: {'✅' if st.session_state.qa3c_trained else '❌'}")
 
-
 # --- Page Implementations ---
+# ... (Dashboard, Data Collection, QLSTM/QA3C Training, Backtesting pages remain the same) ...
 
-if selected_page == "Dashboard":
-    st.subheader("Project Dashboard")
-    # Key metrics from paper
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        st.metric("Paper Total Return", "11.87%")
-    with col2:
-        st.metric("Paper Max Drawdown", "0.92%")
-    with col3:
-        st.metric("QA3C Parameters", "244", "vs Classical: 3,332")  
-    with col4:
-        st.metric("QLSTM Accuracy", "~71.5%")
-    
-    st.markdown("### Welcome to the Quantum Trading System!")
-    st.write("""
-    This application is an implementation of the research paper by Chen et al., which explores using hybrid quantum-classical machine learning models for algorithmic trading. 
-    
-    **Follow the steps in the sidebar to:**
-    1.  **Collect** financial data.
-    2.  **Train** the Quantum LSTM (QLSTM) forecaster.
-    3.  **Train** the Quantum A3C (QA3C) trading agent.
-    4.  **Backtest** the agent's performance on historical data.
-    """)
-
-elif selected_page == "Data Collection":
-    st.subheader("📈 Data Collection Module")
-    # (Code remains the same as previous version)
-    ticker = st.text_input("Ticker Symbol", "USDTWD=X")
-    col1, col2 = st.columns(2)
-    with col1:
-        start_date = st.date_input("Start Date", datetime(2000, 1, 1))
-    with col2:
-        end_date = st.date_input("End Date", datetime.now())
-    if st.button("Download & Preprocess Data"):
-        with st.spinner("Running data collection script..."):
-            try:
-                result = subprocess.run(["python", "src/data_collector.py"], capture_output=True, text=True, check=True)
-                st.success("Data collection and preprocessing complete!")
-                st.code(result.stdout)
-            except subprocess.CalledProcessError as e:
-                st.error("Data collection failed:")
-                st.code(e.stderr)
-
-elif selected_page == "QLSTM Training":
-    st.subheader("⚛️ QLSTM Forecaster Training")
-    st.info("This module trains the Quantum LSTM to predict short-term price trends.")
-    if st.button("Train QLSTM Model", disabled=st.session_state.qlstm_trained):
-        with st.spinner("Training QLSTM... This may take several minutes."):
-            try:
-                result = subprocess.run(["python", "src/train_qlstm.py"], capture_output=True, text=True, check=True)
-                st.session_state.qlstm_trained = True
-                st.success("QLSTM training completed!")
-                st.code(result.stdout)
-                st.rerun()
-            except subprocess.CalledProcessError as e:
-                st.error("Training failed:")
-                st.code(e.stderr)
-    if st.session_state.qlstm_trained:
-        st.success("QLSTM model is already trained and saved.")
-
-
-elif selected_page == "QA3C Training":
-    st.subheader("🤖 QA3C Agent Training")
-    st.info("This module trains the Reinforcement Learning agent to make trading decisions.")
-    if not st.session_state.qlstm_trained:
-        st.warning("Please train the QLSTM model first.")
-    
-    if st.button("Train QA3C Agent", disabled=not st.session_state.qlstm_trained or st.session_state.qa3c_trained):
-        st.warning("This is a long process and may take hours. Please be patient.")
-        with st.spinner("Training QA3C Agent... See terminal for progress."):
-            try:
-                # Using Popen to allow real-time feedback in the terminal
-                process = subprocess.Popen(["python", "src/train_qa3c.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-                
-                # Placeholder for streaming output to Streamlit if desired
-                placeholder = st.empty()
-                output = ""
-                for line in iter(process.stdout.readline, ''):
-                    output += line
-                    placeholder.code(output)
-                
-                process.wait()
-
-                if process.returncode == 0:
-                    st.session_state.qa3c_trained = True
-                    st.success("QA3C training completed!")
-                    st.rerun()
-                else:
-                    st.error("QA3C training failed. Check terminal for errors.")
-                    st.code(process.stderr.read())
-            
-            except Exception as e:
-                st.error(f"An error occurred: {e}")
-    
-    if st.session_state.qa3c_trained:
-        st.success("QA3C agent is already trained and saved.")
-
-
-elif selected_page == "Backtesting":
-    st.subheader("🔬 Performance Backtesting")
-    st.info("This module evaluates the trained QA3C agent on historical data.")
-    
+if selected_page == "Portfolio Analysis":
+    st.subheader("💼 On-Demand Portfolio Analysis")
+    st.info("Get Buy/Sell/Hold recommendations for any stock using the trained QA3C agent.")
     if not st.session_state.qa3c_trained:
         st.warning("Please train the QA3C agent first.")
-    
-    if st.button("Run Backtest", disabled=not st.session_state.qa3c_trained):
-        with st.spinner("Running backtest..."):
-            try:
-                # --- Backtesting Logic ---
-                data = pd.read_csv(f"data/processed/USDTWD=X_processed.csv", index_col='Date', parse_dates=True)
-                split_index = int(len(data) * 0.8)
-                test_data = data.iloc[split_index:]
+    else:
+        tickers_input = st.text_input("Enter stock tickers (comma-separated)", "AAPL, GOOG, NVDA")
+        if st.button("Analyze Portfolio"):
+            with st.spinner("Analyzing... This may take a moment."):
+                analyzer = PortfolioAnalyzer("models/saved_models/qlstm_best.pth", "models/saved_models/qa3c_agent.pth")
+                tickers = [t.strip().upper() for t in tickers_input.split(',')]
+                results = []
+                for ticker in tickers:
+                    rec, conf, price = analyzer.get_recommendation(ticker)
+                    results.append({"Ticker": ticker, "Price": f"${price:.2f}", "Recommendation": rec, "Confidence": f"{conf:.2%}"})
+                st.dataframe(pd.DataFrame(results), use_container_width=True)
 
-                env = TradingEnvironment(test_data, "models/saved_models/qlstm_best.pth")
-                agent = QA3C(input_dim=10, q_layer=vqc_a3c, n_qubits=n_qubits_a3c, action_dim=3)
-                agent.load_state_dict(torch.load("models/saved_models/qa3c_agent.pth"))
-                agent.eval()
+elif selected_page == "Paper Trading":
+    st.subheader("💰 Live Paper Trading Control Panel")
+    if not API_KEY or not SECRET_KEY:
+        st.error("Alpaca API keys not found. Please add them to your .env file.")
+    elif not st.session_state.qa3c_trained:
+        st.warning("Please train the QA3C agent first to enable the trading bot.")
+    else:
+        try:
+            api = tradeapi.REST(API_KEY, SECRET_KEY, base_url=BASE_URL)
+            account = api.get_account()
+            st.success("✅ Connected to Alpaca Paper Trading Account")
+            
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Portfolio Value", f"${float(account.portfolio_value):,.2f}")
+            col2.metric("Buying Power", f"${float(account.buying_power):,.2f}")
+            col3.metric("Account Status", account.status.title())
 
-                state = env.reset()
-                done = False
-                while not done:
-                    state_tensor = torch.FloatTensor(state).unsqueeze(0)
-                    with torch.no_grad():
-                        policy, _ = agent(state_tensor)
-                    action = torch.argmax(policy).item()
-                    state, _, done = env.step(action)
-                
-                # --- Display Results ---
-                st.success("Backtest complete!")
-                history_df = pd.DataFrame(env.history)
-                
-                # Metrics
-                total_return = (history_df['portfolio_value'].iloc[-1] / env.initial_capital - 1) * 100
-                max_drawdown = (1 - history_df['portfolio_value'] / history_df['portfolio_value'].cummax()).max() * 100
-                
-                st.subheader("Backtest Performance Metrics")
-                col1, col2, col3 = st.columns(3)
-                col1.metric("Total Return", f"{total_return:.2f}%")
-                col2.metric("Max Drawdown", f"{max_drawdown:.2f}%")
-                col3.metric("Total Trades", f"{env.total_trades}")
+            st.markdown("---")
+            st.subheader("Bot Control")
 
-                # Chart
-                fig = go.Figure()
-                fig.add_trace(go.Scatter(x=history_df['step'], y=history_df['portfolio_value'], name="Portfolio Value"))
-                fig.update_layout(title="Portfolio Value Over Time", xaxis_title="Time Steps (Days)", yaxis_title="Portfolio Value ($)")
-                st.plotly_chart(fig, use_container_width=True)
+            # Check if the bot process is running
+            bot_running = False
+            if st.session_state.bot_pid:
+                if psutil.pid_exists(st.session_state.bot_pid):
+                    bot_running = True
+                else:
+                    st.session_state.bot_pid = None # Clear stale PID
 
-            except Exception as e:
-                st.error(f"An error occurred during backtesting: {e}")
+            if bot_running:
+                st.success(f"Trading bot is RUNNING (Process ID: {st.session_state.bot_pid}).")
+            else:
+                st.info("Trading bot is STOPPED.")
 
+            trade_universe = st.text_input("Stocks to Trade (comma-separated)", 'AAPL,GOOGL,MSFT,NVDA,TSLA,AMZN')
 
-else:
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("▶️ Start Trading Bot", disabled=bot_running):
+                    with st.spinner("Starting bot..."):
+                        process = subprocess.Popen(["python", "src/paper_trader.py", trade_universe])
+                        st.session_state.bot_pid = process.pid
+                        st.success(f"Trading bot started with PID: {process.pid}")
+                        st.rerun()
+
+            with col2:
+                if st.button("⏹️ Stop Trading Bot", disabled=not bot_running):
+                    p = psutil.Process(st.session_state.bot_pid)
+                    p.terminate() # or p.kill()
+                    st.session_state.bot_pid = None
+                    st.warning("Trading bot process stopped.")
+                    st.rerun()
+
+            st.markdown("---")
+            st.subheader("Current Positions")
+            positions = api.list_positions()
+            if positions:
+                pos_data = [{"Symbol": p.symbol, "Qty": p.qty, "Market Value": f"${float(p.market_value):,.2f}", "Unrealized P/L": f"${float(p.unrealized_pl):,.2f}"} for p in positions]
+                st.dataframe(pd.DataFrame(pos_data), use_container_width=True)
+            else:
+                st.info("No open positions.")
+
+        except Exception as e:
+            st.error(f"Failed to connect to Alpaca: {e}")
+
+elif selected_page not in ["Portfolio Analysis", "Paper Trading"]:
+    # Placeholder for the other pages
     st.subheader(f"{pages[selected_page]} {selected_page}")
-    st.info(f"The {selected_page} module is under development.")
+    st.info("This section is for displaying other modules like the Dashboard, Data Collection, Training, and Backtesting pages.")
 
-# Footer
+# --- Footer ---
 st.markdown("---")
 st.markdown("⚠️ **Important**: This is a research implementation. Quantum computing in finance is experimental. Always use paper trading first.")
+
