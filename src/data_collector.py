@@ -1,25 +1,29 @@
 import yfinance as yf
 import pandas as pd
-import numpy as np
 import os
 from datetime import datetime
 from sklearn.preprocessing import MinMaxScaler
 import pickle
 
-# --- Utility to calculate RSI ---
 def calculate_rsi(data, window=14):
     """Calculates the Relative Strength Index (RSI)."""
     delta = data['Close'].diff()
     gain = (delta.where(delta > 0, 0)).rolling(window=window).mean()
     loss = (-delta.where(delta < 0, 0)).rolling(window=window).mean()
-    rs = gain / (loss + 1e-8) # Add epsilon to prevent division by zero
+    rs = gain / (loss + 1e-8)
     rsi = 100 - (100 / (1 + rs))
     return rsi
 
+def calculate_macd(data, fast_period=12, slow_period=26, signal_period=9):
+    """Calculates the Moving Average Convergence Divergence (MACD)."""
+    fast_ema = data['Close'].ewm(span=fast_period, adjust=False).mean()
+    slow_ema = data['Close'].ewm(span=slow_period, adjust=False).mean()
+    macd = fast_ema - slow_ema
+    signal_line = macd.ewm(span=signal_period, adjust=False).mean()
+    return macd, signal_line
+
 class DataCollector:
-    """
-    Refactored data collector that includes professional-grade indicators like RSI.
-    """
+    """Refactored data collector that includes professional-grade indicators like RSI and MACD."""
     def __init__(self, save_path="data"):
         self.save_path = save_path
         self.raw_path = os.path.join(save_path, "raw")
@@ -44,8 +48,7 @@ class DataCollector:
                     stock_data[col] = pd.to_numeric(stock_data[col], errors='coerce')
             stock_data.dropna(subset=['Close'], inplace=True)
             
-            filename = f"{ticker}_{start_date}_to_{end_date}.csv"
-            stock_data.to_csv(os.path.join(self.raw_path, filename))
+            stock_data.to_csv(os.path.join(self.raw_path, f"{ticker}_{start_date}_to_{end_date}.csv"))
             return stock_data
         except Exception as e:
             print(f"Error processing {ticker}: {e}")
@@ -53,24 +56,16 @@ class DataCollector:
     
     def add_technical_indicators(self, data):
         data = data.copy()
-        data['MA5'] = data['Close'].rolling(window=5).mean()
-        data['MA10'] = data['Close'].rolling(window=10).mean()
-        data['MA20'] = data['Close'].rolling(window=20).mean()
-        data['MA60'] = data['Close'].rolling(window=60).mean()
-        data['RSI'] = calculate_rsi(data) # --- NEW: Add RSI ---
+        data['RSI'] = calculate_rsi(data)
+        data['MACD'], data['MACD_Signal'] = calculate_macd(data)
         data['Volatility'] = data['Close'].rolling(window=20).std()
         return data.dropna()
     
     def preprocess_for_models(self, data, ticker):
         processed_data = self.add_technical_indicators(data)
-        future_returns = processed_data['Close'].pct_change(5).shift(-5)
         
-        processed_data['label'] = np.select(
-            [future_returns > 0.012, future_returns < -0.012], [1, 0], default=-1
-        )
-        
-        features_to_scale = ['Open', 'High', 'Low', 'Close', 'MA5', 'MA10', 'RSI', 'Volatility']
-        scaler = MinMaxScaler(feature_range=(-1, 1)) # Scale between -1 and 1 for better NN performance
+        features_to_scale = ['Close', 'RSI', 'MACD', 'MACD_Signal', 'Volatility']
+        scaler = MinMaxScaler(feature_range=(-1, 1))
         processed_data[features_to_scale] = scaler.fit_transform(processed_data[features_to_scale])
         
         processed_data.to_csv(os.path.join(self.processed_path, f"{ticker}_processed.csv"))
