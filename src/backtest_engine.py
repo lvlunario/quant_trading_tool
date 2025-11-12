@@ -66,4 +66,3 @@ class TradingEnvironment:
         next_state = self._get_state() if not done else None
         
         return next_state, reward, done
-

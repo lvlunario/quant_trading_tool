@@ -70,7 +70,8 @@ def run_backtest():
         state, _, done = env.step(action)
     
     portfolio_history = pd.DataFrame(env.history)
-    portfolio_history.index = test_data.index[:len(portfolio_history)]
+    portfolio_history = portfolio_history.iloc[1:]
+    portfolio_history.index = test_data.index
 
     benchmark_start_price = test_data['Close'].iloc[0]
     benchmark_shares = INITIAL_CAPITAL / benchmark_start_price
@@ -99,4 +100,3 @@ def run_backtest():
 
 if __name__ == '__main__':
     run_backtest()
-

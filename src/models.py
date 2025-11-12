@@ -34,4 +34,3 @@ class ActorCritic(nn.Module):
         action_logits = self.actor_head(shared_features)
         value = self.critic_head(shared_features)
         return action_logits, value
-
