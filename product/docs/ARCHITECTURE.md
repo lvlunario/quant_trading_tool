@@ -8,7 +8,7 @@ Modules: profile/consent; account import/reconciliation; security master; provid
 
 Data flow: source adapter → immutable source record → validation/reconciliation → normalized point-in-time dataset → deterministic calculation → research evidence record → private report. A failed validation prevents a complete/recommendation-ready status. Provider unavailability must become a visible gap, not fabricated data.
 
-Current implementation is only `atlas.risk` and a local CLI. Database, API, UI, production audit storage, account adapters and jobs remain planned.
+Current implementation includes `atlas.risk`, a local risk CLI, and the independent `atlas.ingestion` normalized reconciliation interface. See [import contract](IMPORT_CONTRACT.md). Database, API, UI, production audit storage, broker-specific account adapters and jobs remain planned.
 
 ## ADR-002: account access boundary
 

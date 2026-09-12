@@ -7,7 +7,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R01 | Explicit input mode, schema, USD, timezone and freshness | Reject stale/future/naive snapshots, unsupported currencies and assets | IMPLEMENTED |
 | R02 | Long-equity snapshot value/concentration with Decimal | Hand-calculated fixtures and invalid-data rejection pass | IMPLEMENTED |
 | R03 | Standard covered-call/CSP expiry scenario arithmetic | Bankruptcy, upside cap, breakeven, coverage and reserve cases pass | IMPLEMENTED |
-| R04 | Fidelity export importer | Reconcile balances and positions; report all rejected rows; no silent omission | PLANNED |
+| R04 | Fidelity export importer | Reconcile balances and positions; report all rejected rows; no silent omission | PARTIAL: synthetic normalized reconciliation; Fidelity adapter pending |
 | R05 | Customer mandate | Capture goals, horizon, liquidity, account types, tax context, loss tolerance, experience and restrictions | PLANNED |
 | R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PLANNED |
 | R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PLANNED |

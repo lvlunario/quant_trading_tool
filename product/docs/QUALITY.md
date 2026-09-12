@@ -9,7 +9,7 @@
 5. Security: authorization, tenant isolation, export/deletion, secret handling, malicious files, prompt injection and dependency review.
 6. Acceptance: founder runs representative tasks and signs off evidence; no fictional approvals.
 
-Current tests cover R01–R03 only. A passing kernel suite does not establish account reconciliation, production security, investment edge or commercial readiness. Remote CI results must be checked separately from local results.
+Current tests cover R01–R03 and the synthetic normalized reconciliation portion of R04. A passing suite does not establish Fidelity compatibility, complete broker-account reconciliation, production security, investment edge or commercial readiness. Remote CI results must be checked separately from local results.
 
 ## Backtesting protocol
 

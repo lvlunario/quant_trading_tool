@@ -19,6 +19,8 @@ The demo uses invented `DEMO` shares and hypothetical prices. Output includes sn
 
 ## Program manual
 
+The new `atlas.ingestion.reconcile` Python interface validates synthetic normalized rows, produces a per-row outcome ledger, and blocks publication when account totals or positions disagree. See [import contract](docs/IMPORT_CONTRACT.md). It is not yet a Fidelity CSV parser or connected to the CLI.
+
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)
 - [Architecture and data contracts](docs/ARCHITECTURE.md)
