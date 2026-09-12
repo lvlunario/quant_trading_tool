@@ -13,13 +13,14 @@ cd product
 python -m unittest discover -s tests -v
 python -m atlas --demo
 python -m atlas --snapshot /absolute/private/path/snapshot.json
+python -m atlas --reconcile /absolute/private/path/normalized-import.json
 ```
 
 The demo uses invented `DEMO` shares and hypothetical prices. Output includes snapshot concentration and a put downside scenario. No market-data calls, account linking, order placement, or model recommendations exist yet. Keep any real input/output outside the repository, including GitHub issues and CI logs.
 
 ## Program manual
 
-The new `atlas.ingestion.reconcile` Python interface validates synthetic normalized rows, produces a per-row outcome ledger, and blocks publication when account totals or positions disagree. See [import contract](docs/IMPORT_CONTRACT.md). It is not yet a Fidelity CSV parser or connected to the CLI.
+The `atlas.ingestion` interface and `--reconcile` command validate versioned normalized rows, produce a per-row outcome ledger, and block publication when account totals or positions disagree. See [import contract](docs/IMPORT_CONTRACT.md). It is not yet a Fidelity CSV parser.
 
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)

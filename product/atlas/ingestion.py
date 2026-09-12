@@ -5,6 +5,7 @@ prevents publication of accepted positions. No persistence or broker access.
 """
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal, localcontext
 import re
 from typing import Literal
@@ -36,6 +37,18 @@ class Reconciliation:
     errors: tuple[str, ...]
     rows: tuple[ImportRow, ...]
     account_totals: tuple[tuple[str, Decimal], ...]
+
+
+@dataclass(frozen=True)
+class ImportEnvelope:
+    schema_version: int
+    mode: Literal['synthetic', 'user_export']
+    currency: Literal['USD']
+    source_type: Literal['normalized_synthetic', 'normalized_user_export']
+    source_id: str
+    as_of: datetime
+    expected_totals: dict[str, str]
+    rows: tuple[ImportRow, ...]
 
 
 def _money(value: str) -> Decimal:
@@ -111,3 +124,65 @@ def reconcile(rows: list[ImportRow], expected_totals: dict[str, str]) -> Reconci
     return Reconciliation('blocked' if blocked else 'reconciled', tuple(outcomes), tuple(errors),
                           () if blocked else tuple(rows),
                           () if blocked else tuple(sorted(totals.items())))
+
+
+def parse_envelope(payload: dict, *, now=None, max_age=timedelta(days=4)) -> ImportEnvelope:
+    """Parse a versioned normalized JSON envelope without broker assumptions."""
+    now = now or datetime.now(timezone.utc)
+    if not isinstance(payload, dict) or now.tzinfo is None or max_age <= timedelta(0):
+        raise ValueError('invalid_envelope')
+    required = {'schema_version', 'mode', 'currency', 'source_type', 'source_id',
+                'as_of', 'expected_totals', 'rows'}
+    if set(payload) != required or payload.get('schema_version') != 1:
+        raise ValueError('unsupported_schema')
+    mode, source_type = payload.get('mode'), payload.get('source_type')
+    expected_source = {'synthetic': 'normalized_synthetic',
+                       'user_export': 'normalized_user_export'}.get(mode)
+    if expected_source is None or source_type != expected_source:
+        raise ValueError('invalid_mode_source')
+    if payload.get('currency') != 'USD':
+        raise ValueError('unsupported_currency')
+    source_id = payload.get('source_id')
+    if not isinstance(source_id, str) or not re.fullmatch(r'SRC_[A-Z0-9]{8,32}', source_id):
+        raise ValueError('invalid_source_id')
+    try:
+        as_of = datetime.fromisoformat(payload['as_of'])
+    except (KeyError, TypeError, ValueError):
+        raise ValueError('invalid_as_of') from None
+    if as_of.tzinfo is None or as_of > now or now - as_of > max_age:
+        raise ValueError('stale_or_invalid_as_of')
+    raw_rows = payload.get('rows')
+    if not isinstance(raw_rows, list):
+        raise ValueError('invalid_rows')
+    fields = {'account_alias', 'asset_type', 'symbol', 'quantity', 'price', 'market_value'}
+    rows = []
+    for raw in raw_rows:
+        if not isinstance(raw, dict) or set(raw) != fields:
+            rows.append(raw)  # reconcile() records the row as invalid without echoing it
+        else:
+            rows.append(ImportRow(**raw))
+    if not isinstance(payload.get('expected_totals'), dict):
+        raise ValueError('invalid_expected_totals')
+    return ImportEnvelope(1, mode, 'USD', source_type, source_id, as_of,
+                          payload['expected_totals'], tuple(rows))
+
+
+def reconcile_envelope(payload: dict, *, now=None, max_age=timedelta(days=4)):
+    envelope = parse_envelope(payload, now=now, max_age=max_age)
+    result = reconcile(list(envelope.rows), envelope.expected_totals)
+    return {
+        'schema_version': envelope.schema_version,
+        'mode': envelope.mode,
+        'currency': envelope.currency,
+        'source_type': envelope.source_type,
+        'source_id': envelope.source_id,
+        'as_of': envelope.as_of.isoformat(),
+        'status': result.status,
+        'outcomes': [{'row_number': item.row_number, 'status': item.status, 'code': item.code}
+                     for item in result.outcomes],
+        'errors': list(result.errors),
+        'account_totals': {alias: str(value) for alias, value in result.account_totals},
+        'publishable_row_count': len(result.rows),
+        'readiness': ('normalized reconciliation only; not Fidelity-validated'
+                      if result.status == 'reconciled' else 'blocked; do not use for analysis'),
+    }

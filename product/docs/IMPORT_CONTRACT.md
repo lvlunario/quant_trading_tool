@@ -2,6 +2,8 @@
 
 Requirement R04; [tracking issue #2](https://github.com/lvlunario/quant_trading_tool/issues/2). This is the reconciliation boundary a future broker-specific adapter must satisfy, not a claim of Fidelity compatibility.
 
+The JSON envelope is strict and versioned: `schema_version: 1`; `mode` matched to `source_type`; `currency: USD`; opaque `source_id` matching `SRC_` plus 8–32 uppercase letters/digits; timezone-aware `as_of`; independent `expected_totals`; and normalized `rows`. Default freshness is four days. Unknown fields, future/naive/stale timestamps, other currencies and mode/source mismatches fail before reconciliation.
+
 ```python
 from atlas.ingestion import ImportRow, reconcile
 
@@ -22,4 +24,6 @@ Every input row gets a 1-based row number, accepted/rejected status and a safe r
 
 Envelope failures (empty/oversized row list, missing totals, invalid expected aliases/amounts) raise ValueError before row processing. Maximum 10,000 rows. The pure function makes no writes and is deterministic on identical inputs; this is not durable duplicate-import suppression. A transactional persistence layer must eventually own import IDs, hashes and replay rules.
 
-Still pending: Fidelity CSV mapping; file parsing/limits; source hash and timestamps; freshness/currency validation at the import-envelope level; reconciliation rounding policy; real export validation; options and unsettled activity; durable ledger; connection to the risk CLI. Do not use this arithmetic boundary alone to establish a complete or current brokerage portfolio.
+The local `--reconcile` CLI accepts the JSON envelope with a 1 MB file limit and emits metadata, safe row outcomes, totals, count and readiness—but no symbols, quantities or prices. Exit code 0 means reconciled, 3 means safely blocked, and 2 means invalid input. It does not persist data.
+
+Still pending: Fidelity CSV mapping; source hash; reconciliation rounding policy; real export validation; options and unsettled activity; and durable ledger/replay protection. Do not use this arithmetic boundary alone to establish a complete brokerage portfolio.

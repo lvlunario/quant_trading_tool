@@ -28,6 +28,6 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
-September 12 afternoon: typed normalized rows, fail-closed reconciliation and 14 synthetic tests implemented; R04 remains partial. Next implement an explicit import envelope (version, currency, source identity/as-of) and CLI integration, while keeping broker CSV mapping dependent on representative source evidence. Do not treat deterministic in-memory replay as durable import deduplication.
+September 12: typed normalized rows, fail-closed reconciliation, versioned USD/source/as-of envelope and summary-only CLI implemented with synthetic tests; R04 remains partial. Next design a broker adapter interface and source-hash/replay contract, while keeping Fidelity CSV mapping dependent on representative source evidence. Do not treat deterministic in-memory replay as durable import deduplication.
 
 Build a Fidelity export mapping against a redacted representative sample, with totals reconciliation and a row outcome ledger. If the sample is unavailable, complete typed import interfaces and synthetic malformed/duplicate/core-cash fixtures, clearly labeled as not Fidelity-validated. Continue useful work without repeatedly asking for the same approval.

@@ -1,8 +1,9 @@
 from dataclasses import replace
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import unittest
 
-from atlas.ingestion import ImportRow, reconcile
+from atlas.ingestion import ImportRow, parse_envelope, reconcile, reconcile_envelope
 
 
 class IngestionTests(unittest.TestCase):
@@ -84,3 +85,55 @@ class IngestionTests(unittest.TestCase):
         first = reconcile(self.rows, {'ACCT_ALPHA': '100'})
         self.assertEqual(first, reconcile(self.rows, {'ACCT_ALPHA': '100'}))
         self.assertEqual(self.rows, [self.equity, self.cash])
+
+
+class EnvelopeTests(unittest.TestCase):
+    def setUp(self):
+        self.now = datetime(2026, 9, 12, 11, tzinfo=timezone.utc)
+        self.payload = {
+            'schema_version': 1, 'mode': 'synthetic', 'currency': 'USD',
+            'source_type': 'normalized_synthetic', 'source_id': 'SRC_12345678',
+            'as_of': self.now.isoformat(), 'expected_totals': {'ACCT_ALPHA': '100'},
+            'rows': [
+                {'account_alias': 'ACCT_ALPHA', 'asset_type': 'equity', 'symbol': 'DEMO',
+                 'quantity': '2.5', 'price': '10', 'market_value': '25'},
+                {'account_alias': 'ACCT_ALPHA', 'asset_type': 'cash', 'symbol': '',
+                 'quantity': '0', 'price': '0', 'market_value': '75'},
+            ]}
+
+    def test_versioned_envelope_reconciles(self):
+        result = reconcile_envelope(self.payload, now=self.now)
+        self.assertEqual(result['status'], 'reconciled')
+        self.assertEqual(result['publishable_row_count'], 2)
+        self.assertEqual(result['account_totals'], {'ACCT_ALPHA': '100'})
+
+    def test_user_export_mode_requires_matching_source(self):
+        payload = dict(self.payload, mode='user_export', source_type='normalized_user_export')
+        self.assertEqual(parse_envelope(payload, now=self.now).mode, 'user_export')
+        with self.assertRaisesRegex(ValueError, 'invalid_mode_source'):
+            parse_envelope(dict(payload, source_type='normalized_synthetic'), now=self.now)
+
+    def test_strict_schema_currency_and_source_id(self):
+        for update, code in (({'schema_version': 2}, 'unsupported_schema'),
+                             ({'currency': 'PHP'}, 'unsupported_currency'),
+                             ({'source_id': 'account-1234'}, 'invalid_source_id')):
+            with self.subTest(update=update), self.assertRaisesRegex(ValueError, code):
+                parse_envelope(dict(self.payload, **update), now=self.now)
+        extra = dict(self.payload, unexpected='value')
+        with self.assertRaisesRegex(ValueError, 'unsupported_schema'):
+            parse_envelope(extra, now=self.now)
+
+    def test_as_of_must_be_aware_current_and_not_future(self):
+        values = ((self.now - timedelta(days=5)).isoformat(),
+                  (self.now + timedelta(seconds=1)).isoformat(),
+                  self.now.replace(tzinfo=None).isoformat())
+        for value in values:
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'stale_or_invalid_as_of'):
+                parse_envelope(dict(self.payload, as_of=value), now=self.now)
+
+    def test_malformed_row_becomes_safe_blocked_outcome(self):
+        payload = dict(self.payload, rows=[{'sensitive': 'do-not-echo'}])
+        result = reconcile_envelope(payload, now=self.now)
+        self.assertEqual(result['status'], 'blocked')
+        self.assertEqual(result['outcomes'][0]['code'], 'invalid_row')
+        self.assertNotIn('do-not-echo', repr(result))
