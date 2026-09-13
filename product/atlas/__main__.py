@@ -1,0 +1,64 @@
+"""Run Atlas local research and normalized reconciliation commands."""
+import argparse
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+import sys
+from .adapters import NormalizedJsonAdapter
+from .audit import ReplayLedger, source_sha256
+from .ingestion import reconcile_envelope
+from .risk import snapshot_report, standard_option_payoff
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Atlas research kernel; no live trading")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--demo", action="store_true")
+    source.add_argument("--snapshot", type=Path)
+    source.add_argument("--reconcile", type=Path,
+                        help="versioned normalized JSON; not a broker CSV")
+    parser.add_argument("--ledger", type=Path,
+                        help="private local SQLite replay ledger; only with --reconcile")
+    args = parser.parse_args()
+    try:
+        if args.ledger and not args.reconcile:
+            raise ValueError('ledger_requires_reconcile')
+        if args.demo:
+            snapshot = {"schema_version": 1, "mode": "synthetic", "currency": "USD",
+                        "as_of": datetime.now(timezone.utc).isoformat(), "cash": "20000",
+                        "positions": [{"symbol": "DEMO", "asset_type": "equity",
+                                       "quantity": "100", "price": "100"}]}
+            report = {"portfolio": snapshot_report(snapshot), "hypothetical_put": standard_option_payoff(
+                strategy="cash_secured_put", contracts=1, strike="90", premium_per_share="2",
+                terminal_price="60", available_cash="20000", fees="1")}
+        elif args.snapshot:
+            if args.snapshot.stat().st_size > 1_000_000:
+                raise ValueError("Input exceeds 1 MB limit")
+            report = snapshot_report(json.loads(args.snapshot.read_text()))
+        else:
+            if args.reconcile.stat().st_size > 1_000_000:
+                raise ValueError("Input exceeds 1 MB limit")
+            source_bytes = args.reconcile.read_bytes()
+            payload = NormalizedJsonAdapter().normalize(source_bytes)
+            report = reconcile_envelope(payload)
+            report['source_sha256'] = source_sha256(source_bytes)
+            report['replay_status'] = 'not_checked'
+            if args.ledger:
+                ledger_result = ReplayLedger(args.ledger).record(
+                    source_id=report['source_id'], source_hash=report['source_sha256'],
+                    outcome=report['status'])
+                report['replay_status'] = ledger_result.status
+                report['first_seen_at'] = ledger_result.first_seen_at
+                if ledger_result.status == 'exact_replay':
+                    report['publishable_row_count'] = 0
+                    report['readiness'] = 'exact replay; do not publish positions again'
+        print(json.dumps(report, indent=2))
+        if report.get('status') == 'blocked':
+            return 3
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        # Do not echo raw account content or file paths into logs.
+        parser.exit(2, f"Input rejected ({type(error).__name__}); see input contract.\n")
+
+
+if __name__ == "__main__":
+    sys.exit(main() or 0)
