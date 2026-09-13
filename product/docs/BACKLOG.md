@@ -28,6 +28,6 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
-September 13: the normalized-source adapter, source hashing/replay ledger, effective-dated security identity resolver and purpose-specific data-rights gate are implemented with synthetic tests. R04 and R06 remain partial: Fidelity mapping, production persistence, populated primary-source identities and actual license review are pending.
+September 13: the normalized-source adapter, source hashing/replay ledger, effective-dated security identity resolver, purpose-specific data-rights gate and point-in-time observation selector are implemented with synthetic tests. R04, R06 and R15 remain partial: Fidelity mapping, production persistence, populated evidence, actual license review and experiment registry are pending.
 
-Next, add a provenance record that ties a dated observation to security identity, source availability time and transform version without requiring paid data. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.
+Next, combine point-in-time selection with effective identity and data-rights decisions into one research-readiness result. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.

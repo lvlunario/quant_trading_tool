@@ -40,3 +40,5 @@ The repository contains synthetic tests only. It intentionally does not seed NVD
 5. Before customer use, add persistent private storage, controlled updates, four-eyes review, provenance exports, retention and periodic rights revalidation.
 
 Still pending: primary-source population, CUSIP/ISIN/FIGI policy and licensing, corporate-action ingestion, provider selection, qualified legal review, persistence and customer-facing integration.
+
+Observation records reference these stable instrument/provider/dataset IDs but do not bypass either gate; see [point-in-time provenance](PROVENANCE.md).

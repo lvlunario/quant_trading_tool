@@ -26,6 +26,8 @@ The `atlas.ingestion` interface and `--reconcile` command validate versioned nor
 
 The `atlas.reference` contracts resolve effective-dated security identities without treating ticker labels as stable IDs and block dataset use unless current evidence explicitly permits the requested purpose. See [security master and data-rights contract](docs/SECURITY_MASTER.md). No real watchlist records or provider permissions are populated yet.
 
+The `atlas.provenance` contract records when a source revision became available and selects only evidence available at a historical decision time. See [point-in-time provenance](docs/PROVENANCE.md). This is synthetic contract infrastructure, not a populated research dataset or backtest.
+
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)
 - [Architecture and data contracts](docs/ARCHITECTURE.md)

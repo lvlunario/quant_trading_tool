@@ -39,9 +39,11 @@ This is a normalized JSON contract, not a Fidelity CSV parser. `DEMO` is synthet
 
 Planned importer records account alias, instrument stable ID, quantity, price/as-of, market value, cash/core fund semantics, cost basis if present, source file hash, import version and row outcomes. Reconcile both per-account and aggregate totals; avoid counting a core money-market holding and cash twice. The implemented local ledger makes exact normalized-file replays idempotent at the publication boundary and detects source-ID/content conflicts; it is not the planned multi-tenant audit store. Persist raw files only in an approved private store. Handle unsettled transactions, pending activity, corporate actions, short positions and option symbology explicitly.
 
-## Planned research record
+## Research record
 
-Entity ID, effective symbol, provider, document/filing URL, observed_at, available_at, accounting period, vintage, currency, original and normalized values, transform version, confidence/quality flags. Result record contains input hashes, configuration, code commit, metric definitions, output and validation state. Preserve amendments rather than overwriting historical knowledge.
+The implemented `atlas.provenance` contract binds stable instrument/provider/dataset/metric IDs to an as-of date, revision, source and payload hashes, versioned transform, `available_at` and `observed_at`. Historical selection excludes revisions unavailable at the decision time and preserves amendments rather than overwriting historical knowledge. See [point-in-time provenance](PROVENANCE.md).
+
+Still planned: persistent values, currency/units, confidence/quality flags and a result record containing input hashes, configuration, code commit, metric definitions, output and validation state. The combined pipeline must apply security-identity and data-rights gates after point-in-time selection.
 
 ## ADR-003: evidence before complex models
 

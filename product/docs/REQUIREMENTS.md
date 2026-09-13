@@ -18,7 +18,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R12 | Weekly research report | Data as-of, changes, ranked candidates, thesis risks, blocked items, next checks | PLANNED |
 | R13 | Private customer application | Authentication, consent, access isolation, deletion/export and audit logs | PLANNED |
 | R14 | Operations | Idempotent jobs, retries, monitoring, backup/restore and rollback | PLANNED |
-| R15 | Reproducible evidence | Versioned data references, config, code SHA, result checksums and experiment registry | PLANNED |
+| R15 | Reproducible evidence | Versioned data references, config, code SHA, result checksums and experiment registry | PARTIAL: point-in-time observation/source/payload/transform contract; registry pending |
 | R16 | Commercial gate | Counsel, independent security review, licensing and founder acceptance | PLANNED |
 
 ## Research universe
