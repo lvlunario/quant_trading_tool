@@ -8,7 +8,7 @@ Modules: profile/consent; account import/reconciliation; security master; provid
 
 Data flow: source adapter → immutable source record → validation/reconciliation → normalized point-in-time dataset → deterministic calculation → research evidence record → private report. A failed validation prevents a complete/recommendation-ready status. Provider unavailability must become a visible gap, not fabricated data.
 
-Current implementation includes `atlas.risk`, a local risk CLI, and the `atlas.ingestion` versioned envelope/reconciliation interface exposed through `--reconcile`. See [import contract](IMPORT_CONTRACT.md). Database, API, UI, production audit storage, broker-specific account adapters and jobs remain planned.
+Current implementation includes `atlas.risk`, a local risk CLI, the `atlas.ingestion` versioned envelope/reconciliation interface, an explicit source-adapter protocol, and an optional hash-only local SQLite replay ledger exposed through `--reconcile`. See [import contract](IMPORT_CONTRACT.md). Database, API, UI, production audit storage, broker-specific account adapters and jobs remain planned.
 
 ## ADR-002: account access boundary
 
@@ -33,7 +33,7 @@ MyInvestor's exposed catalog is useful for security discovery; it is not a Fidel
 
 This is a normalized JSON contract, not a Fidelity CSV parser. `DEMO` is synthetic. Use decimal strings for money/quantity; no floats, negative balances, short positions, options, FX or duplicate symbols. Dates must be aware, not future and within four days by default; this snapshot threshold is not a live option-quote freshness policy. Never remove unsupported positions to make an incomplete portfolio look complete. A current price is not independently verified by this kernel.
 
-Planned importer records account alias, instrument stable ID, quantity, price/as-of, market value, cash/core fund semantics, cost basis if present, source file hash, import version and row outcomes. Reconcile both per-account and aggregate totals; avoid counting a core money-market holding and cash twice. Duplicate exports must be idempotent. Persist raw files only in an approved private store. Handle unsettled transactions, pending activity, corporate actions, short positions and option symbology explicitly.
+Planned importer records account alias, instrument stable ID, quantity, price/as-of, market value, cash/core fund semantics, cost basis if present, source file hash, import version and row outcomes. Reconcile both per-account and aggregate totals; avoid counting a core money-market holding and cash twice. The implemented local ledger makes exact normalized-file replays idempotent at the publication boundary and detects source-ID/content conflicts; it is not the planned multi-tenant audit store. Persist raw files only in an approved private store. Handle unsettled transactions, pending activity, corporate actions, short positions and option symbology explicitly.
 
 ## Planned research record
 

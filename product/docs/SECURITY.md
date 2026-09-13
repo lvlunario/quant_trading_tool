@@ -20,6 +20,8 @@ The inherited public repository tracks a `.env` file. Its contents were not insp
 
 Production controls above are planned, not implemented by the CLI. Collect only necessary data, use account aliases, encrypt in transit/at rest, define retention and deletion/export, avoid raw portfolio data in telemetry or general AI training, and disclose subprocessors. Obtain appropriate consent before ingestion.
 
+The local import CLI now offers a narrow replay control: SHA-256 of exact source bytes plus an atomic SQLite uniqueness ledger containing no holdings. New ledger files are owner-only and permissive existing files are rejected. This helps prevent identical imports from being published twice; it does not encrypt data, authenticate users, provide tenant isolation, prove file authenticity, or make a hash anonymous. Store the ledger and its output only in a private location. Production requires a managed transactional audit store, key/access management, retention rules, backups and concurrency qualification.
+
 ## Release levels
 
 - G0 Local synthetic research: allowed now; no customers, accounts or trades.
