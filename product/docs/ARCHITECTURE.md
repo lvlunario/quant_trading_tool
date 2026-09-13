@@ -8,7 +8,11 @@ Modules: profile/consent; account import/reconciliation; security master; provid
 
 Data flow: source adapter → immutable source record → validation/reconciliation → normalized point-in-time dataset → deterministic calculation → research evidence record → private report. A failed validation prevents a complete/recommendation-ready status. Provider unavailability must become a visible gap, not fabricated data.
 
-Current implementation includes `atlas.risk`, a local risk CLI, the `atlas.ingestion` versioned envelope/reconciliation interface, an explicit source-adapter protocol, and an optional hash-only local SQLite replay ledger exposed through `--reconcile`. See [import contract](IMPORT_CONTRACT.md). Database, API, UI, production audit storage, broker-specific account adapters and jobs remain planned.
+Current implementation includes `atlas.risk`, a local risk CLI, the `atlas.ingestion` versioned envelope/reconciliation interface, an explicit source-adapter protocol, an optional hash-only local SQLite replay ledger, and `atlas.reference` effective-dated identity/data-rights gates. See the [import contract](IMPORT_CONTRACT.md) and [security-master contract](SECURITY_MASTER.md). Database, API, UI, populated reference data, production audit storage, broker-specific account adapters and jobs remain planned.
+
+## ADR-004: labels do not establish identity or permission
+
+Resolve a security from stable issuer/instrument IDs plus exchange MIC, symbol and effective period. A symbol match is insufficient; missing and overlapping identities block downstream research. Keep display names mutable and sourced. Independently gate each provider dataset by intended use using latest reviewed evidence. Identity resolution does not imply data rights, and data rights do not verify security identity. This separation prevents a valid ticker from laundering unlicensed data—or licensed data from being attached to the wrong security.
 
 ## ADR-002: account access boundary
 

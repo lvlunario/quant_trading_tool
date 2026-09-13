@@ -24,6 +24,8 @@ The demo uses invented `DEMO` shares and hypothetical prices. Output includes sn
 
 The `atlas.ingestion` interface and `--reconcile` command validate versioned normalized rows, produce per-row outcomes, and block publication when account totals or positions disagree. The optional private SQLite ledger records only an opaque source ID, exact-source SHA-256, outcome and first-seen time; it suppresses publication on exact replay. See [import contract](docs/IMPORT_CONTRACT.md). The implemented adapter accepts Atlas-normalized JSON only—it is not a Fidelity CSV parser.
 
+The `atlas.reference` contracts resolve effective-dated security identities without treating ticker labels as stable IDs and block dataset use unless current evidence explicitly permits the requested purpose. See [security master and data-rights contract](docs/SECURITY_MASTER.md). No real watchlist records or provider permissions are populated yet.
+
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)
 - [Architecture and data contracts](docs/ARCHITECTURE.md)

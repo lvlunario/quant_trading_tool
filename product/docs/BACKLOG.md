@@ -28,6 +28,6 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
-September 13: an explicit normalized-source adapter boundary, exact-byte SHA-256 provenance and optional atomic hash-only SQLite replay ledger are implemented with synthetic tests; R04 remains partial. The ledger blocks source identity conflicts and suppresses exact-replay publication, but is local prototype infrastructure rather than production audit storage.
+September 13: the normalized-source adapter, source hashing/replay ledger, effective-dated security identity resolver and purpose-specific data-rights gate are implemented with synthetic tests. R04 and R06 remain partial: Fidelity mapping, production persistence, populated primary-source identities and actual license review are pending.
 
-Next, specify security-master identities and data-rights evidence while Fidelity mapping remains dependent on a redacted representative sample. When the sample is available, map it through the adapter boundary and extend reconciliation for observed cash/core, unsettled and option semantics. Continue useful work without repeatedly asking for the same approval.
+Next, add a provenance record that ties a dated observation to security identity, source availability time and transform version without requiring paid data. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.
