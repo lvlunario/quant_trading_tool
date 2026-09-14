@@ -8,12 +8,18 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: two local Python command-line demos are available, using synthetic data. There is no browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest verified implementation has 77 passing tests; test count measures verification coverage, not product completeness.
+Today: two local Python command-line demos and an offline HTML workflow preview are available, using synthetic data. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 81 passing tests; test count measures verification coverage, not product completeness.
+
+### Try the offline screen preview
+
+On this branch, download [preview/index.html](preview/index.html) using GitHub's **Download raw file** control, then open the downloaded HTML in a desktop browser. Or open `product/preview/index.html` from your local checkout. No server, install or account login is needed. GitHub's file view displays source, not the running preview. The phase-checklist link requires the full checkout or reading the linked manual here on GitHub.
+
+Click the five navigation links, expand the portfolio arithmetic and incomplete-import warning, then compare the three Options Lab outcomes. See [preview review instructions](preview/README.md). The page contains fixed examples, not kernel-connected calculations or editable financial inputs. It saves nothing and makes no network requests. Browser rendering verification is recorded separately in the daily log; structural tests alone do not prove usability.
 
 | Target | Founder experience | Dependency / state |
 |---|---|---|
 | Now | Run portfolio arithmetic and research-input checks locally using the commands below | Implemented; synthetic data only |
-| September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | New near-term UX target; synthetic content, not yet implemented; M0 acceptance remains separate |
+| September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | First offline navigation/disclosure slice implemented September 14; browser QA and founder feedback pending; M0 acceptance remains separate |
 | October 3 | Try a reconciled portfolio-import workflow | Requires representative redacted Fidelity export; browser delivery is not implied by this milestone |
 | October 17 | Review a sourced stock-research workbench and weekly report | Requires verified identities and permitted data; first version may be local/report-based |
 | October 31 | Try documented strategy experiments and option-risk scenarios | Data, benchmark and cost validation required |

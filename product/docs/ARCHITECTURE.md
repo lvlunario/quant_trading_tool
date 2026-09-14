@@ -1,5 +1,9 @@
 # Architecture and decisions
 
+## Offline UX preview boundary — September 14
+
+`product/preview/index.html` is a standalone, fixed synthetic navigation/disclosure prototype for UX-01. It contains no JavaScript, financial input form, backend integration, persistence or remote dependencies; CSP denies network resources and form submission. This is not the planned authenticated UI described below. Fixed worked examples must not be confused with kernel-computed results. Browser/device QA and founder workflow validation are separate from structural unit checks.
+
 ## ADR-001: modular monolith, deterministic core
 
 Proposed architecture: Python calculation/research core, API, relational database, object storage for immutable source snapshots, job worker, and browser UI. Start with a modular monolith to simplify transactions, deployment and debugging. Select and pin framework versions when implementation begins. Do not install the legacy broad dependency list for this product.

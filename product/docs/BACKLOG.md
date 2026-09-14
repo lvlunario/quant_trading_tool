@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 14 afternoon: UX-01 first slice implemented as an offline five-area HTML preview with expandable arithmetic, failure-state and option-risk examples. Structural tests pass; browser/device verification and founder validation remain pending. Next: finish browser QA and collect workflow feedback before kernel-backed editable scenarios. R13 remains planned, not delivered by the preview.
+
 September 14: the normalized-source/replay path, effective-dated identity, use-specific rights, point-in-time observation selection and combined research-input gate are implemented with synthetic tests. R04, R06 and R15 remain partial: Fidelity mapping, production persistence, populated evidence, actual license review, metric registry and experiment registry are pending.
 
 Founder steering, September 14: prioritize a clickable synthetic screen prototype by September 19 and product-oriented briefings showing what can be tried. See product/README.md for screen concepts and the preview timeline. The metric-definition registry covering units, currency, period, null policy and transformation compatibility follows as a backend dependency. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.
