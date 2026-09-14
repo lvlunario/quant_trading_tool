@@ -27,11 +27,11 @@ Availability is distinct from acquisition. A historically available filing may b
 
 ## Required downstream gates
 
-Selection alone is not research readiness. Before use, the pipeline must also confirm:
+`assess_research_input` now combines the first two gates below. It withholds the observation ID and payload hash unless all three of point-in-time selection, effective identity and current use-specific rights pass:
 
-1. the `instrument_id` is effective in the security master for the relevant date;
+1. the selected `instrument_id` is effective in the security master for the observation's as-of date;
 2. current data-rights evidence explicitly permits the intended use;
 3. metric units, currency, null policy and transformation are registered; and
 4. freshness, reconciliation and quality rules appropriate to the metric pass.
 
-Still pending: the combined readiness gate, persistent private evidence storage, provider adapters, sourced records, corporate actions, macro vintages, transformation registry and experiment/result registry.
+Only gates 1–2 are implemented, alongside point-in-time selection. A `ready` result therefore means **contract-eligible**, not accurate, recommendation-ready, commercially licensed or investment-ready. Still pending: metric/quality gates, persistent private evidence storage, provider adapters, sourced records, corporate actions, macro vintages, transformation registry and experiment/result registry.

@@ -14,6 +14,7 @@ def main():
     parser = argparse.ArgumentParser(description="Atlas research kernel; no live trading")
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--demo", action="store_true")
+    source.add_argument("--research-demo", action="store_true")
     source.add_argument("--snapshot", type=Path)
     source.add_argument("--reconcile", type=Path,
                         help="versioned normalized JSON; not a broker CSV")
@@ -23,7 +24,36 @@ def main():
     try:
         if args.ledger and not args.reconcile:
             raise ValueError('ledger_requires_reconcile')
-        if args.demo:
+        if args.research_demo:
+            from datetime import date, timedelta
+            from .provenance import ObservationRecord, assess_research_input
+            from .reference import DataRightsRecord, SecurityRecord
+
+            now = datetime.now(timezone.utc)
+            instrument_id, provider_id, dataset_id = ('INS_123456789ABC', 'PRV_12345678',
+                                                       'DATA_12345678')
+            observation = ObservationRecord(
+                'OBS_123456789ABC', 'SER_123456789ABC', 0, instrument_id,
+                provider_id, dataset_id, 'MET_SYNTHETIC_VALUE', now.date(),
+                now - timedelta(days=2), now - timedelta(days=1),
+                'https://example.test/synthetic/source', 'a' * 64, 'b' * 64,
+                'atlas.synthetic@1.0.0')
+            security = SecurityRecord(
+                instrument_id, 'ISS_123456789ABC', 'Synthetic Issuer',
+                'Synthetic Class A', 'XNAS', 'USD', 'common_stock', 'DEMO',
+                date(2020, 1, 1), None, 'https://example.test/synthetic/security',
+                now - timedelta(days=1))
+            permission = DataRightsRecord(
+                provider_id, dataset_id, 'verified', ('internal_research',),
+                'https://example.test/synthetic/terms', 'c' * 64,
+                now - timedelta(days=2), now + timedelta(days=30))
+            result = assess_research_input(
+                [observation], [security], [permission], series_id=observation.series_id,
+                decision_at=now, use_case='internal_research', now=now)
+            report = {'mode': 'synthetic', 'status': result.status,
+                      'codes': list(result.codes), 'observation_id': result.observation_id,
+                      'readiness': 'contract gates only; no real data or investment conclusion'}
+        elif args.demo:
             snapshot = {"schema_version": 1, "mode": "synthetic", "currency": "USD",
                         "as_of": datetime.now(timezone.utc).isoformat(), "cash": "20000",
                         "positions": [{"symbol": "DEMO", "asset_type": "equity",

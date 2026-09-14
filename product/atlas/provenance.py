@@ -5,6 +5,9 @@ import re
 from typing import Literal
 from urllib.parse import urlsplit
 
+from .reference import (DataRightsRecord, SecurityRecord, UseCase, check_data_rights,
+                        verify_instrument)
+
 
 def _matches(pattern: str, value) -> bool:
     return isinstance(value, str) and re.fullmatch(pattern, value) is not None
@@ -78,6 +81,14 @@ class ObservationSelection:
     payload_sha256: str | None
 
 
+@dataclass(frozen=True)
+class ResearchReadiness:
+    status: Literal['ready', 'blocked']
+    codes: tuple[str, ...]
+    observation_id: str | None
+    payload_sha256: str | None
+
+
 def select_point_in_time(records: list[ObservationRecord], *, series_id: str,
                          decision_at: datetime, now=None) -> ObservationSelection:
     """Select only the latest revision available at a historical decision time."""
@@ -115,3 +126,30 @@ def select_point_in_time(records: list[ObservationRecord], *, series_id: str,
     return ObservationSelection('selected', 'latest_available_revision',
                                 chosen.observation_id, chosen.revision,
                                 chosen.available_at, chosen.payload_sha256)
+
+
+def assess_research_input(observations: list[ObservationRecord],
+                          securities: list[SecurityRecord], rights: list[DataRightsRecord], *,
+                          series_id: str, decision_at: datetime, use_case: UseCase,
+                          now=None) -> ResearchReadiness:
+    """Combine point-in-time, effective-identity and current-rights gates."""
+    now = now or datetime.now(timezone.utc)
+    selection = select_point_in_time(observations, series_id=series_id,
+                                     decision_at=decision_at, now=now)
+    if selection.status != 'selected':
+        return ResearchReadiness('blocked', (f'observation_{selection.code}',), None, None)
+    selected = next(record for record in observations
+                    if record.observation_id == selection.observation_id)
+    identity = verify_instrument(securities, instrument_id=selected.instrument_id,
+                                 on_date=selected.as_of, now=now)
+    permission = check_data_rights(rights, provider_id=selected.provider_id,
+                                   dataset_id=selected.dataset_id, use_case=use_case, at=now)
+    codes = []
+    if identity.status != 'resolved':
+        codes.append(f'identity_{identity.code}')
+    if not permission.allowed:
+        codes.append(f'rights_{permission.code}')
+    if codes:
+        return ResearchReadiness('blocked', tuple(codes), None, None)
+    return ResearchReadiness('ready', ('point_in_time_identity_rights_passed',),
+                             selected.observation_id, selected.payload_sha256)

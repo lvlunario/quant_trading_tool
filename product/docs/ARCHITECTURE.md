@@ -41,9 +41,9 @@ Planned importer records account alias, instrument stable ID, quantity, price/as
 
 ## Research record
 
-The implemented `atlas.provenance` contract binds stable instrument/provider/dataset/metric IDs to an as-of date, revision, source and payload hashes, versioned transform, `available_at` and `observed_at`. Historical selection excludes revisions unavailable at the decision time and preserves amendments rather than overwriting historical knowledge. See [point-in-time provenance](PROVENANCE.md).
+The implemented `atlas.provenance` contract binds stable instrument/provider/dataset/metric IDs to an as-of date, revision, source and payload hashes, versioned transform, `available_at` and `observed_at`. Historical selection excludes revisions unavailable at the decision time and preserves amendments rather than overwriting historical knowledge. Its combined gate releases an observation reference only when point-in-time selection, effective instrument identity and current purpose-specific data rights all pass. See [point-in-time provenance](PROVENANCE.md).
 
-Still planned: persistent values, currency/units, confidence/quality flags and a result record containing input hashes, configuration, code commit, metric definitions, output and validation state. The combined pipeline must apply security-identity and data-rights gates after point-in-time selection.
+Still planned: persistent values, currency/units, confidence/quality flags and a result record containing input hashes, configuration, code commit, metric definitions, output and validation state. Current `ready` means contract-eligible only; metric-quality, source-accuracy and research-validation gates remain separate.
 
 ## ADR-003: evidence before complex models
 

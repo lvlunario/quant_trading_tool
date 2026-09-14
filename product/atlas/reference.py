@@ -82,16 +82,9 @@ class SecurityResolution:
     instrument_id: str | None
 
 
-def resolve_security(records: list[SecurityRecord], *, symbol: str, exchange_mic: str,
-                     on_date: date, now=None) -> SecurityResolution:
-    """Resolve a symbol/MIC/date without guessing across identities."""
-    now = now or datetime.now(timezone.utc)
-    if (not isinstance(records, list) or len(records) > 10000 or
-            not _matches(r'[A-Z][A-Z0-9.-]{0,15}', symbol) or
-            not _matches(r'[A-Z0-9]{4}', exchange_mic) or
-            type(on_date) is not date or not isinstance(now, datetime) or
-            now.tzinfo is None):
-        raise ValueError('invalid_resolution_request')
+def _validate_security_records(records: list[SecurityRecord], now: datetime) -> None:
+    if not isinstance(records, list) or len(records) > 10000:
+        raise ValueError('invalid_security_records')
     if any(not isinstance(record, SecurityRecord) for record in records):
         raise ValueError('invalid_security_record')
     if any(record.observed_at > now for record in records):
@@ -102,6 +95,18 @@ def resolve_security(records: list[SecurityRecord], *, symbol: str, exchange_mic
         stable_identities.setdefault(record.instrument_id, set()).add(identity)
     if any(len(identities) > 1 for identities in stable_identities.values()):
         raise ValueError('instrument_identity_conflict')
+
+
+def resolve_security(records: list[SecurityRecord], *, symbol: str, exchange_mic: str,
+                     on_date: date, now=None) -> SecurityResolution:
+    """Resolve a symbol/MIC/date without guessing across identities."""
+    now = now or datetime.now(timezone.utc)
+    if (not _matches(r'[A-Z][A-Z0-9.-]{0,15}', symbol) or
+            not _matches(r'[A-Z0-9]{4}', exchange_mic) or
+            type(on_date) is not date or not isinstance(now, datetime) or
+            now.tzinfo is None):
+        raise ValueError('invalid_resolution_request')
+    _validate_security_records(records, now)
     candidates = [
         record for record in records
         if record.symbol == symbol and record.exchange_mic == exchange_mic and
@@ -114,6 +119,24 @@ def resolve_security(records: list[SecurityRecord], *, symbol: str, exchange_mic
     if len(identities) > 1:
         return SecurityResolution('ambiguous', 'overlapping_identities', None)
     return SecurityResolution('resolved', 'effective_identity', candidates[0].instrument_id)
+
+
+def verify_instrument(records: list[SecurityRecord], *, instrument_id: str,
+                      on_date: date, now=None) -> SecurityResolution:
+    """Verify that a stable instrument identity is effective on a given date."""
+    now = now or datetime.now(timezone.utc)
+    if (not _matches(r'INS_[A-Z0-9]{12,32}', instrument_id) or
+            type(on_date) is not date or not isinstance(now, datetime) or now.tzinfo is None):
+        raise ValueError('invalid_instrument_request')
+    _validate_security_records(records, now)
+    candidates = [
+        record for record in records
+        if record.instrument_id == instrument_id and record.effective_from <= on_date and
+        (record.effective_to is None or on_date < record.effective_to)
+    ]
+    if not candidates:
+        return SecurityResolution('missing', 'no_effective_instrument', None)
+    return SecurityResolution('resolved', 'effective_instrument', instrument_id)
 
 
 @dataclass(frozen=True)

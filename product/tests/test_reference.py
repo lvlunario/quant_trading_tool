@@ -3,7 +3,7 @@ from datetime import date, datetime, timedelta, timezone
 import unittest
 
 from atlas.reference import (DataRightsRecord, SecurityRecord, check_data_rights,
-                             resolve_security)
+                             resolve_security, verify_instrument)
 
 
 class SecurityMasterTests(unittest.TestCase):
@@ -65,6 +65,15 @@ class SecurityMasterTests(unittest.TestCase):
                         {'effective_to': date(2024, 1, 1)}):
             with self.subTest(changes=changes), self.assertRaises(ValueError):
                 replace(self.record, **changes)
+
+    def test_stable_instrument_effective_date_is_verified(self):
+        resolved = verify_instrument([self.record], instrument_id=self.record.instrument_id,
+                                     on_date=date(2026, 9, 13), now=self.now)
+        missing = verify_instrument([replace(self.record, effective_from=date(2027, 1, 1))],
+                                    instrument_id=self.record.instrument_id,
+                                    on_date=date(2026, 9, 13), now=self.now)
+        self.assertEqual(resolved.status, 'resolved')
+        self.assertEqual(missing.code, 'no_effective_instrument')
 
 
 class DataRightsTests(unittest.TestCase):

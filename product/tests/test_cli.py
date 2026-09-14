@@ -24,6 +24,14 @@ class CliTests(unittest.TestCase):
         self.assertEqual(report['portfolio']['mode'], 'synthetic')
         self.assertEqual(report['hypothetical_put']['expiration_pnl'], '-2801')
 
+    def test_research_demo_runs_combined_synthetic_gate(self):
+        run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['mode'], report['status']), ('synthetic', 'ready'))
+        self.assertIn('no real data', report['readiness'])
+
     def test_invalid_input_rejected_without_content_or_path_leak(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'private-account.json'

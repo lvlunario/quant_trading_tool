@@ -9,7 +9,7 @@
 5. Security: authorization, tenant isolation, export/deletion, secret handling, malicious files, prompt injection and dependency review.
 6. Acceptance: founder runs representative tasks and signs off evidence; no fictional approvals.
 
-Current tests cover R01–R03, the synthetic normalized reconciliation portion of R04, contract-level missing/ambiguous/effective-date/rights decisions for R06, and historical revision selection for R15. A passing suite does not establish Fidelity compatibility, a populated security master, provider permission, source accuracy, complete broker-account reconciliation, production security, investment edge or commercial readiness. Remote CI results must be checked separately from local results.
+Current tests cover R01–R03, the synthetic normalized reconciliation portion of R04, contract-level missing/ambiguous/effective-date/rights decisions for R06, historical revision selection for R15, and the combined research-input gate. A passing suite does not establish Fidelity compatibility, a populated security master, provider permission, source accuracy, complete broker-account reconciliation, production security, investment edge or commercial readiness. Remote CI results must be checked separately from local results.
 
 ## Backtesting protocol
 

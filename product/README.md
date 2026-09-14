@@ -12,6 +12,7 @@ Use Python 3.11 or later. This kernel uses only the standard library; it does no
 cd product
 python -m unittest discover -s tests -v
 python -m atlas --demo
+python -m atlas --research-demo
 python -m atlas --snapshot /absolute/private/path/snapshot.json
 python -m atlas --reconcile /absolute/private/path/normalized-import.json
 python -m atlas --reconcile /absolute/private/path/normalized-import.json \
@@ -28,6 +29,8 @@ The `atlas.reference` contracts resolve effective-dated security identities with
 
 The `atlas.provenance` contract records when a source revision became available and selects only evidence available at a historical decision time. See [point-in-time provenance](docs/PROVENANCE.md). This is synthetic contract infrastructure, not a populated research dataset or backtest.
 
+`--research-demo` runs the combined point-in-time, effective-identity and current-data-rights gate using invented metadata. A `ready` result means those three contract gates passed only; it is not a statement about source accuracy, investment quality or commercial readiness.
+
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)
 - [Architecture and data contracts](docs/ARCHITECTURE.md)
@@ -36,5 +39,6 @@ The `atlas.provenance` contract records when a source revision became available 
 - [Commercial and financing readiness](docs/COMMERCIAL.md)
 - [Backlog and decisions](docs/BACKLOG.md)
 - [Daily evidence logs](docs/daily/)
+- [Iteration review packets](docs/reviews/)
 
 The root `src/` quantum experiment is legacy research and is not imported by Atlas. Its historical validation approach is not accepted performance evidence.
