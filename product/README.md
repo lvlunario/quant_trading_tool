@@ -64,6 +64,7 @@ The `atlas.provenance` contract records when a source revision became available 
 
 `--research-demo` runs the combined point-in-time, effective-identity and current-data-rights gate using invented metadata. A `ready` result means those three contract gates passed only; it is not a statement about source accuracy, investment quality or commercial readiness.
 
+- [Founder phase approval checklist: what to verify, try and sign off](docs/PROGRAM.md#founder-phase-acceptance-checklist)
 - [Program, roles, approvals and deadlines](docs/PROGRAM.md)
 - [Requirements and metric inventory](docs/REQUIREMENTS.md)
 - [Architecture and data contracts](docs/ARCHITECTURE.md)
