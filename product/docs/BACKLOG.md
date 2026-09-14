@@ -6,6 +6,7 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 |---|---|---|---|---|---|
 | SEC-01 | Review inherited tracked .env privately; rotate if needed | P0 | Sep 13 | Founder/security | Review recorded without exposing values |
 | ENG-01 | Foundation CI and CLI error-path tests | P0 | Sep 19 | Engineering/QA | CI on exact commit; tests and demo pass |
+| UX-01 | Clickable synthetic screen prototype for founder feedback | P0 | Sep 19 | Product/application | Navigation and sample workflows usable; no live data implied |
 | DAT-01 | Redacted Fidelity sample and import contract | P0 | Sep 19 | Founder/data | Format and cash/core semantics resolved |
 | DAT-02 | Import/reconciliation implementation | P0 | Oct 3 | Data/QA | All rows accounted; duplicate/unsupported cases explicit |
 | RES-01 | Security master, CRBS identity and provider rights | P0 | Oct 3 | Research/data | Stable IDs and licensed access plan |
@@ -30,4 +31,4 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 September 14: the normalized-source/replay path, effective-dated identity, use-specific rights, point-in-time observation selection and combined research-input gate are implemented with synthetic tests. R04, R06 and R15 remain partial: Fidelity mapping, production persistence, populated evidence, actual license review, metric registry and experiment registry are pending.
 
-Next, implement a metric-definition registry covering units, currency, period, null policy and transformation compatibility. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.
+Founder steering, September 14: prioritize a clickable synthetic screen prototype by September 19 and product-oriented briefings showing what can be tried. See product/README.md for screen concepts and the preview timeline. The metric-definition registry covering units, currency, period, null policy and transformation compatibility follows as a backend dependency. Fidelity mapping remains dependent on a redacted representative sample. Continue useful work without repeatedly asking for the same approval.
