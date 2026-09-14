@@ -2,6 +2,7 @@
 from html.parser import HTMLParser
 from pathlib import Path
 import unittest
+from atlas.preview import synthetic_preview_model
 
 
 class Page(HTMLParser):
@@ -48,3 +49,21 @@ class PreviewTests(unittest.TestCase):
         tags = [tag for tag, _ in self.page.elements]
         self.assertEqual(tags.count('details'), 6)
         self.assertEqual(tags.count('summary'), tags.count('details'))
+
+    def test_displayed_financial_values_match_kernel_contract(self):
+        model = synthetic_preview_model()
+        actual = {attrs['data-kernel']: attrs['data-value']
+                  for _, attrs in self.page.elements if 'data-kernel' in attrs}
+        expected = {
+            'total_value': model['portfolio']['total_value'],
+            'cash': '5000',
+            'largest_equity_weight': model['portfolio']['largest_equity_weight'],
+            **{f'put_pnl_{terminal}': result['expiration_pnl']
+               for terminal, result in model['put_outcomes'].items()},
+        }
+        self.assertEqual(actual, expected)
+
+    def test_preview_model_is_explicitly_fixed_and_synthetic(self):
+        model = synthetic_preview_model()
+        self.assertEqual(model['portfolio']['mode'], 'synthetic')
+        self.assertIn('fixed synthetic', model['model_status'])

@@ -14,7 +14,7 @@ Today: two local Python command-line demos and an offline HTML workflow preview 
 
 On this branch, download [preview/index.html](preview/index.html) using GitHub's **Download raw file** control, then open the downloaded HTML in a desktop browser. Or open `product/preview/index.html` from your local checkout. No server, install or account login is needed. GitHub's file view displays source, not the running preview. The phase-checklist link requires the full checkout or reading the linked manual here on GitHub.
 
-Click the five navigation links, expand the portfolio arithmetic and incomplete-import warning, then compare the three Options Lab outcomes. See [preview review instructions](preview/README.md). The page contains fixed examples, not kernel-connected calculations or editable financial inputs. It saves nothing and makes no network requests. Browser rendering verification is recorded separately in the daily log; structural tests alone do not prove usability.
+Click the five navigation links, expand the portfolio arithmetic and incomplete-import warning, then compare the three Options Lab outcomes. See [preview review instructions](preview/README.md). The page contains fixed, non-editable examples. The checked-in values are regression-tested against `atlas.risk`, but the HTML does not call Python at runtime. It saves nothing and makes no network requests. Browser rendering verification is recorded separately in the daily log; structural and value-contract tests do not prove usability.
 
 | Target | Founder experience | Dependency / state |
 |---|---|---|

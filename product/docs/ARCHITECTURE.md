@@ -2,7 +2,7 @@
 
 ## Offline UX preview boundary — September 14
 
-`product/preview/index.html` is a standalone, fixed synthetic navigation/disclosure prototype for UX-01. It contains no JavaScript, financial input form, backend integration, persistence or remote dependencies; CSP denies network resources and form submission. This is not the planned authenticated UI described below. Fixed worked examples must not be confused with kernel-computed results. Browser/device QA and founder workflow validation are separate from structural unit checks.
+`product/preview/index.html` is a standalone, fixed synthetic navigation/disclosure prototype for UX-01. It contains no JavaScript, financial input form, backend integration, persistence or remote dependencies; CSP denies network resources and form submission. This is not the planned authenticated UI described below. `atlas.preview.synthetic_preview_model` calculates the checked-in values through `atlas.risk`, and a regression test requires the HTML values to agree. The page does not invoke Python at runtime. Browser/device QA and founder workflow validation remain separate from structural and value-contract checks.
 
 ## ADR-001: modular monolith, deterministic core
 

@@ -11,6 +11,8 @@
 
 Current tests cover R01–R03, the synthetic normalized reconciliation portion of R04, contract-level missing/ambiguous/effective-date/rights decisions for R06, historical revision selection for R15, and the combined research-input gate. A passing suite does not establish Fidelity compatibility, a populated security master, provider permission, source accuracy, complete broker-account reconciliation, production security, investment edge or commercial readiness. Remote CI results must be checked separately from local results.
 
+UX-01 preview tests require its displayed portfolio and option values to equal a fixed model calculated by the deterministic risk kernel. They also check document structure and offline boundaries. These checks prevent mockup/math drift; they do not verify browser rendering, accessibility, usability, editable runtime calculations or current data.
+
 ## Backtesting protocol
 
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
