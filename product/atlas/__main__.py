@@ -15,16 +15,26 @@ def main():
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--demo", action="store_true")
     source.add_argument("--research-demo", action="store_true")
+    source.add_argument("--preview-server", action="store_true",
+                        help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
     source.add_argument("--reconcile", type=Path,
                         help="versioned normalized JSON; not a broker CSV")
     parser.add_argument("--ledger", type=Path,
                         help="private local SQLite replay ledger; only with --reconcile")
+    parser.add_argument("--preview-port", type=int,
+                        help="localhost port 1024-65535; only with --preview-server")
     args = parser.parse_args()
     try:
         if args.ledger and not args.reconcile:
             raise ValueError('ledger_requires_reconcile')
-        if args.research_demo:
+        if args.preview_port is not None and not args.preview_server:
+            raise ValueError('preview_port_requires_preview_server')
+        if args.preview_server:
+            from .web_preview import serve_preview
+            serve_preview(args.preview_port if args.preview_port is not None else 8765)
+            return 0
+        elif args.research_demo:
             from datetime import date, timedelta
             from .provenance import ObservationRecord, assess_research_input
             from .reference import DataRightsRecord, SecurityRecord

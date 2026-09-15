@@ -4,6 +4,8 @@
 
 `product/preview/index.html` is a standalone, fixed synthetic navigation/disclosure prototype for UX-01. It contains no JavaScript, financial input form, backend integration, persistence or remote dependencies; CSP denies network resources and form submission. This is not the planned authenticated UI described below. `atlas.preview.synthetic_preview_model` calculates the checked-in values through `atlas.risk`, and a regression test requires the HTML values to agree. The page does not invoke Python at runtime. Browser/device QA and founder workflow validation remain separate from structural and value-contract checks.
 
+`atlas.web_preview` is the first interactive slice: a standard-library HTTP server bound exclusively to `127.0.0.1`. It uses a per-process form token, strict body/field limits, host/path/content-type checks, no-store and restrictive browser headers, no request logging, and no persistence. A form submission calls the existing deterministic `standard_option_payoff`; it cannot access accounts, market data or orders. This temporary founder-feedback adapter is not the future API/authentication architecture and must not be exposed to a network or reused as production security.
+
 ## ADR-001: modular monolith, deterministic core
 
 Proposed architecture: Python calculation/research core, API, relational database, object storage for immutable source snapshots, job worker, and browser UI. Start with a modular monolith to simplify transactions, deployment and debugging. Select and pin framework versions when implementation begins. Do not install the legacy broad dependency list for this product.

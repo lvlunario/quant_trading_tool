@@ -99,3 +99,9 @@ class CliTests(unittest.TestCase):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--demo', '--ledger', 'audit.db'],
                              capture_output=True, text=True)
         self.assertEqual(run.returncode, 2)
+
+    def test_preview_port_requires_preview_server(self):
+        run = subprocess.run([sys.executable, '-m', 'atlas', '--demo',
+                              '--preview-port', '8765'], capture_output=True, text=True)
+        self.assertEqual(run.returncode, 2)
+        self.assertNotIn('8765', run.stderr)

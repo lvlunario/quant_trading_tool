@@ -13,6 +13,8 @@ Current tests cover R01–R03, the synthetic normalized reconciliation portion o
 
 UX-01 preview tests require its displayed portfolio and option values to equal a fixed model calculated by the deterministic risk kernel. They also check document structure and offline boundaries. These checks prevent mockup/math drift; they do not verify browser rendering, accessibility, usability, editable runtime calculations or current data.
 
+The local interactive Options Lab has HTTP integration tests for the full GET → tokenized POST → kernel-result path plus invalid token, collateral, field multiplicity, path and request-size cases. A manual localhost smoke test repeats the default request. These do not replace cross-browser, responsive, keyboard or accessibility testing.
+
 ## Backtesting protocol
 
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
