@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 15 evening: added immutable metric definitions, finite Decimal/unavailable values and same-definition compatibility checks (unit, currency, period, formula and versions). Eight new tests pass. This is not a sourced metric catalog or readiness integration. Next: bind metric values/definitions to point-in-time observation evidence and reporting-period dates; retain browser/device QA as pending.
+
 September 15 afternoon: connected the five-area overview, interactive put form and read-only phase checklist through exact allowlisted local routes. HTTP tests verify round-trip links and rejection of arbitrary file/query paths. UX-01 remains pending browser/device QA and founder feedback. Next bounded backend priority: metric definitions (units, currency, period, null policy and transformation compatibility); do not count blocked visual QA as completed.
 
 September 14 afternoon: UX-01 first slice implemented as an offline five-area HTML preview with expandable arithmetic, failure-state and option-risk examples. Displayed values are now bound to a fixed risk-kernel model by regression tests. Browser/device verification and founder validation remain pending; local and cloud browser routes were unavailable in the current runtime. Next: browser QA in a capable environment and founder feedback, followed by kernel-backed editable scenarios. R13 remains planned, not delivered by the preview.

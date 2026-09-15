@@ -8,7 +8,7 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 93 passing tests; test count measures verification coverage, not product completeness.
+Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 101 passing tests; test count measures verification coverage, not product completeness.
 
 ### Try the offline screen preview
 
@@ -50,7 +50,7 @@ Planned navigation: **Overview · Portfolio · Research · Options Lab · Weekly
 
 The first screen prototype will use clearly labeled synthetic values and let the founder review navigation and workflow before account/data integration. It will not display invented live quotes or simulated results as measured performance.
 
-Product briefings will lead with what the founder can see or try, the next visible deliverable and its date, then tests, risks and decisions. The next implementation priority is the synthetic screen prototype; metric-registry work remains a backend dependency.
+Product briefings lead with what the founder can try, its next visible deliverable/date, tests, risks and decisions. The connected local preview is available; browser/device QA and founder feedback remain pending. The [metric-semantics contract](docs/METRICS.md) is now implemented as a backend dependency; sourced values and research integration remain pending.
 
 ## Run the foundation
 

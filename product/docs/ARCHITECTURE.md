@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 15 metric increment: `atlas.metrics` defines immutable semantic versions and finite Decimal/unavailable values, rejecting incompatible same-definition comparisons. See [metric contract](METRICS.md). Value-to-provenance hash binding and readiness integration remain pending; no formula text is executed.
+
 September 15 navigation increment: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, and `/checklist` for escaped read-only acceptance instructions. It does not serve caller-selected files or directory listings. The downloadable offline page remains standalone; the interactive link is inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
 
 ## Offline UX preview boundary — September 14
