@@ -94,3 +94,25 @@ class WebPreviewTests(unittest.TestCase):
         for port in (0, 80, 65536, "8765", True):
             with self.subTest(port=port), self.assertRaises(ValueError):
                 serve_preview(port)
+
+    def test_overview_links_to_interactive_lab_and_readonly_checklist(self):
+        status, headers, page = self.request("GET", "/overview")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertIn('href="/">Open interactive Options Lab', page)
+        self.assertIn('href="/checklist"', page)
+        self.assertNotIn('<!-- interactive-options-link -->', page)
+        for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
+            self.assertIn(f'id="{section}"', page)
+        _, _, lab = self.request("GET", "/")
+        self.assertIn('href="/overview"', lab)
+
+    def test_checklist_is_readonly_and_arbitrary_files_are_not_served(self):
+        status, _, page = self.request("GET", "/checklist")
+        self.assertEqual(status, 200)
+        self.assertIn('no decisions are saved or approved', page)
+        self.assertIn('M6', page)
+        self.assertNotIn('<form', page)
+        for path in ('/.env', '/../.env', '/docs/PROGRAM.md', '/overview?file=.env'):
+            status, _, _ = self.request("GET", path)
+            self.assertEqual(status, 404)

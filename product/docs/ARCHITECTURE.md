@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 15 navigation increment: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, and `/checklist` for escaped read-only acceptance instructions. It does not serve caller-selected files or directory listings. The downloadable offline page remains standalone; the interactive link is inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
+
 ## Offline UX preview boundary — September 14
 
 `product/preview/index.html` is a standalone, fixed synthetic navigation/disclosure prototype for UX-01. It contains no JavaScript, financial input form, backend integration, persistence or remote dependencies; CSP denies network resources and form submission. This is not the planned authenticated UI described below. `atlas.preview.synthetic_preview_model` calculates the checked-in values through `atlas.risk`, and a regression test requires the HTML values to agree. The page does not invoke Python at runtime. Browser/device QA and founder workflow validation remain separate from structural and value-contract checks.

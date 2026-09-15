@@ -4,11 +4,11 @@ Working name; trademark and domain availability are unverified. Target: a privat
 
 Atlas will connect portfolio exposure, company fundamentals, economic conditions, systematic signals and option scenarios into an explainable weekly research process. Benchmark outperformance is a research hypothesis, never a product guarantee.
 
-## What you can try and when — updated September 14, 2026
+## What you can try and when — updated September 15, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 91 passing tests; test count measures verification coverage, not product completeness.
+Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 93 passing tests; test count measures verification coverage, not product completeness.
 
 ### Try the offline screen preview
 
@@ -23,7 +23,7 @@ cd product
 python -m atlas --preview-server
 ```
 
-Open the displayed `http://127.0.0.1:8765/` address and change strike, premium, expiration price, total fees or available cash. Press **Ctrl+C** in the terminal to stop it. The server binds only to the local computer, stores nothing and calculates one standard cash-secured-put expiration scenario through `atlas.risk`. Use invented inputs only. This is not the authenticated November application and contains no quote, broker, account or order connection.
+Open the displayed `http://127.0.0.1:8765/overview` address. Navigate the five product areas, then select **Open interactive Options Lab** in the Options section. Change strike, premium, expiration price, total fees or available cash, calculate, then use **Return to five-area overview**. Weekly Review links to the read-only founder checklist. Press **Ctrl+C** in the terminal to stop it. The server binds only to the local computer, stores nothing and calculates one standard cash-secured-put expiration scenario through `atlas.risk`. Use invented inputs only. This is not the authenticated November application and contains no quote, broker, account or order connection.
 
 | Target | Founder experience | Dependency / state |
 |---|---|---|

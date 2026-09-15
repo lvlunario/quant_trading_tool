@@ -20,4 +20,6 @@ Not implemented in this fixed page: editable scenarios, runtime kernel integrati
 
 From the `product` directory, run `python -m atlas --preview-server`, then open the displayed localhost address. You may edit the five synthetic cash-secured-put inputs. The Python kernel returns expiration P&L, modeled maximum loss/gain, breakeven and gross collateral. Invalid decimal inputs, insufficient cash and invalid session tokens fail closed. Nothing is saved and the server accepts connections only on `127.0.0.1`. Stop it with Ctrl+C.
 
-This is separate from the fixed five-area page above and changes the previous limitation only for one synthetic put scenario. Current chains, covered-call interaction, accounts, research, persistence, login and orders remain unavailable.
+The local server starts at `/overview`, serving the fixed five-area page with a link from Options Lab to the interactive form at `/`. The form links back to the overview. Weekly Review opens the phase checklist at `/checklist`, displayed as read-only text with no approval form. Only these exact routes are served; this is not a general file server. Current chains, covered-call interaction, accounts, research, persistence, login and orders remain unavailable.
+
+For founder validation: navigate to Options Lab, calculate a synthetic scenario, return to Portfolio, then open the checklist from Weekly Review. Expected: working round-trip links and no saved decisions. HTTP route/content tests pass; visual, keyboard and phone-browser behavior still require device QA.

@@ -10,6 +10,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from secrets import token_urlsafe
 from urllib.parse import parse_qs
 from decimal import Decimal
+from pathlib import Path
 
 from .risk import standard_option_payoff
 
@@ -18,6 +19,26 @@ MAX_BODY_BYTES = 2_048
 FIELDS = ("strike", "premium_per_share", "terminal_price", "fees", "available_cash")
 DEFAULTS = {"strike": "50", "premium_per_share": "2", "terminal_price": "48",
             "fees": "0", "available_cash": "5000"}
+
+
+def render_overview():
+    """Serve only the fixed synthetic page, never a caller-selected file."""
+    page = (Path(__file__).resolve().parents[1] / "preview/index.html").read_text()
+    return page.replace("<!-- interactive-options-link -->",
+                        '<p><a href="/">Open interactive Options Lab →</a></p>').replace(
+        '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
+
+
+def render_checklist():
+    manual = (Path(__file__).resolve().parents[1] / "docs/PROGRAM.md").read_text()
+    checklist = manual.split("## Founder phase acceptance checklist", 1)[1]
+    return ('<!doctype html><html lang="en"><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>Atlas founder checklist</title><style>body{font:16px/1.5 system-ui;'
+            'max-width:900px;margin:auto;padding:24px}pre{white-space:pre-wrap}</style>'
+            '<a href="/overview">Return to synthetic overview</a>'
+            '<h1>Founder phase acceptance checklist</h1><p>Read-only manual; '
+            'no decisions are saved or approved here.</p><pre>' + escape(checklist) + '</pre></html>')
 
 
 def _money(value):
@@ -60,7 +81,7 @@ def render_page(*, token, values=None, result=None, error=None):
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Options Lab · Synthetic</title>
 <style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}*{{box-sizing:border-box}}body{{margin:0}}header{{background:#112e40;color:#fff;padding:24px}}main{{max-width:760px;margin:auto;padding:24px}}form,.result,.notice,.error{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:22px;margin:18px 0}}label{{display:block;font-weight:650;margin-top:12px}}input{{width:100%;font:inherit;padding:10px;border:1px solid #708b98;border-radius:6px}}button{{margin-top:20px;background:#076278;color:#fff;border:0;border-radius:7px;padding:12px 18px;font:inherit;font-weight:700}}dt{{color:#526d79}}dd{{font-size:1.3rem;font-weight:700;margin:0 0 10px}}.banner{{background:#fff0c4;color:#513800;padding:10px 24px}}.error{{border-left:5px solid #a34400}}small{{display:block;color:#526d79;margin-top:16px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
-<body><header><strong>ATLAS</strong><h1>Options Lab</h1><p>Interactive expiration scenario</p></header>
+<body><header><strong>ATLAS</strong><h1>Options Lab</h1><p>Interactive expiration scenario</p><a href="/overview" style="color:white">Return to five-area overview</a></header>
 <div class="banner"><strong>Synthetic inputs only.</strong> Local calculation—not a quote, forecast, recommendation or order.</div>
 <main>{panel}<form method="post" action="/calculate"><input type="hidden" name="token" value="{escape(token, quote=True)}">
 <label for="strike">Put strike per share ($)</label><input id="strike" name="strike" inputmode="decimal" value="{safe['strike']}" required>
@@ -94,10 +115,15 @@ def make_handler(token):
             return host in {"127.0.0.1", "localhost"}
 
         def do_GET(self):
-            if not self._valid_host() or self.path != "/":
+            if not self._valid_host() or self.path not in {"/", "/overview", "/checklist"}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
-            self._send(200, render_page(token=token))
+            if self.path == "/overview":
+                self._send(200, render_overview())
+            elif self.path == "/checklist":
+                self._send(200, render_checklist())
+            else:
+                self._send(200, render_page(token=token))
 
         def do_POST(self):
             if not self._valid_host() or self.path != "/calculate":
@@ -141,7 +167,7 @@ def serve_preview(port=8765):
     if type(port) is not int or not 1024 <= port <= 65535:
         raise ValueError("Preview port must be between 1024 and 65535")
     server = HTTPServer(("127.0.0.1", port), make_handler(token_urlsafe(32)))
-    print(f"Atlas synthetic preview: http://127.0.0.1:{server.server_port}/")
+    print(f"Atlas synthetic preview: http://127.0.0.1:{server.server_port}/overview")
     print("Press Ctrl+C to stop. No data is saved.")
     try:
         server.serve_forever()
