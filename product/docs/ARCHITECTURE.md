@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 16 afternoon: `assess_metric_input` composes metadata eligibility with selected-observation payload binding and numeric availability; blocked results release no value. Existing metadata-only API remains unchanged. Source accuracy, fiscal-calendar validation and persistence remain pending.
+
 September 16: `atlas.metric_evidence` binds versioned metric definitions/Decimal values and reporting-period dates to canonical payload hashes checked against observation metadata. It detects payload/version/date drift but does not authenticate sources. Automatic readiness integration, persistence and fiscal-period alignment remain pending.
 
 September 15 metric increment: `atlas.metrics` defines immutable semantic versions and finite Decimal/unavailable values, rejecting incompatible same-definition comparisons. See [metric contract](METRICS.md). Value-to-provenance hash binding and readiness integration remain pending; no formula text is executed.

@@ -1,5 +1,11 @@
 # Metric semantics contract — September 15, 2026
 
+## Combined metric gate — September 16 afternoon
+
+`assess_metric_input` first runs the existing point-in-time, security identity and current purpose-specific rights gate, then verifies the supplied payload against the selected observation and requires a numeric value. Blocked results contain codes but no payload or observation ID. Malformed requests raise ValueError. The original metadata-only API retains its meaning.
+
+This connects the binding contract to research eligibility. It does not establish source accuracy, fiscal-calendar correctness, freshness appropriate to every metric, investment merit or provider access. No populated dataset, screen or persisted results are added. Six integration cases cover success, missing dependencies/permission, altered values, bound missing values, revision leakage and invalid payloads.
+
 ## Evidence binding — September 16
 
 `atlas.metric_evidence.MetricPayload` binds a metric value and full definition to explicit inclusive reporting start/end dates. V1 canonical UTF-8 JSON uses sorted keys, compact separators, schema_version=1 and the exact Decimal string (123.40 differs from 123.4). SHA-256 covers all these fields, including missing reason and definition version. It is not a signature, anonymization or proof of source accuracy.

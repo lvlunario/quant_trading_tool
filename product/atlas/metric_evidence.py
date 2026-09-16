@@ -5,7 +5,7 @@ from hashlib import sha256
 import json
 
 from .metrics import MetricValue
-from .provenance import ObservationRecord
+from .provenance import ObservationRecord, assess_research_input
 
 
 @dataclass(frozen=True)
@@ -52,3 +52,32 @@ def verify_metric_binding(payload: MetricPayload, observation: ObservationRecord
         raise ValueError('metric_as_of_mismatch')
     if payload.payload_sha256 != observation.payload_sha256:
         raise ValueError('metric_payload_hash_mismatch')
+
+
+@dataclass(frozen=True)
+class MetricReadiness:
+    status: str
+    codes: tuple[str, ...]
+    observation_id: str | None = None
+    payload: MetricPayload | None = None
+
+
+def assess_metric_input(payload, observations, securities, rights, *,
+                        series_id, decision_at, use_case, now=None) -> MetricReadiness:
+    """Release a numeric payload only after metadata and binding checks pass."""
+    if not isinstance(payload, MetricPayload):
+        raise ValueError('invalid_metric_payload')
+    metadata = assess_research_input(observations, securities, rights,
+        series_id=series_id, decision_at=decision_at, use_case=use_case, now=now)
+    if metadata.status != 'ready':
+        return MetricReadiness('blocked', metadata.codes)
+    selected = next(record for record in observations
+                    if record.observation_id == metadata.observation_id)
+    try:
+        verify_metric_binding(payload, selected)
+    except ValueError as error:
+        return MetricReadiness('blocked', (str(error),))
+    if payload.metric.value is None:
+        return MetricReadiness('blocked', ('metric_unavailable',))
+    return MetricReadiness('ready', ('metadata_binding_numeric_passed',),
+                           selected.observation_id, payload)
