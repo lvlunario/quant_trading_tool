@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 16: `atlas.metric_evidence` binds versioned metric definitions/Decimal values and reporting-period dates to canonical payload hashes checked against observation metadata. It detects payload/version/date drift but does not authenticate sources. Automatic readiness integration, persistence and fiscal-period alignment remain pending.
+
 September 15 metric increment: `atlas.metrics` defines immutable semantic versions and finite Decimal/unavailable values, rejecting incompatible same-definition comparisons. See [metric contract](METRICS.md). Value-to-provenance hash binding and readiness integration remain pending; no formula text is executed.
 
 September 15 navigation increment: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, and `/checklist` for escaped read-only acceptance instructions. It does not serve caller-selected files or directory listings. The downloadable offline page remains standalone; the interactive link is inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.

@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 16 morning: metric payload/hash binding and explicit reporting dates implemented with seven synthetic tests, including revision selection and independent canonical-byte expectations. Next: explicit metric-bearing readiness gate combining payload binding with existing point-in-time/identity/rights controls, without changing the meaning of the existing metadata-only gate. Browser/device QA remains pending.
+
 September 15 evening: added immutable metric definitions, finite Decimal/unavailable values and same-definition compatibility checks (unit, currency, period, formula and versions). Eight new tests pass. This is not a sourced metric catalog or readiness integration. Next: bind metric values/definitions to point-in-time observation evidence and reporting-period dates; retain browser/device QA as pending.
 
 September 15 afternoon: connected the five-area overview, interactive put form and read-only phase checklist through exact allowlisted local routes. HTTP tests verify round-trip links and rejection of arbitrary file/query paths. UX-01 remains pending browser/device QA and founder feedback. Next bounded backend priority: metric definitions (units, currency, period, null policy and transformation compatibility); do not count blocked visual QA as completed.

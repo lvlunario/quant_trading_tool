@@ -1,5 +1,13 @@
 # Metric semantics contract — September 15, 2026
 
+## Evidence binding — September 16
+
+`atlas.metric_evidence.MetricPayload` binds a metric value and full definition to explicit inclusive reporting start/end dates. V1 canonical UTF-8 JSON uses sorted keys, compact separators, schema_version=1 and the exact Decimal string (123.40 differs from 123.4). SHA-256 covers all these fields, including missing reason and definition version. It is not a signature, anonymization or proof of source accuracy.
+
+`verify_metric_binding` rejects differing metric IDs, transformation versions, period-end/as-of dates or payload hashes against an `ObservationRecord`. Original and revised observations retain distinct hashes for point-in-time selection. Missing values can have valid evidence bindings; this does not make them usable numeric operands.
+
+Start must not follow end; instant metrics require one date. Quarter/year/TTM calendar duration, fiscal calendars and comparisons across actual date windows still require reviewed adapters. No persistence, real source population, automated research-readiness integration or new UI is delivered by this increment. This binding verifies claimed payload integrity only; identity, rights, availability and financial semantics remain separate gates.
+
 `atlas.metrics` provides immutable versioned definitions and Decimal values. Definitions include metric ID, definition version, human-readable formula, unit, currency, period, null policy and exact transformation version. It does not execute formula text.
 
 Current units: money, money_per_share, ratio (fraction, not percent) and count. Monetary units require USD; dimensionless/count values require absent currency. Period labels are instant, quarter, annual and ttm. Labels do not prove actual date alignment or correct aggregation. No FX, scale conversion or annualization is performed implicitly.
