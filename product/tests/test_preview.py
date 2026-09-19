@@ -63,6 +63,15 @@ class PreviewTests(unittest.TestCase):
         }
         self.assertEqual(actual, expected)
 
+    def test_research_trace_matches_combined_metric_gate(self):
+        model = synthetic_preview_model()['research_trace']
+        actual = {attrs['data-research']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-research' in attrs}
+        expected = {key: model[key] for key in ('value', 'unit', 'currency',
+                    'period_start', 'period_end', 'available_at',
+                    'transform_version', 'status', 'blocked_example')}
+        self.assertEqual(actual, expected)
+
     def test_preview_model_is_explicitly_fixed_and_synthetic(self):
         model = synthetic_preview_model()
         self.assertEqual(model['portfolio']['mode'], 'synthetic')

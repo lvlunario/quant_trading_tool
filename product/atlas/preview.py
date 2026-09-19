@@ -1,7 +1,11 @@
 """Synthetic, fixed UX-preview model derived from the deterministic risk kernel."""
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
+from .metric_evidence import MetricPayload, assess_metric_input
+from .metrics import MetricDefinition, MetricValue
+from .provenance import ObservationRecord
+from .reference import DataRightsRecord, SecurityRecord
 from .risk import snapshot_report, standard_option_payoff
 
 
@@ -27,5 +31,44 @@ def synthetic_preview_model():
             available_cash="5000")
     if Decimal(outcomes["48"]["expiration_pnl"]) != 0:
         raise AssertionError("Synthetic preview breakeven is inconsistent")
+    metric_definition = MetricDefinition(
+        'MET_REVENUE', '1.0.0', 'Invented reported revenue', 'money', 'USD',
+        'quarter', 'missing', 'synthetic.reported@1.0.0')
+    metric_payload = MetricPayload(
+        MetricValue(metric_definition, Decimal('123.40')),
+        date(2026, 4, 1), date(2026, 6, 30))
+    observation = ObservationRecord(
+        'OBS_DEMO12345678', 'SER_DEMO12345678', 0, 'INS_DEMO12345678',
+        'PRV_DEMO1234', 'DATA_DEMO1234', 'MET_REVENUE', date(2026, 6, 30),
+        datetime(2026, 8, 1, tzinfo=timezone.utc),
+        datetime(2026, 9, 1, tzinfo=timezone.utc),
+        'https://example.test/atlas/synthetic-revenue', 'a' * 64,
+        metric_payload.payload_sha256, 'synthetic.reported@1.0.0')
+    security = SecurityRecord(
+        'INS_DEMO12345678', 'ISS_DEMO12345678', 'Synthetic Issuer',
+        'Synthetic Class A', 'XNAS', 'USD', 'common_stock', 'DEMO',
+        date(2020, 1, 1), None, 'https://example.test/atlas/synthetic-security',
+        PREVIEW_AS_OF - timedelta(days=1))
+    rights = DataRightsRecord(
+        'PRV_DEMO1234', 'DATA_DEMO1234', 'verified', ('internal_research',),
+        'https://example.test/atlas/synthetic-terms', 'b' * 64,
+        PREVIEW_AS_OF - timedelta(days=30), PREVIEW_AS_OF + timedelta(days=30))
+    research = assess_metric_input(
+        metric_payload, [observation], [security], [rights],
+        series_id='SER_DEMO12345678', decision_at=PREVIEW_AS_OF,
+        use_case='internal_research', now=PREVIEW_AS_OF)
+    if research.status != 'ready':
+        raise AssertionError("Synthetic research trace is inconsistent")
     return {"portfolio": portfolio, "put_outcomes": outcomes,
+            "research_trace": {
+                "status": research.status,
+                "value": str(research.payload.metric.value),
+                "unit": research.payload.metric.definition.unit,
+                "currency": research.payload.metric.definition.currency,
+                "period_start": research.payload.period_start.isoformat(),
+                "period_end": research.payload.period_end.isoformat(),
+                "available_at": observation.available_at.isoformat(),
+                "transform_version": observation.transform_version,
+                "blocked_example": "identity_no_effective_instrument",
+            },
             "model_status": "fixed synthetic values calculated by atlas.risk"}
