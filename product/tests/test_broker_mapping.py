@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta, timezone
+from dataclasses import replace
 import unittest
 
-from atlas.broker_mapping import map_synthetic_broker_export
+from atlas.broker_mapping import (MappingProfile, SYNTHETIC_BROKER_PROFILE,
+                                  map_synthetic_broker_export)
 
 
 class SyntheticBrokerMappingTests(unittest.TestCase):
@@ -26,7 +28,43 @@ class SyntheticBrokerMappingTests(unittest.TestCase):
         self.assertEqual(result['status'], 'reconciled')
         self.assertEqual(result['account_totals'], {'ACCT_ALPHA': '100'})
         self.assertEqual(result['input_row_count'], result['mapped_row_count'])
+        self.assertEqual(result['mapping_profile']['rounding_policy'], 'exact')
         self.assertIn('not Fidelity-validated', result['readiness'])
+
+    def test_custom_synthetic_headers_and_row_types_are_profile_driven(self):
+        profile = MappingProfile(
+            'MAP_CUSTOMSYNTH1', 1, 'USD',
+            (('account_key', 'Account'), ('row_type', 'Record Type'),
+             ('ticker', 'Instrument'), ('quantity', 'Units'),
+             ('price', 'Unit Price'), ('market_value', 'Total Value')),
+            (('STOCK', 'equity'), ('AVAILABLE_CASH', 'cash')), 'exact')
+        payload = dict(self.payload, rows=[
+            {'Account': 'ALPHA', 'Record Type': 'STOCK', 'Instrument': 'DEMO',
+             'Units': '2.5', 'Unit Price': '10', 'Total Value': '25'},
+            {'Account': 'ALPHA', 'Record Type': 'AVAILABLE_CASH', 'Instrument': '',
+             'Units': '0', 'Unit Price': '0', 'Total Value': '75'},
+        ])
+        result = map_synthetic_broker_export(payload, profile=profile, now=self.now)
+        self.assertEqual(result['status'], 'reconciled')
+        self.assertEqual(result['mapping_profile']['profile_id'], 'MAP_CUSTOMSYNTH1')
+
+    def test_invalid_or_implicit_profile_semantics_are_rejected(self):
+        duplicate_headers = tuple(
+            (canonical, 'Amount' if canonical in ('quantity', 'price') else source)
+            for canonical, source in SYNTHETIC_BROKER_PROFILE.headers)
+        cases = [
+            replace(SYNTHETIC_BROKER_PROFILE, schema_version=2),
+            replace(SYNTHETIC_BROKER_PROFILE, currency='EUR'),
+            replace(SYNTHETIC_BROKER_PROFILE,
+                    headers=SYNTHETIC_BROKER_PROFILE.headers[:-1]),
+            replace(SYNTHETIC_BROKER_PROFILE, headers=duplicate_headers),
+            replace(SYNTHETIC_BROKER_PROFILE, row_types=(('EQUITY', 'security'),)),
+            replace(SYNTHETIC_BROKER_PROFILE, rounding_policy='nearest_cent'),
+        ]
+        for profile in cases:
+            with self.subTest(profile=profile), self.assertRaisesRegex(
+                    ValueError, 'invalid_mapping_profile'):
+                map_synthetic_broker_export(self.payload, profile=profile, now=self.now)
 
     def test_core_cash_maps_without_ticker(self):
         rows = [dict(self.payload['rows'][0]),
