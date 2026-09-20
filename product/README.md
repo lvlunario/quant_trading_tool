@@ -52,6 +52,8 @@ The first screen prototype will use clearly labeled synthetic values and let the
 
 Product briefings lead with what the founder can try, its next visible deliverable/date, tests, risks and decisions. The connected local preview is available; browser/device QA and founder feedback remain pending. The [metric-semantics contract](docs/METRICS.md) is now implemented as a backend dependency; sourced values and research integration remain pending.
 
+Latest asynchronous review: [September 21 M1 concept and iteration packet](docs/reviews/2026-09-21-M1.md). It presents evidence and recommended decisions; it is not a completed meeting or founder approval.
+
 ## Run the foundation
 
 Use Python 3.11 or later. This kernel uses only the standard library; it does not need the experimental root requirements.
