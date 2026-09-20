@@ -1,0 +1,81 @@
+from datetime import datetime, timedelta, timezone
+import unittest
+
+from atlas.broker_mapping import map_synthetic_broker_export
+
+
+class SyntheticBrokerMappingTests(unittest.TestCase):
+    def setUp(self):
+        self.now = datetime(2026, 9, 20, tzinfo=timezone.utc)
+        self.payload = {
+            'schema_version': 1, 'mode': 'synthetic', 'currency': 'USD',
+            'source_type': 'broker_mapping_synthetic', 'source_id': 'SRC_SYNTHETIC1',
+            'as_of': self.now.isoformat(), 'expected_totals': {'ALPHA': '100'},
+            'rows': [
+                {'account_key': 'ALPHA', 'row_type': 'EQUITY', 'ticker': 'DEMO',
+                 'quantity': '2.5', 'price': '10', 'market_value': '25'},
+                {'account_key': 'ALPHA', 'row_type': 'CASH', 'ticker': 'IGNORED',
+                 'quantity': '0', 'price': '0', 'market_value': '75'},
+            ]}
+
+    def map(self, payload=None):
+        return map_synthetic_broker_export(payload or self.payload, now=self.now)
+
+    def test_equity_and_cash_map_and_reconcile(self):
+        result = self.map()
+        self.assertEqual(result['status'], 'reconciled')
+        self.assertEqual(result['account_totals'], {'ACCT_ALPHA': '100'})
+        self.assertEqual(result['input_row_count'], result['mapped_row_count'])
+        self.assertIn('not Fidelity-validated', result['readiness'])
+
+    def test_core_cash_maps_without_ticker(self):
+        rows = [dict(self.payload['rows'][0]),
+                dict(self.payload['rows'][1], row_type='CORE_CASH')]
+        self.assertEqual(self.map(dict(self.payload, rows=rows))['status'], 'reconciled')
+
+    def test_unsupported_option_is_accounted_and_blocks(self):
+        option = dict(self.payload['rows'][0], row_type='OPTION', ticker='DEMO_OPT')
+        result = self.map(dict(self.payload, rows=self.payload['rows'] + [option]))
+        self.assertEqual(result['input_row_count'], 3)
+        self.assertEqual(result['outcomes'][-1]['code'], 'unsupported_asset')
+        self.assertEqual(result['publishable_row_count'], 0)
+
+    def test_malformed_footer_and_unknown_account_are_not_dropped(self):
+        rows = self.payload['rows'] + [
+            {'footer': 'sensitive-source-text'},
+            dict(self.payload['rows'][0], account_key='UNKNOWN')]
+        result = self.map(dict(self.payload, rows=rows))
+        self.assertEqual(result['mapped_row_count'], 4)
+        self.assertEqual([item['code'] for item in result['outcomes'][-2:]],
+                         ['invalid_row', 'invalid_row'])
+        self.assertNotIn('sensitive-source-text', repr(result))
+
+    def test_duplicate_cash_is_blocked_after_mapping(self):
+        rows = self.payload['rows'] + [dict(self.payload['rows'][1], row_type='CORE_CASH')]
+        result = self.map(dict(self.payload, rows=rows, expected_totals={'ALPHA': '175'}))
+        self.assertEqual(result['status'], 'blocked')
+        self.assertEqual([item['code'] for item in result['outcomes'][-2:]],
+                         ['duplicate_position_or_cash', 'duplicate_position_or_cash'])
+
+    def test_total_mismatch_and_stale_source_block(self):
+        mismatch = self.map(dict(self.payload, expected_totals={'ALPHA': '101'}))
+        self.assertIn('account_total_mismatch', mismatch['errors'])
+        stale = dict(self.payload, as_of=(self.now - timedelta(days=5)).isoformat())
+        with self.assertRaisesRegex(ValueError, 'stale_or_invalid_as_of'):
+            self.map(stale)
+
+    def test_outer_contract_is_strict(self):
+        cases = [dict(self.payload, source_type='fidelity'),
+                 dict(self.payload, mode='user_export'),
+                 dict(self.payload, currency='EUR'),
+                 dict(self.payload, schema_version=2),
+                 dict(self.payload, unexpected=True)]
+        for payload in cases:
+            with self.subTest(payload=payload), self.assertRaises(ValueError):
+                self.map(payload)
+
+    def test_bad_account_key_and_empty_rows_rejected(self):
+        for payload in (dict(self.payload, expected_totals={'1234': '100'}),
+                        dict(self.payload, rows=[])):
+            with self.assertRaises(ValueError):
+                self.map(payload)

@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 20 morning: M1 began with a strict synthetic broker-shaped mapping harness. It converts invented account keys and equity/cash/core-cash rows into the normalized import contract, preserves unsupported or malformed rows as explicit outcomes and reuses fail-closed reconciliation. Eight tests cover success, unsupported options, malformed/footer rows, account coverage, duplicate cash, total mismatch, stale input and strict schemas. This does not establish Fidelity compatibility. Next: expose a safe synthetic command-line/demo path while awaiting the representative privately redacted export.
+
 September 19 evening: Research preview now displays a fixed metric trace produced by the combined eligibility gate, including value, unit/currency, reporting dates, availability time, transformation version and a missing-identity block code. M0 engineering scope is delivered, but milestone acceptance remains pending founder review and browser/device QA. M1 is active next; implement a synthetic broker-format mapping harness while awaiting the private representative export.
 
 September 16 afternoon: combined metric eligibility gate now withholds values until point-in-time/identity/rights, payload binding and numeric availability all pass. Next: expose a synthetic metric trace in the Research preview so founder can inspect dates, units and blocked reasons; browser/device QA remains outstanding. Root README-only main-page update awaits explicit authorization requested in chat.

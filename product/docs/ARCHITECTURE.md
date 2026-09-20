@@ -22,7 +22,7 @@ Modules: profile/consent; account import/reconciliation; security master; provid
 
 Data flow: source adapter → immutable source record → validation/reconciliation → normalized point-in-time dataset → deterministic calculation → research evidence record → private report. A failed validation prevents a complete/recommendation-ready status. Provider unavailability must become a visible gap, not fabricated data.
 
-Current implementation includes `atlas.risk`, a local risk CLI, the `atlas.ingestion` versioned envelope/reconciliation interface, an explicit source-adapter protocol, an optional hash-only local SQLite replay ledger, and `atlas.reference` effective-dated identity/data-rights gates. See the [import contract](IMPORT_CONTRACT.md) and [security-master contract](SECURITY_MASTER.md). Database, API, UI, populated reference data, production audit storage, broker-specific account adapters and jobs remain planned.
+Current implementation includes `atlas.risk`, a local risk CLI, the `atlas.ingestion` versioned envelope/reconciliation interface, an explicit source-adapter protocol, an optional hash-only local SQLite replay ledger, a synthetic broker-shaped mapping harness, and `atlas.reference` effective-dated identity/data-rights gates. The harness guarantees one mapping outcome per invented source row and is intentionally labeled unvalidated for Fidelity. See the [import contract](IMPORT_CONTRACT.md) and [security-master contract](SECURITY_MASTER.md). Database, API, UI, populated reference data, production audit storage, real broker-specific account adapters and jobs remain planned.
 
 ## ADR-004: labels do not establish identity or permission
 

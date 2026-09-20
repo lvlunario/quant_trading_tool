@@ -4,11 +4,11 @@ Working name; trademark and domain availability are unverified. Target: a privat
 
 Atlas will connect portfolio exposure, company fundamentals, economic conditions, systematic signals and option scenarios into an explainable weekly research process. Benchmark outperformance is a research hypothesis, never a product guarantee.
 
-## What you can try and when — updated September 19, 2026
+## What you can try and when — updated September 20, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research now shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 115 passing tests; test count measures verification coverage, not product completeness.
+Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research now shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 also includes a code-level harness that maps an invented broker-shaped export into the normalized reconciliation contract while accounting for every source row. It is not a Fidelity adapter or a new screen. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 123 passing tests; test count measures verification coverage, not product completeness.
 
 ### Try the offline screen preview
 
@@ -71,7 +71,7 @@ The demo uses invented `DEMO` shares and hypothetical prices. Output includes sn
 
 ## Program manual
 
-The `atlas.ingestion` interface and `--reconcile` command validate versioned normalized rows, produce per-row outcomes, and block publication when account totals or positions disagree. The optional private SQLite ledger records only an opaque source ID, exact-source SHA-256, outcome and first-seen time; it suppresses publication on exact replay. See [import contract](docs/IMPORT_CONTRACT.md). The implemented adapter accepts Atlas-normalized JSON only—it is not a Fidelity CSV parser.
+The `atlas.ingestion` interface and `--reconcile` command validate versioned normalized rows, produce per-row outcomes, and block publication when account totals or positions disagree. The optional private SQLite ledger records only an opaque source ID, exact-source SHA-256, outcome and first-seen time; it suppresses publication on exact replay. See [import contract](docs/IMPORT_CONTRACT.md). The implemented command-line adapter accepts Atlas-normalized JSON only. A separate synthetic broker-shaped mapping harness now tests row classification and lossless mapping, but it is not a Fidelity CSV parser.
 
 The `atlas.reference` contracts resolve effective-dated security identities without treating ticker labels as stable IDs and block dataset use unless current evidence explicitly permits the requested purpose. See [security master and data-rights contract](docs/SECURITY_MASTER.md). No real watchlist records or provider permissions are populated yet.
 
