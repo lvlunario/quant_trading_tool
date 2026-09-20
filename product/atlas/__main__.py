@@ -15,6 +15,8 @@ def main():
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--demo", action="store_true")
     source.add_argument("--research-demo", action="store_true")
+    source.add_argument("--broker-demo", action="store_true",
+                        help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -34,6 +36,24 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
+        elif args.broker_demo:
+            from .broker_mapping import map_synthetic_broker_export
+
+            now = datetime.now(timezone.utc)
+            payload = {
+                'schema_version': 1, 'mode': 'synthetic', 'currency': 'USD',
+                'source_type': 'broker_mapping_synthetic',
+                'source_id': 'SRC_BROKERDEMO1', 'as_of': now.isoformat(),
+                'expected_totals': {'ALPHA': '100'},
+                'rows': [
+                    {'account_key': 'ALPHA', 'row_type': 'EQUITY', 'ticker': 'DEMO',
+                     'quantity': '2.5', 'price': '10', 'market_value': '25'},
+                    {'account_key': 'ALPHA', 'row_type': 'CASH', 'ticker': '',
+                     'quantity': '0', 'price': '0', 'market_value': '75'},
+                ],
+            }
+            report = map_synthetic_broker_export(payload, now=now)
+            report['data_notice'] = 'invented values only; no broker file or account access'
         elif args.research_demo:
             from datetime import date, timedelta
             from .provenance import ObservationRecord, assess_research_input

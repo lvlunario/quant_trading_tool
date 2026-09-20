@@ -8,7 +8,7 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: two local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research now shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 also includes a code-level harness that maps an invented broker-shaped export into the normalized reconciliation contract while accounting for every source row. It is not a Fidelity adapter or a new screen. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 123 passing tests; test count measures verification coverage, not product completeness.
+Today: three local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration that turns invented broker-shaped rows into the normalized reconciliation contract while accounting for every source row. It is not a Fidelity adapter or a new screen. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 124 passing tests; test count measures verification coverage, not product completeness.
 
 ### Try the offline screen preview
 
@@ -61,13 +61,14 @@ cd product
 python -m unittest discover -s tests -v
 python -m atlas --demo
 python -m atlas --research-demo
+python -m atlas --broker-demo
 python -m atlas --snapshot /absolute/private/path/snapshot.json
 python -m atlas --reconcile /absolute/private/path/normalized-import.json
 python -m atlas --reconcile /absolute/private/path/normalized-import.json \
   --ledger /absolute/private/path/import-audit.sqlite3
 ```
 
-The demo uses invented `DEMO` shares and hypothetical prices. Output includes snapshot concentration and a put downside scenario. No market-data calls, account linking, order placement, or model recommendations exist yet. Keep any real input/output outside the repository, including GitHub issues and CI logs.
+The demos use invented `DEMO` shares and hypothetical prices. `--broker-demo` runs two invented rows through the mapping and reconciliation path, prints row outcomes and totals without printing the position symbol, and remains explicitly labeled not Fidelity-validated. The other demo output includes snapshot concentration, a put downside scenario and research-contract readiness. No market-data calls, account linking, order placement, or model recommendations exist yet. Keep any real input/output outside the repository, including GitHub issues and CI logs.
 
 ## Program manual
 

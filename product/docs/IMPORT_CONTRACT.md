@@ -34,6 +34,8 @@ Each synthetic row accepts exactly `account_key`, `row_type`, `ticker`, `quantit
 
 Successful output still reports readiness as `not Fidelity-validated`. A representative privately redacted export is required to define real headers, footers, cash/core semantics, rounding and unsupported activity before any Fidelity-specific compatibility claim.
 
+Run `python -m atlas --broker-demo` from `product/` to exercise the successful synthetic mapping path. The command creates two invented rows in memory, performs no file or network access and does not print their symbol or quantities. Its output is suitable for workflow inspection only; it is not evidence from a broker export.
+
 `--ledger /private/path/import-audit.sqlite3` enables an atomic local SQLite replay gate. It stores only source ID, SHA-256, reconciliation outcome and first-seen UTC time, creates a new file with owner-only permissions, and rejects an existing file accessible by group/others. The same ID, digest and outcome is an `exact_replay`; its publishable row count becomes zero. Reusing an ID with different bytes, reusing bytes under another ID, or changing the recorded outcome fails closed. A digest links identical content and is **not anonymization**; ledger and CLI output remain private. Without `--ledger`, replay status is `not_checked` and durable suppression is absent. Consumers may persist rows only when reconciliation succeeds and replay status is `recorded` (or under a separately controlled first-import path).
 
 Still pending: Fidelity CSV mapping; reconciliation rounding policy; real export validation; production audit storage; concurrency/load qualification; options and unsettled activity. Do not use this arithmetic boundary alone to establish a complete brokerage portfolio.

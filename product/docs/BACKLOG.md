@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 20 afternoon: added `--broker-demo`, a no-file/no-network command that runs two invented rows through the synthetic mapping and reconciliation path. The subprocess test verifies reconciliation, lossless row accounting, explicit non-Fidelity readiness and suppression of the position symbol in output. Next: define a versioned mapping-profile contract for headers, row classifications and rounding decisions without claiming a Fidelity profile before the private representative export is reviewed.
+
 September 20 morning: M1 began with a strict synthetic broker-shaped mapping harness. It converts invented account keys and equity/cash/core-cash rows into the normalized import contract, preserves unsupported or malformed rows as explicit outcomes and reuses fail-closed reconciliation. Eight tests cover success, unsupported options, malformed/footer rows, account coverage, duplicate cash, total mismatch, stale input and strict schemas. This does not establish Fidelity compatibility. Next: expose a safe synthetic command-line/demo path while awaiting the representative privately redacted export.
 
 September 19 evening: Research preview now displays a fixed metric trace produced by the combined eligibility gate, including value, unit/currency, reporting dates, availability time, transformation version and a missing-identity block code. M0 engineering scope is delivered, but milestone acceptance remains pending founder review and browser/device QA. M1 is active next; implement a synthetic broker-format mapping harness while awaiting the private representative export.

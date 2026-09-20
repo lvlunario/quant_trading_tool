@@ -15,6 +15,8 @@ UX-01 preview tests require its displayed portfolio and option values to equal a
 
 The local interactive Options Lab has HTTP integration tests for the full GET → tokenized POST → kernel-result path plus invalid token, collateral, field multiplicity, path and request-size cases. A manual localhost smoke test repeats the default request. These do not replace cross-browser, responsive, keyboard or accessibility testing.
 
+The synthetic broker demo has a subprocess-level check that its JSON result reconciles, retains one mapped outcome per input row, states that it is not Fidelity-validated and does not echo the invented position symbol. This verifies CLI wiring and safe summary behavior, not a real broker format.
+
 ## Backtesting protocol
 
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.

@@ -32,6 +32,19 @@ class CliTests(unittest.TestCase):
         self.assertEqual((report['mode'], report['status']), ('synthetic', 'ready'))
         self.assertIn('no real data', report['readiness'])
 
+    def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
+        run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['mode'], report['status']), ('synthetic', 'reconciled'))
+        self.assertEqual(report['mapping_contract'], 'synthetic_broker_v1')
+        self.assertEqual(report['input_row_count'], report['mapped_row_count'])
+        self.assertIn('not Fidelity-validated', report['readiness'])
+        self.assertIn('invented values only', report['data_notice'])
+        for private_field in ('"symbol"', '"ticker"', '"quantity"', '"price"'):
+            self.assertNotIn(private_field, run.stdout)
+
     def test_invalid_input_rejected_without_content_or_path_leak(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / 'private-account.json'
