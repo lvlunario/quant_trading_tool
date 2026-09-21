@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 21 afternoon: added a bounded internal synthetic CSV parser. It enforces UTF-8/1 MB/10,000-record limits, exact profile headers and explicit trailing account-total footers; malformed-width and data-after-footer records become invalid rows that block publication. Five tests cover success, alternate profile headers, header/footer failures, non-omission and size/encoding rejection. It is not yet a CLI file-input path and is not Fidelity-validated. Next: connect a synthetic CSV fixture to a safe CLI command with exact-source hashing and redacted output.
+
 September 20 evening: added an immutable, validated synthetic mapping profile that versions the source header map, row classifications, currency and exact-decimal rounding policy. Alternate invented headers work only through an explicit valid profile; duplicate headers, unknown versions/currencies, unsupported classifications and implicit rounding fail before row mapping. This is profile infrastructure, not a Fidelity profile. Next: add a synthetic delimited-file parser boundary with header/footer accounting and safe diagnostics while awaiting the private representative export.
 
 September 20 afternoon: added `--broker-demo`, a no-file/no-network command that runs two invented rows through the synthetic mapping and reconciliation path. The subprocess test verifies reconciliation, lossless row accounting, explicit non-Fidelity readiness and suppression of the position symbol in output. Next: define a versioned mapping-profile contract for headers, row classifications and rounding decisions without claiming a Fidelity profile before the private representative export is reviewed.

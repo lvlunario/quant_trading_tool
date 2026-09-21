@@ -38,6 +38,12 @@ Successful output still reports readiness as `not Fidelity-validated`. A represe
 
 Run `python -m atlas --broker-demo` from `product/` to exercise the successful synthetic mapping path. The command creates two invented rows in memory, performs no file or network access and does not print their symbol or quantities. Its output is suitable for workflow inspection only; it is not evidence from a broker export.
 
+### Synthetic delimited boundary
+
+`parse_synthetic_delimited` accepts UTF-8 CSV bytes up to 1 MB and at most 10,000 records after the header. The first record must exactly match the selected profile's six source headers in canonical order. Source-reported totals use explicit trailing `ACCOUNT_TOTAL` records (or the profile's declared footer type): account key and market value are required, while ticker, quantity and price must be blank. At least one position and one total footer are required; duplicate/invalid footers, invalid encoding, NUL bytes, malformed CSV and unexpected headers fail closed.
+
+Every non-footer record after the header is accounted for. Wrong-width records and data appearing after footer processing begins become invalid mapped rows, which block publication rather than disappearing. Safe output reports byte and record counts, not raw CSV contents. This parser has only synthetic fixtures and is not exposed by the CLI; it does not establish the header names, footer rules, cash semantics or rounding behavior of a Fidelity export.
+
 `--ledger /private/path/import-audit.sqlite3` enables an atomic local SQLite replay gate. It stores only source ID, SHA-256, reconciliation outcome and first-seen UTC time, creates a new file with owner-only permissions, and rejects an existing file accessible by group/others. The same ID, digest and outcome is an `exact_replay`; its publishable row count becomes zero. Reusing an ID with different bytes, reusing bytes under another ID, or changing the recorded outcome fails closed. A digest links identical content and is **not anonymization**; ledger and CLI output remain private. Without `--ledger`, replay status is `not_checked` and durable suppression is absent. Consumers may persist rows only when reconciliation succeeds and replay status is `recorded` (or under a separately controlled first-import path).
 
 Still pending: Fidelity CSV mapping; reconciliation rounding policy; real export validation; production audit storage; concurrency/load qualification; options and unsettled activity. Do not use this arithmetic boundary alone to establish a complete brokerage portfolio.

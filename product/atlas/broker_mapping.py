@@ -1,6 +1,8 @@
 """Synthetic broker-shaped mapping harness; not a Fidelity adapter."""
+import csv
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+import io
 import re
 
 from .ingestion import reconcile_envelope
@@ -20,6 +22,7 @@ class MappingProfile:
     headers: tuple[tuple[str, str], ...]
     row_types: tuple[tuple[str, str], ...]
     rounding_policy: str
+    account_total_type: str = 'ACCOUNT_TOTAL'
 
 
 SYNTHETIC_BROKER_PROFILE = MappingProfile(
@@ -38,6 +41,8 @@ def _profile_maps(profile: MappingProfile):
             not re.fullmatch(r'MAP_[A-Z0-9]{8,32}', profile.profile_id) or
             profile.schema_version != 1 or profile.currency != 'USD' or
             profile.rounding_policy != 'exact' or
+            not isinstance(profile.account_total_type, str) or
+            re.fullmatch(r'[A-Z][A-Z0-9_]{0,31}', profile.account_total_type) is None or
             not isinstance(profile.headers, tuple) or
             not isinstance(profile.row_types, tuple) or not profile.row_types):
         raise ValueError('invalid_mapping_profile')
@@ -53,6 +58,7 @@ def _profile_maps(profile: MappingProfile):
         raise ValueError('invalid_mapping_profile')
     if (len(source_headers) != len(set(source_headers)) or
             len(row_types) != len(profile.row_types) or
+            profile.account_total_type in row_types or
             any(not isinstance(source, str) or not isinstance(target, str) or
                 re.fullmatch(r'[A-Z][A-Z0-9_]{0,31}', source) is None or
                 target not in _ASSET_TYPES for source, target in row_types.items())):
@@ -137,4 +143,80 @@ def map_synthetic_broker_export(payload: dict, *, profile=SYNTHETIC_BROKER_PROFI
     result['readiness'] = ('synthetic broker mapping reconciled; not Fidelity-validated'
                            if result['status'] == 'reconciled'
                            else 'blocked synthetic mapping; do not use for analysis')
+    return result
+
+
+def parse_synthetic_delimited(source_bytes: bytes, *, source_id: str, as_of: str,
+                              profile=SYNTHETIC_BROKER_PROFILE, now=None,
+                              max_age=timedelta(days=4)) -> dict:
+    """Parse a bounded invented CSV layout and reconcile it through the profile.
+
+    The first record must be the exact profile header. ACCOUNT_TOTAL footer
+    records supply source-reported account totals and must follow all data rows.
+    Malformed/data-after-footer records become invalid mapped rows rather than
+    disappearing. This is deliberately not a Fidelity parser.
+    """
+    headers, _ = _profile_maps(profile)
+    if not isinstance(source_bytes, bytes) or not source_bytes or len(source_bytes) > 1_000_000:
+        raise ValueError('invalid_delimited_source')
+    try:
+        text = source_bytes.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ValueError('invalid_delimited_encoding') from None
+    if '\x00' in text:
+        raise ValueError('invalid_delimited_encoding')
+    try:
+        records = list(csv.reader(io.StringIO(text, newline=''), strict=True))
+    except csv.Error:
+        raise ValueError('invalid_delimited_syntax') from None
+    expected_header = [headers[field] for field in _CANONICAL_FIELDS]
+    if not records or records[0] != expected_header:
+        raise ValueError('unexpected_delimited_header')
+    if len(records) == 1 or len(records) - 1 > 10_000:
+        raise ValueError('invalid_delimited_record_count')
+
+    rows, totals = [], {}
+    footer_started = False
+    footer_count = 0
+    for record in records[1:]:
+        if len(record) != len(expected_header):
+            rows.append({'invalid_delimited_row': True})
+            continue
+        raw = dict(zip(expected_header, record))
+        if raw[headers['row_type']] == profile.account_total_type:
+            footer_started = True
+            footer_count += 1
+            account_key = raw[headers['account_key']]
+            if (not account_key or account_key in totals or raw[headers['ticker']] or
+                    raw[headers['quantity']] or raw[headers['price']] or
+                    not raw[headers['market_value']]):
+                raise ValueError('invalid_account_total_footer')
+            totals[account_key] = raw[headers['market_value']]
+        elif footer_started:
+            rows.append({'invalid_delimited_row': True})
+        else:
+            rows.append(raw)
+    if not totals:
+        raise ValueError('account_total_footer_required')
+    if not rows:
+        raise ValueError('position_rows_required')
+
+    payload = {
+        'schema_version': 1,
+        'mode': 'synthetic',
+        'currency': profile.currency,
+        'source_type': 'broker_mapping_synthetic',
+        'source_id': source_id,
+        'as_of': as_of,
+        'expected_totals': totals,
+        'rows': rows,
+    }
+    result = map_synthetic_broker_export(
+        payload, profile=profile, now=now, max_age=max_age)
+    result['parser_contract'] = 'synthetic_delimited_v1'
+    result['source_byte_count'] = len(source_bytes)
+    result['header_record_count'] = 1
+    result['position_record_count'] = len(rows)
+    result['footer_record_count'] = footer_count
+    result['delimited_record_count'] = len(records)
     return result
