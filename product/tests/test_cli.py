@@ -1,3 +1,4 @@
+import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -44,6 +45,37 @@ class CliTests(unittest.TestCase):
         self.assertIn('invented values only', report['data_notice'])
         for private_field in ('"symbol"', '"ticker"', '"quantity"', '"price"'):
             self.assertNotIn(private_field, run.stdout)
+
+    def test_synthetic_csv_demo_hashes_exact_fixture_and_redacts_positions(self):
+        fixture = Path(__file__).parents[1] / 'fixtures' / 'synthetic-broker.csv'
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--synthetic-csv-demo', str(fixture)],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['mode'], report['status']), ('synthetic', 'reconciled'))
+        self.assertEqual(report['parser_contract'], 'synthetic_delimited_v1')
+        self.assertEqual(report['source_sha256'], hashlib.sha256(fixture.read_bytes()).hexdigest())
+        self.assertIn('runtime timestamp', report['data_notice'])
+        for private_field in ('"symbol"', '"ticker"', '"quantity"', '"price"'):
+            self.assertNotIn(private_field, run.stdout)
+
+    def test_synthetic_csv_demo_blocks_invalid_rows_without_echoing_them(self):
+        source = ('account_key,row_type,ticker,quantity,price,market_value\n'
+                  'ALPHA,CASH,,0,0,75\n'
+                  'PRIVATE-MARKER,EXTRA\n'
+                  'ALPHA,ACCOUNT_TOTAL,,,,75\n')
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'private-export.csv'
+            path.write_text(source)
+            run = subprocess.run(
+                [sys.executable, '-m', 'atlas', '--synthetic-csv-demo', str(path)],
+                capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['status'], 'blocked')
+        self.assertNotIn('PRIVATE-MARKER', run.stdout + run.stderr)
+        self.assertNotIn('private-export', run.stdout + run.stderr)
 
     def test_invalid_input_rejected_without_content_or_path_leak(self):
         with tempfile.TemporaryDirectory() as directory:

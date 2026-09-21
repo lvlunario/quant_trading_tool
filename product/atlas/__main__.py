@@ -17,6 +17,8 @@ def main():
     source.add_argument("--research-demo", action="store_true")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
+    source.add_argument("--synthetic-csv-demo", type=Path,
+                        help="invented synthetic CSV only; not a broker/Fidelity import")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -54,6 +56,21 @@ def main():
             }
             report = map_synthetic_broker_export(payload, now=now)
             report['data_notice'] = 'invented values only; no broker file or account access'
+        elif args.synthetic_csv_demo:
+            from .broker_mapping import parse_synthetic_delimited
+
+            if args.synthetic_csv_demo.stat().st_size > 1_000_000:
+                raise ValueError("Input exceeds 1 MB limit")
+            source_bytes = args.synthetic_csv_demo.read_bytes()
+            digest = source_sha256(source_bytes)
+            now = datetime.now(timezone.utc)
+            report = parse_synthetic_delimited(
+                source_bytes, source_id=f'SRC_{digest[:16].upper()}',
+                as_of=now.isoformat(), now=now)
+            report['source_sha256'] = digest
+            report['data_notice'] = (
+                'invented synthetic fixture only; runtime timestamp; '
+                'no broker file or account access')
         elif args.research_demo:
             from datetime import date, timedelta
             from .provenance import ObservationRecord, assess_research_input
