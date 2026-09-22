@@ -15,7 +15,7 @@ UX-01 preview tests require its displayed portfolio and option values to equal a
 
 The local interactive Options Lab has HTTP integration tests for the full GET → tokenized POST → kernel-result path plus invalid token, collateral, field multiplicity, path and request-size cases. A manual localhost smoke test repeats the default request. These do not replace cross-browser, responsive, keyboard or accessibility testing.
 
-The synthetic broker demo has a subprocess-level check that its JSON result reconciles, retains one mapped outcome per input row, states that it is not Fidelity-validated and does not echo the invented position symbol. The synthetic CSV command is checked against the exact fixture digest and a blocked malformed-row path; both tests assert that position fields, raw marker content and private paths are absent from output. This verifies CLI wiring and safe summary behavior, not a real broker format.
+The synthetic broker demo has a subprocess-level check that its JSON result reconciles, retains one mapped outcome per input row, states that it is not Fidelity-validated and does not echo the invented position symbol. The synthetic CSV command is checked against the exact fixture digest, a blocked malformed-row path and a two-attempt private-ledger workflow that suppresses publication on the second attempt. Tests assert that position fields, raw marker content and private paths are absent from output. This verifies CLI wiring and safe summary behavior, not a real broker format.
 
 ## Backtesting protocol
 

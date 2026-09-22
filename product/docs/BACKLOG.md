@@ -29,6 +29,8 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 
 ## Next concrete increment
 
+September 22 morning: extended the private hash-only replay receipt to the synthetic CSV command. The first attempt records source identity, exact-byte digest, outcome and time; an identical retry returns zero publishable rows. No holdings enter the ledger. Next: define a redacted import receipt schema that separates source, validation, reconciliation and replay decisions for UI/report consumption.
+
 September 21 evening: exposed the bounded parser as `--synthetic-csv-demo` with a checked-in invented fixture, exact-byte SHA-256 provenance, opaque source identity, redacted summary output and exit code 3 for blocked reconciliations. The demo uses its runtime as a synthetic source time and is not Fidelity validation. Next: add a private hash-only replay receipt to the synthetic CSV workflow so retries cannot republish rows.
 
 September 21 afternoon: added a bounded internal synthetic CSV parser. It enforces UTF-8/1 MB/10,000-record limits, exact profile headers and explicit trailing account-total footers; malformed-width and data-after-footer records become invalid rows that block publication. Five tests cover success, alternate profile headers, header/footer failures, non-omission and size/encoding rejection. It is not yet a CLI file-input path and is not Fidelity-validated. Next: connect a synthetic CSV fixture to a safe CLI command with exact-source hashing and redacted output.

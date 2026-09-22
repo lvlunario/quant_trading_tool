@@ -10,6 +10,21 @@ from .ingestion import reconcile_envelope
 from .risk import snapshot_report, standard_option_payoff
 
 
+def _apply_replay_gate(report: dict, source_hash: str, ledger_path: Path | None) -> None:
+    """Attach hash-only replay evidence and suppress rows on an exact retry."""
+    report['source_sha256'] = source_hash
+    report['replay_status'] = 'not_checked'
+    if ledger_path:
+        ledger_result = ReplayLedger(ledger_path).record(
+            source_id=report['source_id'], source_hash=source_hash,
+            outcome=report['status'])
+        report['replay_status'] = ledger_result.status
+        report['first_seen_at'] = ledger_result.first_seen_at
+        if ledger_result.status == 'exact_replay':
+            report['publishable_row_count'] = 0
+            report['readiness'] = 'exact replay; do not publish positions again'
+
+
 def main():
     parser = argparse.ArgumentParser(description="Atlas research kernel; no live trading")
     source = parser.add_mutually_exclusive_group(required=True)
@@ -25,13 +40,13 @@ def main():
     source.add_argument("--reconcile", type=Path,
                         help="versioned normalized JSON; not a broker CSV")
     parser.add_argument("--ledger", type=Path,
-                        help="private local SQLite replay ledger; only with --reconcile")
+                        help="private SQLite replay ledger; with --reconcile or --synthetic-csv-demo")
     parser.add_argument("--preview-port", type=int,
                         help="localhost port 1024-65535; only with --preview-server")
     args = parser.parse_args()
     try:
-        if args.ledger and not args.reconcile:
-            raise ValueError('ledger_requires_reconcile')
+        if args.ledger and not (args.reconcile or args.synthetic_csv_demo):
+            raise ValueError('ledger_requires_import')
         if args.preview_port is not None and not args.preview_server:
             raise ValueError('preview_port_requires_preview_server')
         if args.preview_server:
@@ -67,7 +82,7 @@ def main():
             report = parse_synthetic_delimited(
                 source_bytes, source_id=f'SRC_{digest[:16].upper()}',
                 as_of=now.isoformat(), now=now)
-            report['source_sha256'] = digest
+            _apply_replay_gate(report, digest, args.ledger)
             report['data_notice'] = (
                 'invented synthetic fixture only; runtime timestamp; '
                 'no broker file or account access')
@@ -118,17 +133,7 @@ def main():
             source_bytes = args.reconcile.read_bytes()
             payload = NormalizedJsonAdapter().normalize(source_bytes)
             report = reconcile_envelope(payload)
-            report['source_sha256'] = source_sha256(source_bytes)
-            report['replay_status'] = 'not_checked'
-            if args.ledger:
-                ledger_result = ReplayLedger(args.ledger).record(
-                    source_id=report['source_id'], source_hash=report['source_sha256'],
-                    outcome=report['status'])
-                report['replay_status'] = ledger_result.status
-                report['first_seen_at'] = ledger_result.first_seen_at
-                if ledger_result.status == 'exact_replay':
-                    report['publishable_row_count'] = 0
-                    report['readiness'] = 'exact replay; do not publish positions again'
+            _apply_replay_gate(report, source_sha256(source_bytes), args.ledger)
         print(json.dumps(report, indent=2))
         if report.get('status') == 'blocked':
             return 3

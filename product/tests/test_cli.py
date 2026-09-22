@@ -56,6 +56,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual((report['mode'], report['status']), ('synthetic', 'reconciled'))
         self.assertEqual(report['parser_contract'], 'synthetic_delimited_v1')
         self.assertEqual(report['source_sha256'], hashlib.sha256(fixture.read_bytes()).hexdigest())
+        self.assertEqual(report['replay_status'], 'not_checked')
         self.assertIn('runtime timestamp', report['data_notice'])
         for private_field in ('"symbol"', '"ticker"', '"quantity"', '"price"'):
             self.assertNotIn(private_field, run.stdout)
@@ -76,6 +77,22 @@ class CliTests(unittest.TestCase):
         self.assertEqual(report['status'], 'blocked')
         self.assertNotIn('PRIVATE-MARKER', run.stdout + run.stderr)
         self.assertNotIn('private-export', run.stdout + run.stderr)
+
+    def test_synthetic_csv_ledger_suppresses_exact_replay(self):
+        fixture = Path(__file__).parents[1] / 'fixtures' / 'synthetic-broker.csv'
+        with tempfile.TemporaryDirectory() as directory:
+            ledger = Path(directory) / 'synthetic-receipts.sqlite3'
+            command = [sys.executable, '-m', 'atlas', '--synthetic-csv-demo',
+                       str(fixture), '--ledger', str(ledger)]
+            first = subprocess.run(command, capture_output=True, text=True)
+            replay = subprocess.run(command, capture_output=True, text=True)
+        self.assertEqual(first.returncode, 0)
+        self.assertEqual(json.loads(first.stdout)['replay_status'], 'recorded')
+        self.assertEqual(replay.returncode, 0)
+        report = json.loads(replay.stdout)
+        self.assertEqual(report['replay_status'], 'exact_replay')
+        self.assertEqual(report['publishable_row_count'], 0)
+        self.assertIn('do not publish', report['readiness'])
 
     def test_invalid_input_rejected_without_content_or_path_leak(self):
         with tempfile.TemporaryDirectory() as directory:
