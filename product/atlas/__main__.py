@@ -8,6 +8,7 @@ from .adapters import NormalizedJsonAdapter
 from .audit import ReplayLedger, source_sha256
 from .ingestion import reconcile_envelope
 from .risk import snapshot_report, standard_option_payoff
+from .receipts import import_receipt
 
 
 def _apply_replay_gate(report: dict, source_hash: str, ledger_path: Path | None) -> None:
@@ -23,6 +24,7 @@ def _apply_replay_gate(report: dict, source_hash: str, ledger_path: Path | None)
         if ledger_result.status == 'exact_replay':
             report['publishable_row_count'] = 0
             report['readiness'] = 'exact replay; do not publish positions again'
+    report['receipt'] = import_receipt(report).to_dict()
 
 
 def main():

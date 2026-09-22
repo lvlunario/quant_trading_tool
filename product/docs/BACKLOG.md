@@ -33,6 +33,8 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 22 afternoon: added a versioned minimal receipt to both import CLI paths, with controlled decisions, row counts and no financial/account fields. Inconsistent publication states are rejected. Next: display synthetic receipts on the Portfolio preview and verify browser behavior. Routine decisions follow the September 22 delegation.
+
 September 22 morning: extended the private hash-only replay receipt to the synthetic CSV command. The first attempt records source identity, exact-byte digest, outcome and time; an identical retry returns zero publishable rows. No holdings enter the ledger. Next: define a redacted import receipt schema that separates source, validation, reconciliation and replay decisions for UI/report consumption.
 
 September 21 evening: exposed the bounded parser as `--synthetic-csv-demo` with a checked-in invented fixture, exact-byte SHA-256 provenance, opaque source identity, redacted summary output and exit code 3 for blocked reconciliations. The demo uses its runtime as a synthetic source time and is not Fidelity validation. Next: add a private hash-only replay receipt to the synthetic CSV workflow so retries cannot republish rows.

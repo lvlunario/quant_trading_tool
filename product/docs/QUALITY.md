@@ -36,3 +36,5 @@ Future options gate: current chain with known timestamp; contract identity; posi
 ## Definition of done
 
 Requirement and issue linked; code reviewed; relevant tests pass; invalid-path tests added for financial logic; docs match behavior; actual evidence recorded; no personal data/secrets in diff; migration/rollback considered; PR ready for founder acceptance. Do not add meaningless tests or empty commits to create activity. Freeze nonessential features after November 28.
+
+Import receipt tests verify the exact field allowlist, duplicate/unchecked decisions, blocked-state precedence and rejection of contradictory publication counts. Receipts summarize engine results and do not independently verify source authenticity or financial correctness.
