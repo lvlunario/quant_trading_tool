@@ -1,5 +1,21 @@
 # Program baseline — September 12, 2026
 
+## Delegated project decisions — September 22, 2026
+
+Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
+
+The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.
+
+- Scope: adopt the December 12 private read-only/paper prototype baseline. Keep November 28–December 12 for stabilization and reduce scope before consuming that time.
+- M0: conditionally accept the documented engineering baseline for continued development, based on the recorded 134-test suite and successful CI at c641036d3a983473fa46be499f416b8c0f960a89. Browser/device/accessibility verification and user workflow validation remain open, owned by engineering/product; target browser evidence by October 3. This is not full UX acceptance or a release approval.
+- M1: continue synthetic fixtures, reconciliation, receipts and UI integration immediately. No further permission is needed for this fallback. Real Fidelity compatibility remains unverified until a representative authorized export is available; do not hold unrelated engineering work for that input.
+- Private boundary: select a separate private Atlas repository and private local storage outside source control for future personal data. Keep current public work synthetic-only. This records the destination policy, not a provisioned private repository or authorization to upload account data. Check access, history and secret handling before migration; do not copy the inherited environment file.
+- Data and budget: keep spending at $0. Leave CRBS excluded from analysis until identity is verified. The inherited environment-file review remains an owner dependency and does not block synthetic development.
+- Review workload: engineering owns routine V&V and phase recommendations. Report material exceptions and show usable milestones; stop repeatedly requesting scope, fallback or destination-policy decisions already made here. Preserve the phase checklists as evidence requirements.
+- Existing explicit boundaries remain: no automatic merge, paid purchase, production deployment, outreach or real-money orders. Final prototype release acceptance remains separate.
+
+Next implementation: a redacted import-receipt contract for the Portfolio screen, followed by visible synthetic import status. October 3 Fidelity-specific delivery remains at risk; December 12 remains the target subject to private-access and data prerequisites.
+
 ## Mandate and acceptance
 
 The founder is Program Manager and Director, accountable for scope, spending, customer promises and release acceptance. The AI implementation team prepares designs, code, tests, review packets and recommended decisions. AI workstreams are roles, not employed people, licensed professionals or independent certifications. No hires or vendors have been commissioned.

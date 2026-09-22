@@ -16,14 +16,18 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 | APP-01 | Private UI, access and jobs | P1 | Nov 14 | Application/security | End-to-end and isolation tests |
 | REL-01 | Hardening, restore, UAT and investor demo | P1 | Dec 12 | QA/ops/founder | Documented acceptance |
 
-## Decisions for founder
+## Current delegated decisions
+
+See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--september-22-2026). These supersede earlier pending entries for product scope, synthetic fallback and destination policy. M0 engineering baseline is conditionally accepted for progression; browser and usability evidence remain open. A representative export and private environment-file review remain unavailable inputs, not repeated requests for routine permission.
+
+## Historical decision proposals
 
 | Decision | Recommendation | Status |
 |---|---|---|
-| Product boundary | December read-only/paper prototype; separate real-money gate | Proposed for approval |
-| Code destination | Use isolated product/ branch in existing quant repo; private repo before sensitive commercial work | Provisional; no sensitive data committed |
+| Product boundary | December read-only/paper prototype; separate real-money gate | Adopted under delegated authority, Sep 22 |
+| Code destination | Use isolated product/ branch in existing quant repo; private repo before sensitive commercial work | Separate private destination selected; not provisioned; current public work stays synthetic |
 | Risk objective | Evaluate net total return and drawdown versus agreed benchmark; premium is secondary | Needs customer mandate |
-| Budget | Spend $0 until provider and reviewer quotes are reviewed | Default pending approval |
+| Budget | Spend $0 until provider and reviewer quotes are reviewed | $0 adopted under delegated authority, Sep 22 |
 | Customer input | Redacted Fidelity export, account aliases, all asset rows retained | Requested |
 | Symbol ambiguity | Confirm CRBS issuer; verify SPCX via primary source | Open |
 
