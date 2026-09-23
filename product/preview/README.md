@@ -6,7 +6,7 @@ Open `index.html` locally in a desktop browser. No server, dependencies, login o
 
 1. Click Overview, Portfolio, Research, Options Lab and Weekly Review. Expected: the corresponding section comes into view.
 2. In Portfolio, expand the arithmetic. Expected: $5,000 equity + $5,000 cash = $10,000; concentration 50%.
-3. Expand the incomplete-import warning. Expected: visibly blocked analysis, explicitly labeled as illustrative rather than an actual import result.
+3. Inspect the four import receipt states. Expected: eligible, blocked, duplicate and replay-check-required examples show only row counts and state; no holdings or account details. Expand the incomplete-import warning and confirm it is illustrative rather than an actual import result.
 4. Click DEMO to inspect Research. Expected: an invented $123.40 quarterly metric shows its unit, reporting dates, availability time and transformation. Expand its trace, then read why real research remains blocked and CRBS unresolved.
 5. Expand all three put outcomes. Expected at underlying prices $0 / $48 / $60: expiration P&L −$4,800 / $0 / $200, using the displayed assumptions.
 6. Use keyboard Tab and Enter to navigate, and Enter/Space to toggle disclosures. At phone width verify text remains readable without page-wide horizontal scrolling.
@@ -14,7 +14,7 @@ Open `index.html` locally in a desktop browser. No server, dependencies, login o
 
 Automated Python tests check navigation targets, labels, disclosure structure, absence of scripts/forms/remote links and exact equality between displayed portfolio, option and research-trace values and the fixed kernel models. They do not execute a browser, verify rendering or audit accessibility. Browser QA results and limitations belong in the daily log.
 
-Not implemented in this fixed page: editable scenarios, runtime kernel integration, current data, Fidelity import UI, customer storage, authentication, saved journal, live trade comparisons or orders. All phase decisions remain pending.
+Not implemented in this fixed page: editable scenarios, current data, Fidelity import UI, customer storage, authentication, saved journal, live trade comparisons or orders. Its receipt examples are generated from the backend presentation contract during regression testing, but the HTML does not accept files or run an import. Routine best-practice decisions are delegated; sensitive-data transfer and production-impacting actions still require explicit authorization.
 
 ## Interactive Options Lab slice
 

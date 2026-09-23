@@ -5,11 +5,33 @@ from decimal import Decimal
 from .metric_evidence import MetricPayload, assess_metric_input
 from .metrics import MetricDefinition, MetricValue
 from .provenance import ObservationRecord
+from .receipts import import_receipt
 from .reference import DataRightsRecord, SecurityRecord
 from .risk import snapshot_report, standard_option_payoff
 
 
 PREVIEW_AS_OF = datetime(2026, 9, 12, tzinfo=timezone.utc)
+
+
+def synthetic_import_receipts():
+    """Return redacted receipt examples produced by the real receipt contract."""
+    accepted = [
+        {"row_number": 1, "status": "accepted"},
+        {"row_number": 2, "status": "accepted"},
+    ]
+    reports = (
+        {"mode": "synthetic", "status": "reconciled", "replay_status": "recorded",
+         "outcomes": accepted, "publishable_row_count": 2, "errors": []},
+        {"mode": "synthetic", "status": "blocked", "replay_status": "recorded",
+         "outcomes": [accepted[0], {"row_number": 2, "status": "rejected"}],
+         "publishable_row_count": 0, "errors": ["synthetic_invalid_row"]},
+        {"mode": "synthetic", "status": "reconciled", "replay_status": "exact_replay",
+         "outcomes": accepted, "publishable_row_count": 0, "errors": []},
+        {"mode": "synthetic", "status": "reconciled", "replay_status": "not_checked",
+         "outcomes": accepted, "publishable_row_count": 2, "errors": []},
+    )
+    receipts = [import_receipt(report).to_dict() for report in reports]
+    return {receipt["decision"]: receipt for receipt in receipts}
 
 
 def synthetic_preview_model():
@@ -60,6 +82,7 @@ def synthetic_preview_model():
     if research.status != 'ready':
         raise AssertionError("Synthetic research trace is inconsistent")
     return {"portfolio": portfolio, "put_outcomes": outcomes,
+            "import_receipts": synthetic_import_receipts(),
             "research_trace": {
                 "status": research.status,
                 "value": str(research.payload.metric.value),

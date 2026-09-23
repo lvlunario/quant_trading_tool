@@ -6,19 +6,19 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated September 22, 2026
+## What you can try and when — updated September 23, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: four local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. It is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 138 passing tests; test count measures verification coverage, not product completeness.
+Today: four local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. It is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 139 passing tests; test count measures verification coverage, not product completeness.
 
-The normalized and synthetic CSV commands now include a minimal `receipt` for future Portfolio-screen use: eligible, blocked, duplicate or replay check required. It contains counts and controlled states, with no account aliases, totals or position fields. This increment adds the presentation contract; screen integration follows.
+Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The page still does not accept a file or run an import.
 
 ### Try the offline screen preview
 
 On this branch, download [preview/index.html](preview/index.html) using GitHub's **Download raw file** control, then open the downloaded HTML in a desktop browser. Or open `product/preview/index.html` from your local checkout. No server, install or account login is needed. GitHub's file view displays source, not the running preview. The phase-checklist link requires the full checkout or reading the linked manual here on GitHub.
 
-Click the five navigation links, expand the portfolio arithmetic and incomplete-import warning, then compare the three Options Lab outcomes. See [preview review instructions](preview/README.md). The page contains fixed, non-editable examples. The checked-in values are regression-tested against `atlas.risk`, but the HTML does not call Python at runtime. It saves nothing and makes no network requests. Browser rendering verification is recorded separately in the daily log; structural and value-contract tests do not prove usability.
+Click the five navigation links, inspect the four redacted import receipt states, expand the portfolio arithmetic and incomplete-import warning, then compare the three Options Lab outcomes. See [preview review instructions](preview/README.md). The page contains fixed, non-editable examples. The checked-in values are regression-tested against `atlas.risk`, but the HTML does not call Python at runtime. It saves nothing and makes no network requests. Browser rendering verification is recorded separately in the daily log; structural and value-contract tests do not prove usability.
 
 For an editable synthetic put scenario, start the local Options Lab from a terminal:
 
@@ -32,7 +32,7 @@ Open the displayed `http://127.0.0.1:8765/overview` address. Navigate the five p
 | Target | Founder experience | Dependency / state |
 |---|---|---|
 | Now | Run portfolio arithmetic and research-input checks locally using the commands below | Implemented; synthetic data only |
-| September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | Offline navigation plus local editable kernel-backed put scenario implemented; full browser/device QA and founder feedback pending; M0 acceptance remains separate |
+| September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | Offline navigation plus local editable kernel-backed put scenario implemented; M0 engineering baseline conditionally accepted for progression; full browser/device QA and founder workflow feedback pending |
 | October 3 | Try a reconciled portfolio-import workflow | Requires representative redacted Fidelity export; browser delivery is not implied by this milestone |
 | October 17 | Review a sourced stock-research workbench and weekly report | Requires verified identities and permitted data; first version may be local/report-based |
 | October 31 | Try documented strategy experiments and option-risk scenarios | Data, benchmark and cost validation required |

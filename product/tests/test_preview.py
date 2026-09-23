@@ -39,8 +39,8 @@ class PreviewTests(unittest.TestCase):
         self.assertIn("default-src 'none'", self.text)
         self.assertIn("form-action 'none'", self.text)
 
-    def test_limitations_and_pending_acceptance_are_visible(self):
-        for marker in ['Synthetic data only', 'Founder approval: pending',
+    def test_limitations_and_milestone_disposition_are_visible(self):
+        for marker in ['Synthetic data only', 'Conditionally accepted for progression',
                        'CRBS remains unresolved', 'Actionable option comparison blocked',
                        'not connected to the calculation kernel']:
             self.assertIn(marker, self.text)
@@ -70,6 +70,24 @@ class PreviewTests(unittest.TestCase):
         expected = {key: model[key] for key in ('value', 'unit', 'currency',
                     'period_start', 'period_end', 'available_at',
                     'transform_version', 'status', 'blocked_example')}
+        self.assertEqual(actual, expected)
+
+    def test_import_receipts_match_redacted_backend_contract(self):
+        expected = synthetic_preview_model()['import_receipts']
+        actual = {}
+        for _, attrs in self.page.elements:
+            decision = attrs.get('data-import-receipt')
+            if decision:
+                actual[decision] = {
+                    'schema_version': int(attrs['data-schema-version']),
+                    'mode': attrs['data-mode'],
+                    'reconciliation': attrs['data-reconciliation'],
+                    'replay': attrs['data-replay'],
+                    'input_rows': int(attrs['data-input-rows']),
+                    'rejected_rows': int(attrs['data-rejected-rows']),
+                    'publishable_rows': int(attrs['data-publishable-rows']),
+                    'decision': decision,
+                }
         self.assertEqual(actual, expected)
 
     def test_preview_model_is_explicitly_fixed_and_synthetic(self):
