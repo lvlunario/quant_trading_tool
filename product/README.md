@@ -6,13 +6,13 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated September 23, 2026
+## What you can try and when — updated September 27, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: four local Python command-line demos, an offline HTML workflow preview and a localhost-only interactive Options Lab are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. It is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 139 passing tests; test count measures verification coverage, not product completeness.
+Today: four local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. It is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 141 passing tests; test count measures verification coverage, not product completeness.
 
-Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The page still does not accept a file or run an import.
+Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The offline page still does not accept a file or run an import. The localhost Import Demo runs only the checked-in invented CSV through the same parser, reconciliation and receipt pipeline used by the command-line workflow; it accepts no upload or caller-selected path.
 
 ### Try the offline screen preview
 
@@ -27,11 +27,11 @@ cd product
 python -m atlas --preview-server
 ```
 
-Open the displayed `http://127.0.0.1:8765/overview` address. Navigate the five product areas, then select **Open interactive Options Lab** in the Options section. Change strike, premium, expiration price, total fees or available cash, calculate, then use **Return to five-area overview**. Weekly Review links to the read-only founder checklist. Press **Ctrl+C** in the terminal to stop it. The server binds only to the local computer, stores nothing and calculates one standard cash-secured-put expiration scenario through `atlas.risk`. Use invented inputs only. This is not the authenticated November application and contains no quote, broker, account or order connection.
+Open the displayed `http://127.0.0.1:8765/overview` address. In Portfolio, select **Run fixed synthetic import demo** and verify the replay-check-required receipt. Then select **Open interactive Options Lab** in the Options section. Change strike, premium, expiration price, total fees or available cash, calculate, then use **Return to five-area overview**. Weekly Review links to the read-only founder checklist. Press **Ctrl+C** in the terminal to stop it. The server binds only to the local computer, stores nothing and calculates one standard cash-secured-put expiration scenario through `atlas.risk`. Use invented inputs only. This is not the authenticated November application and contains no quote, broker, account or order connection.
 
 | Target | Founder experience | Dependency / state |
 |---|---|---|
-| Now | Run portfolio arithmetic and research-input checks locally using the commands below | Implemented; synthetic data only |
+| Now | Run portfolio arithmetic, fixed CSV reconciliation, receipt and research-input checks locally | Implemented; synthetic data only; no file upload or account connection |
 | September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | Offline navigation plus local editable kernel-backed put scenario implemented; M0 engineering baseline conditionally accepted for progression; full browser/device QA and founder workflow feedback pending |
 | October 3 | Try a reconciled portfolio-import workflow | Requires representative redacted Fidelity export; browser delivery is not implied by this milestone |
 | October 17 | Review a sourced stock-research workbench and weekly report | Requires verified identities and permitted data; first version may be local/report-based |

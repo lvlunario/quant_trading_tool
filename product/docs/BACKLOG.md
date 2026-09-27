@@ -33,6 +33,8 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 27 morning: connected the localhost Portfolio flow to the real synthetic CSV parser/reconciliation/receipt pipeline through a shared `atlas.import_workflow` service. The new `/import-demo` route processes only the checked-in invented fixture, accepts no upload or path, persists nothing and therefore correctly reports `replay_check_required`. Two HTTP/privacy tests raise the suite to 141. Next: add an M1 conformance summary separating implemented synthetic guarantees from Fidelity-specific evidence still blocked by the private representative export, then prepare the October 3 review packet.
+
 September 22 afternoon: added a versioned minimal receipt to both import CLI paths, with controlled decisions, row counts and no financial/account fields. Inconsistent publication states are rejected. Next: display synthetic receipts on the Portfolio preview and verify browser behavior. Routine decisions follow the September 22 delegation.
 
 September 22 morning: extended the private hash-only replay receipt to the synthetic CSV command. The first attempt records source identity, exact-byte digest, outcome and time; an identical retry returns zero publishable rows. No holdings enter the ledger. Next: define a redacted import receipt schema that separates source, validation, reconciliation and replay decisions for UI/report consumption.

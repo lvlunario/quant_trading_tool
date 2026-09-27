@@ -5,26 +5,10 @@ import json
 from pathlib import Path
 import sys
 from .adapters import NormalizedJsonAdapter
-from .audit import ReplayLedger, source_sha256
+from .audit import source_sha256
 from .ingestion import reconcile_envelope
+from .import_workflow import apply_replay_gate, synthetic_csv_report
 from .risk import snapshot_report, standard_option_payoff
-from .receipts import import_receipt
-
-
-def _apply_replay_gate(report: dict, source_hash: str, ledger_path: Path | None) -> None:
-    """Attach hash-only replay evidence and suppress rows on an exact retry."""
-    report['source_sha256'] = source_hash
-    report['replay_status'] = 'not_checked'
-    if ledger_path:
-        ledger_result = ReplayLedger(ledger_path).record(
-            source_id=report['source_id'], source_hash=source_hash,
-            outcome=report['status'])
-        report['replay_status'] = ledger_result.status
-        report['first_seen_at'] = ledger_result.first_seen_at
-        if ledger_result.status == 'exact_replay':
-            report['publishable_row_count'] = 0
-            report['readiness'] = 'exact replay; do not publish positions again'
-    report['receipt'] = import_receipt(report).to_dict()
 
 
 def main():
@@ -74,20 +58,10 @@ def main():
             report = map_synthetic_broker_export(payload, now=now)
             report['data_notice'] = 'invented values only; no broker file or account access'
         elif args.synthetic_csv_demo:
-            from .broker_mapping import parse_synthetic_delimited
-
             if args.synthetic_csv_demo.stat().st_size > 1_000_000:
                 raise ValueError("Input exceeds 1 MB limit")
             source_bytes = args.synthetic_csv_demo.read_bytes()
-            digest = source_sha256(source_bytes)
-            now = datetime.now(timezone.utc)
-            report = parse_synthetic_delimited(
-                source_bytes, source_id=f'SRC_{digest[:16].upper()}',
-                as_of=now.isoformat(), now=now)
-            _apply_replay_gate(report, digest, args.ledger)
-            report['data_notice'] = (
-                'invented synthetic fixture only; runtime timestamp; '
-                'no broker file or account access')
+            report = synthetic_csv_report(source_bytes, ledger_path=args.ledger)
         elif args.research_demo:
             from datetime import date, timedelta
             from .provenance import ObservationRecord, assess_research_input
@@ -135,7 +109,7 @@ def main():
             source_bytes = args.reconcile.read_bytes()
             payload = NormalizedJsonAdapter().normalize(source_bytes)
             report = reconcile_envelope(payload)
-            _apply_replay_gate(report, source_sha256(source_bytes), args.ledger)
+            apply_replay_gate(report, source_sha256(source_bytes), args.ledger)
         print(json.dumps(report, indent=2))
         if report.get('status') == 'blocked':
             return 3

@@ -12,6 +12,7 @@ from urllib.parse import parse_qs
 from decimal import Decimal
 from pathlib import Path
 
+from .import_workflow import synthetic_csv_report
 from .risk import standard_option_payoff
 
 
@@ -26,7 +27,36 @@ def render_overview():
     page = (Path(__file__).resolve().parents[1] / "preview/index.html").read_text()
     return page.replace("<!-- interactive-options-link -->",
                         '<p><a href="/">Open interactive Options Lab →</a></p>').replace(
+        "<!-- interactive-import-link -->",
+        '<p><a href="/import-demo">Run fixed synthetic import demo →</a></p>').replace(
         '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
+
+
+def render_import_demo():
+    """Run only the checked-in invented fixture and show its redacted receipt."""
+    fixture = (Path(__file__).resolve().parents[1] /
+               "fixtures/synthetic-broker.csv").read_bytes()
+    report = synthetic_csv_report(fixture)
+    receipt = report['receipt']
+    if receipt['mode'] != 'synthetic':
+        raise AssertionError('import_demo_must_be_synthetic')
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Import Demo · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:760px;margin:auto;padding:24px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:22px;margin:18px 0}}dt{{color:#526d79}}dd{{font-size:1.2rem;font-weight:700;margin:0 0 10px}}.banner{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><a href="/overview">Return to five-area overview</a><h1>Synthetic import demo</h1>
+<p class="banner"><strong>Checked-in invented fixture only.</strong> No upload, account connection, file picker, saved portfolio or order capability.</p>
+<section data-import-decision="{escape(receipt['decision'], quote=True)}"
+ data-reconciliation="{escape(receipt['reconciliation'], quote=True)}"
+ data-replay="{escape(receipt['replay'], quote=True)}"
+ data-input-rows="{receipt['input_rows']}" data-rejected-rows="{receipt['rejected_rows']}"
+ data-publishable-rows="{receipt['publishable_rows']}"><h2>Import receipt</h2><dl>
+<dt>Decision</dt><dd>{escape(receipt['decision'].replace('_', ' ').title())}</dd>
+<dt>Reconciliation</dt><dd>{escape(receipt['reconciliation'].title())}</dd>
+<dt>Replay status</dt><dd>{escape(receipt['replay'].replace('_', ' ').title())}</dd>
+<dt>Rows</dt><dd>{receipt['input_rows']} input · {receipt['rejected_rows']} rejected · {receipt['publishable_rows']} provisionally publishable</dd>
+<dt>Parser</dt><dd>{escape(report['parser_contract'])}</dd></dl></section>
+<p><strong>Why publication is not yet eligible:</strong> this read-only demonstration uses no private replay ledger, so an identical retry cannot be durably suppressed. It calculates a receipt but persists nothing.</p>
+<p>No symbols, quantities, prices, account aliases, totals, source path or source hash are displayed.</p></body></html>'''
 
 
 def render_checklist():
@@ -115,13 +145,16 @@ def make_handler(token):
             return host in {"127.0.0.1", "localhost"}
 
         def do_GET(self):
-            if not self._valid_host() or self.path not in {"/", "/overview", "/checklist"}:
+            if not self._valid_host() or self.path not in {
+                    "/", "/overview", "/checklist", "/import-demo"}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
             if self.path == "/overview":
                 self._send(200, render_overview())
             elif self.path == "/checklist":
                 self._send(200, render_checklist())
+            elif self.path == "/import-demo":
+                self._send(200, render_import_demo())
             else:
                 self._send(200, render_page(token=token))
 

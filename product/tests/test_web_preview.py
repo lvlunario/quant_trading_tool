@@ -4,7 +4,8 @@ from threading import Thread
 from urllib.parse import urlencode
 import unittest
 
-from atlas.web_preview import calculate_put, make_handler, render_page, serve_preview
+from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
+                               render_page, serve_preview)
 
 
 class WebPreviewTests(unittest.TestCase):
@@ -100,12 +101,33 @@ class WebPreviewTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(headers["Cache-Control"], "no-store")
         self.assertIn('href="/">Open interactive Options Lab', page)
+        self.assertIn('href="/import-demo">Run fixed synthetic import demo', page)
         self.assertIn('href="/checklist"', page)
         self.assertNotIn('<!-- interactive-options-link -->', page)
         for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
             self.assertIn(f'id="{section}"', page)
         _, _, lab = self.request("GET", "/")
         self.assertIn('href="/overview"', lab)
+
+    def test_import_demo_runs_fixed_fixture_through_redacted_contract(self):
+        status, headers, page = self.request("GET", "/import-demo")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertIn('data-import-decision="replay_check_required"', page)
+        self.assertIn('data-reconciliation="reconciled"', page)
+        self.assertIn('data-replay="not_checked"', page)
+        self.assertIn('data-input-rows="2"', page)
+        self.assertIn('data-rejected-rows="0"', page)
+        self.assertIn('data-publishable-rows="2"', page)
+        self.assertIn('synthetic_delimited_v1', page)
+
+    def test_import_demo_has_no_input_or_position_disclosure(self):
+        page = render_import_demo()
+        self.assertNotIn('<form', page)
+        self.assertNotIn('<input', page)
+        for private_marker in ('DEMO', 'ALPHA', '$25', '$75', 'source_sha256'):
+            self.assertNotIn(private_marker, page)
+        self.assertIn('No upload', page)
 
     def test_checklist_is_readonly_and_arbitrary_files_are_not_served(self):
         status, _, page = self.request("GET", "/checklist")
