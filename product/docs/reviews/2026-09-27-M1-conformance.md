@@ -28,6 +28,10 @@ The import demo processes only the checked-in invented fixture. The conformance 
 
 Private import persistence is **not implemented**. The destination policy is selected, but a private repository/storage boundary has not been provisioned.
 
+## Automated engineering recommendation
+
+The conformance model now derives this bounded recommendation: accept the documented synthetic engineering evidence, defer Fidelity-specific external validation, continue the synthetic/manual-redacted fallback and leave the December target unchanged but conditional. The derivation fails closed if status counts or Fidelity evidence states are altered inconsistently. It records neither founder approval nor release authorization.
+
 ## October 3 disposition rule
 
 - Accept only the synthetic import-contract scope if all automated evidence remains green.
@@ -37,6 +41,6 @@ Private import persistence is **not implemented**. The destination policy is sel
 
 ## Verification
 
-Expected automated result: 144 tests, including conformance status/count integrity and HTTP privacy rendering. Exact feature commit and CI evidence are recorded in the September 27 daily log and PR #1.
+Expected automated result: 146 tests, including conformance status/count integrity and HTTP privacy rendering. Exact feature commit and CI evidence are recorded in the September 27 daily log and PR #1.
 
 Founder decision: **Pending**. No response or approval is inferred from this packet.

@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 27 evening: `recommend_m1_disposition` derives the October 3 recommendation only from a validated conformance report. It rejects altered counts, duplicate IDs and unsupported promotion of blocked Fidelity checks. The result separates synthetic evidence acceptance, Fidelity deferral, fallback progression and release authority; both founder approval and release authorization are hard-coded false.
+
 September 27 afternoon: `atlas.conformance` defines a public-safe, versioned M1 evidence map with unique check IDs and controlled statuses. The `/m1-status` view renders that model without accepting input or recording acceptance. Synthetic verification, unavailable Fidelity evidence and unimplemented private persistence remain distinct states; the aggregate is `partial_synthetic_only`, so UI wording cannot promote synthetic tests into broker compatibility.
 
 September 27 M1 workflow increment: `atlas.import_workflow` now owns exact-byte hashing, synthetic CSV parsing, reconciliation, replay gating and redacted receipt creation for both CLI and preview adapters. The local `/import-demo` route invokes that shared workflow only for the checked-in invented fixture. It accepts no upload, query, source path or account connection and persists nothing; its `replay_check_required` result demonstrates why reconciliation alone is insufficient for safe publication.

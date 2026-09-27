@@ -2,6 +2,9 @@
 from dataclasses import asdict, dataclass
 
 
+_STATUSES = ('verified_synthetic', 'blocked_external_evidence', 'not_implemented')
+
+
 @dataclass(frozen=True)
 class ConformanceCheck:
     check_id: str
@@ -56,8 +59,7 @@ def m1_import_conformance() -> dict:
     )
     serialized = [check.to_dict() for check in checks]
     counts = {status: sum(check.status == status for check in checks)
-              for status in ('verified_synthetic', 'blocked_external_evidence',
-                             'not_implemented')}
+              for status in _STATUSES}
     return {
         'schema_version': 1,
         'phase': 'M1 Portfolio Truth',
@@ -65,4 +67,47 @@ def m1_import_conformance() -> dict:
         'overall_status': 'partial_synthetic_only',
         'counts': counts,
         'checks': serialized,
+    }
+
+
+def recommend_m1_disposition(report=None) -> dict:
+    """Derive a bounded milestone recommendation; never record acceptance."""
+    report = report or m1_import_conformance()
+    if (not isinstance(report, dict) or report.get('schema_version') != 1 or
+            report.get('phase') != 'M1 Portfolio Truth' or
+            report.get('milestone_date') != '2026-10-03' or
+            report.get('overall_status') != 'partial_synthetic_only' or
+            not isinstance(report.get('checks'), list) or
+            not isinstance(report.get('counts'), dict)):
+        raise ValueError('invalid_m1_conformance')
+    checks = report['checks']
+    ids = [check.get('check_id') for check in checks if isinstance(check, dict)]
+    actual = {status: sum(check.get('status') == status for check in checks
+                          if isinstance(check, dict)) for status in _STATUSES}
+    if (len(ids) != len(checks) or len(ids) != len(set(ids)) or
+            set(report['counts']) != set(_STATUSES) or
+            report['counts'] != actual or any(
+                check.get('status') not in _STATUSES for check in checks
+                if isinstance(check, dict))):
+        raise ValueError('inconsistent_m1_conformance')
+    fidelity = [check for check in checks
+                if check['check_id'].startswith('FID_')]
+    if (actual['verified_synthetic'] < 1 or not fidelity or
+            any(check['status'] != 'blocked_external_evidence'
+                for check in fidelity)):
+        raise ValueError('unsupported_m1_disposition')
+    return {
+        'schema_version': 1,
+        'evaluated_milestone': report['milestone_date'],
+        'synthetic_scope': 'recommend_accept_engineering_evidence',
+        'fidelity_scope': 'recommend_defer_external_validation',
+        'phase_progression': 'continue_synthetic_fallback',
+        'december_target': 'unchanged_conditional',
+        'founder_approval_recorded': False,
+        'release_authorized': False,
+        'required_before_fidelity_acceptance': (
+            'provisioned_private_boundary',
+            'authorized_representative_export',
+            'source_specific_profile_and_reconciliation_evidence',
+        ),
     }

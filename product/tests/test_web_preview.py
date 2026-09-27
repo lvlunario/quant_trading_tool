@@ -139,6 +139,10 @@ class WebPreviewTests(unittest.TestCase):
         self.assertEqual(page.count('data-status="not_implemented"'), 1)
         self.assertIn('not founder approval', page)
         self.assertIn('not founder approval', render_m1_status())
+        self.assertIn('data-synthetic-disposition="recommend_accept_engineering_evidence"', page)
+        self.assertIn('data-fidelity-disposition="recommend_defer_external_validation"', page)
+        self.assertIn('data-phase-progression="continue_synthetic_fallback"', page)
+        self.assertIn('No founder approval or release authorization is recorded', page)
         self.assertNotIn('<form', page)
 
     def test_checklist_is_readonly_and_arbitrary_files_are_not_served(self):

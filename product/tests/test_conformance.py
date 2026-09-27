@@ -1,7 +1,8 @@
 """M1 conformance statement must stay explicit, bounded and public-safe."""
+from copy import deepcopy
 import unittest
 
-from atlas.conformance import m1_import_conformance
+from atlas.conformance import m1_import_conformance, recommend_m1_disposition
 
 
 class ConformanceTests(unittest.TestCase):
@@ -30,3 +31,27 @@ class ConformanceTests(unittest.TestCase):
         self.assertNotIn('fidelity-compatible', rendered)
         for private_marker in ('account number', 'holding quantity', 'customer name'):
             self.assertNotIn(private_marker, rendered)
+
+    def test_disposition_accepts_only_synthetic_evidence_and_defers_fidelity(self):
+        disposition = recommend_m1_disposition()
+        self.assertEqual(disposition['synthetic_scope'],
+                         'recommend_accept_engineering_evidence')
+        self.assertEqual(disposition['fidelity_scope'],
+                         'recommend_defer_external_validation')
+        self.assertEqual(disposition['phase_progression'],
+                         'continue_synthetic_fallback')
+        self.assertFalse(disposition['founder_approval_recorded'])
+        self.assertFalse(disposition['release_authorized'])
+
+    def test_disposition_rejects_tampered_evidence(self):
+        report = deepcopy(m1_import_conformance())
+        report['counts']['verified_synthetic'] += 1
+        with self.assertRaises(ValueError):
+            recommend_m1_disposition(report)
+        report = deepcopy(m1_import_conformance())
+        report['checks'][4]['status'] = 'verified_synthetic'
+        report['counts'] = {'verified_synthetic': 5,
+                            'blocked_external_evidence': 3,
+                            'not_implemented': 1}
+        with self.assertRaises(ValueError):
+            recommend_m1_disposition(report)

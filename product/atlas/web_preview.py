@@ -12,7 +12,7 @@ from urllib.parse import parse_qs
 from decimal import Decimal
 from pathlib import Path
 
-from .conformance import m1_import_conformance
+from .conformance import m1_import_conformance, recommend_m1_disposition
 from .import_workflow import synthetic_csv_report
 from .risk import standard_option_payoff
 
@@ -64,6 +64,7 @@ def render_import_demo():
 def render_m1_status():
     """Render the public-safe M1 evidence boundary; record no approval."""
     report = m1_import_conformance()
+    disposition = recommend_m1_disposition(report)
     rows = ''.join(
         '<tr data-check-id="{check_id}" data-status="{status}">'
         '<th scope="row">{capability}</th><td>{status_label}</td>'
@@ -84,6 +85,7 @@ def render_m1_status():
 <div class="summary"><span><strong>{counts['verified_synthetic']}</strong> verified with synthetic evidence</span><span><strong>{counts['blocked_external_evidence']}</strong> blocked on external evidence</span><span><strong>{counts['not_implemented']}</strong> not implemented</span></div>
 <p class="warning"><strong>Scope boundary:</strong> this is an engineering conformance statement, not founder approval, Fidelity compatibility, browser acceptance or release authorization.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Capability</th><th>Status</th><th>Evidence</th><th>Limitation</th></tr></thead><tbody>{rows}</tbody></table></div>
+<section data-synthetic-disposition="{escape(disposition['synthetic_scope'], quote=True)}" data-fidelity-disposition="{escape(disposition['fidelity_scope'], quote=True)}" data-phase-progression="{escape(disposition['phase_progression'], quote=True)}"><h2>Engineering recommendation for October 3</h2><ul><li>Accept the documented synthetic engineering evidence only.</li><li>Defer Fidelity-specific validation until the private boundary, authorized export and source-specific reconciliation evidence exist.</li><li>Continue the synthetic/manual-redacted fallback without moving the conditional December target.</li></ul><p><strong>No founder approval or release authorization is recorded.</strong></p></section>
 <p>No personal portfolio or broker-export content is used or displayed.</p></body></html>'''
 
 
