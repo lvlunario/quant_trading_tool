@@ -5,7 +5,7 @@ from urllib.parse import urlencode
 import unittest
 
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
-                               render_page, serve_preview)
+                               render_m1_status, render_page, serve_preview)
 
 
 class WebPreviewTests(unittest.TestCase):
@@ -102,6 +102,7 @@ class WebPreviewTests(unittest.TestCase):
         self.assertEqual(headers["Cache-Control"], "no-store")
         self.assertIn('href="/">Open interactive Options Lab', page)
         self.assertIn('href="/import-demo">Run fixed synthetic import demo', page)
+        self.assertIn('href="/m1-status">View M1 conformance', page)
         self.assertIn('href="/checklist"', page)
         self.assertNotIn('<!-- interactive-options-link -->', page)
         for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
@@ -128,6 +129,17 @@ class WebPreviewTests(unittest.TestCase):
         for private_marker in ('DEMO', 'ALPHA', '$25', '$75', 'source_sha256'):
             self.assertNotIn(private_marker, page)
         self.assertIn('No upload', page)
+
+    def test_m1_status_separates_synthetic_evidence_from_blockers(self):
+        status, headers, page = self.request("GET", "/m1-status")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertEqual(page.count('data-status="verified_synthetic"'), 4)
+        self.assertEqual(page.count('data-status="blocked_external_evidence"'), 4)
+        self.assertEqual(page.count('data-status="not_implemented"'), 1)
+        self.assertIn('not founder approval', page)
+        self.assertIn('not founder approval', render_m1_status())
+        self.assertNotIn('<form', page)
 
     def test_checklist_is_readonly_and_arbitrary_files_are_not_served(self):
         status, _, page = self.request("GET", "/checklist")

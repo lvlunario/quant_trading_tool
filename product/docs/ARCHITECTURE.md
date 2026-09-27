@@ -1,5 +1,7 @@
 # Architecture and decisions
 
+September 27 afternoon: `atlas.conformance` defines a public-safe, versioned M1 evidence map with unique check IDs and controlled statuses. The `/m1-status` view renders that model without accepting input or recording acceptance. Synthetic verification, unavailable Fidelity evidence and unimplemented private persistence remain distinct states; the aggregate is `partial_synthetic_only`, so UI wording cannot promote synthetic tests into broker compatibility.
+
 September 27 M1 workflow increment: `atlas.import_workflow` now owns exact-byte hashing, synthetic CSV parsing, reconciliation, replay gating and redacted receipt creation for both CLI and preview adapters. The local `/import-demo` route invokes that shared workflow only for the checked-in invented fixture. It accepts no upload, query, source path or account connection and persists nothing; its `replay_check_required` result demonstrates why reconciliation alone is insufficient for safe publication.
 
 September 16 afternoon: `assess_metric_input` composes metadata eligibility with selected-observation payload binding and numeric availability; blocked results release no value. Existing metadata-only API remains unchanged. Source accuracy, fiscal-calendar validation and persistence remain pending.
@@ -8,7 +10,7 @@ September 16: `atlas.metric_evidence` binds versioned metric definitions/Decimal
 
 September 15 metric increment: `atlas.metrics` defines immutable semantic versions and finite Decimal/unavailable values, rejecting incompatible same-definition comparisons. See [metric contract](METRICS.md). Value-to-provenance hash binding and readiness integration remain pending; no formula text is executed.
 
-September 15 navigation increment, extended September 27: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, `/import-demo` for the checked-in synthetic CSV receipt, and `/checklist` for escaped read-only acceptance instructions. It does not serve caller-selected files or directory listings. The downloadable offline page remains standalone; the interactive link is inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
+September 15 navigation increment, extended September 27: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, `/import-demo` for the checked-in synthetic CSV receipt, `/m1-status` for the public-safe M1 evidence boundary, and `/checklist` for escaped read-only acceptance instructions. It does not serve caller-selected files or directory listings. The downloadable offline page remains standalone; the interactive link is inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
 
 ## Offline UX preview boundary — September 14
 

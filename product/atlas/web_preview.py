@@ -12,6 +12,7 @@ from urllib.parse import parse_qs
 from decimal import Decimal
 from pathlib import Path
 
+from .conformance import m1_import_conformance
 from .import_workflow import synthetic_csv_report
 from .risk import standard_option_payoff
 
@@ -28,7 +29,8 @@ def render_overview():
     return page.replace("<!-- interactive-options-link -->",
                         '<p><a href="/">Open interactive Options Lab →</a></p>').replace(
         "<!-- interactive-import-link -->",
-        '<p><a href="/import-demo">Run fixed synthetic import demo →</a></p>').replace(
+        '<p><a href="/import-demo">Run fixed synthetic import demo →</a> · '
+        '<a href="/m1-status">View M1 conformance →</a></p>').replace(
         '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
 
 
@@ -43,7 +45,7 @@ def render_import_demo():
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Import Demo · Synthetic</title>
 <style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:760px;margin:auto;padding:24px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:22px;margin:18px 0}}dt{{color:#526d79}}dd{{font-size:1.2rem;font-weight:700;margin:0 0 10px}}.banner{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
-<body><a href="/overview">Return to five-area overview</a><h1>Synthetic import demo</h1>
+<body><a href="/overview">Return to five-area overview</a> · <a href="/m1-status">View M1 conformance</a><h1>Synthetic import demo</h1>
 <p class="banner"><strong>Checked-in invented fixture only.</strong> No upload, account connection, file picker, saved portfolio or order capability.</p>
 <section data-import-decision="{escape(receipt['decision'], quote=True)}"
  data-reconciliation="{escape(receipt['reconciliation'], quote=True)}"
@@ -57,6 +59,32 @@ def render_import_demo():
 <dt>Parser</dt><dd>{escape(report['parser_contract'])}</dd></dl></section>
 <p><strong>Why publication is not yet eligible:</strong> this read-only demonstration uses no private replay ledger, so an identical retry cannot be durably suppressed. It calculates a receipt but persists nothing.</p>
 <p>No symbols, quantities, prices, account aliases, totals, source path or source hash are displayed.</p></body></html>'''
+
+
+def render_m1_status():
+    """Render the public-safe M1 evidence boundary; record no approval."""
+    report = m1_import_conformance()
+    rows = ''.join(
+        '<tr data-check-id="{check_id}" data-status="{status}">'
+        '<th scope="row">{capability}</th><td>{status_label}</td>'
+        '<td>{evidence}</td><td>{limitation}</td></tr>'.format(
+            check_id=escape(check['check_id'], quote=True),
+            status=escape(check['status'], quote=True),
+            capability=escape(check['capability']),
+            status_label=escape(check['status'].replace('_', ' ').title()),
+            evidence=escape(check['evidence']),
+            limitation=escape(check['limitation']))
+        for check in report['checks'])
+    counts = report['counts']
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas M1 Conformance</title>
+<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1100px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}table{{border-collapse:collapse;width:100%;background:#fff;margin-top:18px}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><a href="/overview">Return to five-area overview</a> · <a href="/import-demo">Run synthetic import demo</a>
+<h1>M1 Portfolio Truth conformance</h1><p>Milestone: {escape(report['milestone_date'])}. Overall status: <strong>{escape(report['overall_status'].replace('_', ' ').title())}</strong>.</p>
+<div class="summary"><span><strong>{counts['verified_synthetic']}</strong> verified with synthetic evidence</span><span><strong>{counts['blocked_external_evidence']}</strong> blocked on external evidence</span><span><strong>{counts['not_implemented']}</strong> not implemented</span></div>
+<p class="warning"><strong>Scope boundary:</strong> this is an engineering conformance statement, not founder approval, Fidelity compatibility, browser acceptance or release authorization.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Capability</th><th>Status</th><th>Evidence</th><th>Limitation</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p>No personal portfolio or broker-export content is used or displayed.</p></body></html>'''
 
 
 def render_checklist():
@@ -146,7 +174,7 @@ def make_handler(token):
 
         def do_GET(self):
             if not self._valid_host() or self.path not in {
-                    "/", "/overview", "/checklist", "/import-demo"}:
+                    "/", "/overview", "/checklist", "/import-demo", "/m1-status"}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
             if self.path == "/overview":
@@ -155,6 +183,8 @@ def make_handler(token):
                 self._send(200, render_checklist())
             elif self.path == "/import-demo":
                 self._send(200, render_import_demo())
+            elif self.path == "/m1-status":
+                self._send(200, render_m1_status())
             else:
                 self._send(200, render_page(token=token))
 
