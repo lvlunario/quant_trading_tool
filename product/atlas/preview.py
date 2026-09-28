@@ -2,12 +2,14 @@
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
 
-from .metric_evidence import MetricPayload, assess_metric_input
+from .macro_vintages import MacroReleaseRecord, select_macro_vintage
+from .metric_evidence import MetricPayload, assess_sourced_metric_input
 from .metrics import MetricDefinition, MetricValue
 from .provenance import ObservationRecord
 from .receipts import import_receipt
 from .reference import DataRightsRecord, SecurityRecord
 from .risk import snapshot_report, standard_option_payoff
+from .source_evidence import ResearchSourceRecord
 
 
 PREVIEW_AS_OF = datetime(2026, 9, 12, tzinfo=timezone.utc)
@@ -75,12 +77,47 @@ def synthetic_preview_model():
         'PRV_DEMO1234', 'DATA_DEMO1234', 'verified', ('internal_research',),
         'https://example.test/atlas/synthetic-terms', 'b' * 64,
         PREVIEW_AS_OF - timedelta(days=30), PREVIEW_AS_OF + timedelta(days=30))
-    research = assess_metric_input(
-        metric_payload, [observation], [security], [rights],
+    source = ResearchSourceRecord(
+        'DOC_DEMO12345678', observation.instrument_id, observation.provider_id,
+        observation.dataset_id, 'regulator_filing', 'application/pdf',
+        observation.available_at - timedelta(minutes=1), observation.available_at,
+        observation.observed_at, observation.source_uri, observation.source_sha256)
+    research = assess_sourced_metric_input(
+        metric_payload, [observation], [security], [rights], source,
         series_id='SER_DEMO12345678', decision_at=PREVIEW_AS_OF,
         use_case='internal_research', now=PREVIEW_AS_OF)
     if research.status != 'ready':
         raise AssertionError("Synthetic research trace is inconsistent")
+
+    macro_initial = MacroReleaseRecord(
+        'MREL_DEMO12345678', 'MAC_DEMO12345678', 'PRV_MACRO1234',
+        'DATA_MACRO1234', 'Invented monthly activity index', 'index', 'monthly',
+        'seasonally_adjusted', date(2026, 7, 1), date(2026, 7, 31), 0,
+        datetime(2026, 8, 5, 12, 30, tzinfo=timezone.utc),
+        datetime(2026, 8, 5, 13, tzinfo=timezone.utc), Decimal('100.0'), None,
+        'https://example.test/atlas/macro/initial', 'c' * 64,
+        'synthetic.macro@1.0.0')
+    macro_revised = MacroReleaseRecord(
+        'MREL_DEMOABCDEF12', macro_initial.macro_series_id,
+        macro_initial.provider_id, macro_initial.dataset_id, macro_initial.name,
+        macro_initial.unit, macro_initial.frequency,
+        macro_initial.seasonal_adjustment, macro_initial.period_start,
+        macro_initial.period_end, 1,
+        datetime(2026, 9, 5, 12, 30, tzinfo=timezone.utc),
+        datetime(2026, 9, 5, 13, tzinfo=timezone.utc), Decimal('99.5'), None,
+        'https://example.test/atlas/macro/revised', 'd' * 64,
+        macro_initial.transform_version)
+    macro_records = [macro_initial, macro_revised]
+    macro_early = select_macro_vintage(
+        macro_records, macro_series_id=macro_initial.macro_series_id,
+        period_end=macro_initial.period_end,
+        decision_at=datetime(2026, 8, 1, tzinfo=timezone.utc), now=PREVIEW_AS_OF)
+    macro_late = select_macro_vintage(
+        macro_records, macro_series_id=macro_initial.macro_series_id,
+        period_end=macro_initial.period_end, decision_at=PREVIEW_AS_OF,
+        now=PREVIEW_AS_OF)
+    if macro_early.status != 'missing' or macro_late.status != 'selected':
+        raise AssertionError("Synthetic macro vintage trace is inconsistent")
     return {"portfolio": portfolio, "put_outcomes": outcomes,
             "import_receipts": synthetic_import_receipts(),
             "research_trace": {
@@ -93,5 +130,26 @@ def synthetic_preview_model():
                 "available_at": observation.available_at.isoformat(),
                 "transform_version": observation.transform_version,
                 "blocked_example": "identity_no_effective_instrument",
+            },
+            "source_trace": {
+                "status": research.status,
+                "document_id": source.document_id,
+                "source_kind": source.source_kind,
+                "provider_id": source.provider_id,
+                "dataset_id": source.dataset_id,
+                "available_at": source.available_at.isoformat(),
+                "retrieved_at": source.retrieved_at.isoformat(),
+                "binding": "exact_source_binding_passed",
+            },
+            "macro_trace": {
+                "series_id": macro_initial.macro_series_id,
+                "period_end": macro_initial.period_end.isoformat(),
+                "initial_value": str(macro_initial.value),
+                "initial_available_at": macro_initial.available_at.isoformat(),
+                "revised_value": str(macro_revised.value),
+                "revised_available_at": macro_revised.available_at.isoformat(),
+                "selected_revision": str(macro_late.revision),
+                "selected_value": str(macro_late.value),
+                "unavailable_code": macro_early.code,
             },
             "model_status": "fixed synthetic values calculated by atlas.risk"}

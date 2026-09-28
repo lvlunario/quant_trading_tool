@@ -33,6 +33,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 28 evening: exposed the exact synthetic source binding and macro
+release-vintage states in Research. Two projection tests fail if document,
+provider, dataset, timing, original/revised values, selected revision or the
+not-yet-available state drift from the backend contracts; 163 local tests pass.
+Next: add a small permitted-source intake adapter that produces these records
+without weakening the rights, timing or missing-data gates.
+
 September 28 afternoon: added a dedicated macro release/vintage identity,
 point-in-time revision selector and purpose-specific rights gate. Original and
 revised synthetic values remain separate; a later revision cannot appear in an
