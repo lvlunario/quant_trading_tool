@@ -11,7 +11,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R05 | Customer mandate | Capture goals, horizon, liquidity, account types, tax context, loss tolerance, experience and restrictions | PLANNED |
 | R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity, data-rights, observation and exact source-document binding contracts; sourced population/persistence pending |
 | R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PARTIAL: sourced metric readiness contract; populated metrics, thesis/counter-thesis and report UI pending |
-| R08 | Macro and market regime | Release/vintage dates and causal exposure mapping; no certainty from regimes | PLANNED |
+| R08 | Macro and market regime | Release/vintage dates and causal exposure mapping; no certainty from regimes | PARTIAL: typed point-in-time macro-vintage and rights gate; populated series, exposure mapping and UI pending |
 | R09 | Equity strategy testing | Chronological walk-forward, costs, benchmark alignment and holdout | PLANNED |
 | R10 | Options research | Executable chain freshness, liquidity, IV/Greeks, expiry, earnings/dividend and assignment risks | PLANNED |
 | R11 | Portfolio risk | Total exposures incl. options, correlation, stress, drawdown, factor and concentration limits | PLANNED |

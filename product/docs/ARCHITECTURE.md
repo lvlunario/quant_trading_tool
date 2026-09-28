@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+September 28 M2 macro-vintage increment: `atlas.macro_vintages` gives economic
+series a dedicated identity rather than a fake security/ticker. Each reporting
+period retains original and revised releases with Decimal/missing values,
+availability/observation times, source hash and transform version. Historical
+selection admits only the latest vintage available at the decision time, then
+applies purpose-specific data rights. No real provider, series or forecast is
+implemented. See [macro vintage contract](MACRO_VINTAGES.md).
+
 September 28 M2 source-boundary increment: `atlas.source_evidence` records exact
 instrument-level source bytes with stable instrument/provider/dataset IDs,
 controlled kind/content type, publication/availability/retrieval times, HTTPS

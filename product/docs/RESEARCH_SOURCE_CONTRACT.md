@@ -26,8 +26,9 @@ failed check returns no metric payload.
 - Supported source kinds: issuer filing/release, regulator filing, exchange
   notice and licensed dataset.
 - Supported content types: JSON, PDF, CSV and HTML.
-- The contract is instrument-level. Macro-release/vintage modeling is next and
-  must not be forced into a fake security identity.
+- The contract is instrument-level. Macro releases use the separate
+  [`MAC_...` vintage contract](MACRO_VINTAGES.md) and are not forced into a fake
+  security identity.
 - Source classification is asserted metadata, not proof that a domain or
   publisher is genuine. Adapter allowlists, transport capture, immutable
   storage, signature/authority checks and manual source review remain planned.
@@ -39,4 +40,3 @@ failed check returns no metric payload.
 Tests cover exact successful binding; instrument/provider/dataset drift;
 URI/hash drift; availability/retrieval ordering; future retrieval; invalid
 identifiers/types/times; and preservation of prior metric-gate failures.
-

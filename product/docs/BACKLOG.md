@@ -33,6 +33,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 28 afternoon: added a dedicated macro release/vintage identity,
+point-in-time revision selector and purpose-specific rights gate. Original and
+revised synthetic values remain separate; a later revision cannot appear in an
+earlier decision, and missing values cannot become zero. The full local suite
+now has 161 passing tests. Next: surface an end-to-end synthetic source and
+macro-vintage trace in Research with visible unavailable/revised states.
+
 September 28 morning: began dependency-safe M2 work with an immutable
 instrument-level source-document record and a sourced-metric gate. Exact
 instrument/provider/dataset identity, URI, digest, availability and retrieval
