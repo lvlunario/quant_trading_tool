@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+September 28 M2 source-boundary increment: `atlas.source_evidence` records exact
+instrument-level source bytes with stable instrument/provider/dataset IDs,
+controlled kind/content type, publication/availability/retrieval times, HTTPS
+URI and SHA-256 digest. `assess_sourced_metric_input` releases a metric only
+after the existing point-in-time, identity, rights, payload and numeric gates
+also bind to that exact source. This is internal consistency evidence, not
+publisher authentication, source accuracy, permission, persistence or a
+populated research feed. See [research source contract](RESEARCH_SOURCE_CONTRACT.md).
+
 September 27 evening: `recommend_m1_disposition` derives the October 3 recommendation only from a validated conformance report. It rejects altered counts, duplicate IDs and unsupported promotion of blocked Fidelity checks. The result separates synthetic evidence acceptance, Fidelity deferral, fallback progression and release authority; both founder approval and release authorization are hard-coded false.
 
 September 27 afternoon: `atlas.conformance` defines a public-safe, versioned M1 evidence map with unique check IDs and controlled statuses. The `/m1-status` view renders that model without accepting input or recording acceptance. Synthetic verification, unavailable Fidelity evidence and unimplemented private persistence remain distinct states; the aggregate is `partial_synthetic_only`, so UI wording cannot promote synthetic tests into broker compatibility.
@@ -61,7 +70,7 @@ Planned importer records account alias, instrument stable ID, quantity, price/as
 
 ## Research record
 
-The implemented `atlas.provenance` contract binds stable instrument/provider/dataset/metric IDs to an as-of date, revision, source and payload hashes, versioned transform, `available_at` and `observed_at`. Historical selection excludes revisions unavailable at the decision time and preserves amendments rather than overwriting historical knowledge. Its combined gate releases an observation reference only when point-in-time selection, effective instrument identity and current purpose-specific data rights all pass. See [point-in-time provenance](PROVENANCE.md).
+The implemented `atlas.provenance` contract binds stable instrument/provider/dataset/metric IDs to an as-of date, revision, source and payload hashes, versioned transform, `available_at` and `observed_at`. Historical selection excludes revisions unavailable at the decision time and preserves amendments rather than overwriting historical knowledge. Its combined gate releases an observation reference only when point-in-time selection, effective instrument identity and current purpose-specific data rights all pass. `atlas.source_evidence` then verifies that the selected observation agrees with one exact source-document record before the sourced-metric gate releases a value. See [point-in-time provenance](PROVENANCE.md) and [research source contract](RESEARCH_SOURCE_CONTRACT.md).
 
 Still planned: persistent values, currency/units, confidence/quality flags and a result record containing input hashes, configuration, code commit, metric definitions, output and validation state. Current `ready` means contract-eligible only; metric-quality, source-accuracy and research-validation gates remain separate.
 

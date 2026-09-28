@@ -14,7 +14,7 @@ The founder delegated routine project decisions; the following dispositions are 
 - Review workload: engineering owns routine V&V and phase recommendations. Report material exceptions and show usable milestones; stop repeatedly requesting scope, fallback or destination-policy decisions already made here. Preserve the phase checklists as evidence requirements.
 - Existing explicit boundaries remain: no automatic merge, paid purchase, production deployment, outreach or real-money orders. Final prototype release acceptance remains separate.
 
-Next implementation: a redacted import-receipt contract for the Portfolio screen, followed by visible synthetic import status. October 3 Fidelity-specific delivery remains at risk; December 12 remains the target subject to private-access and data prerequisites.
+Current implementation: keep the October 3 synthetic M1 disposition evidence current while proceeding with dependency-safe M2 source and macro contracts. Fidelity-specific acceptance remains deferred unless authorized private evidence arrives. October 17 remains the sourced-workbench target; December 12 remains subject to private-access and data prerequisites.
 
 ## Mandate and acceptance
 

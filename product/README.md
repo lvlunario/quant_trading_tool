@@ -6,11 +6,11 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated September 27, 2026
+## What you can try and when — updated September 28, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: four local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. It is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 146 passing tests; test count measures verification coverage, not product completeness.
+Today: four local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a synthetic, gate-backed metric trace with its units, reporting dates, availability time and blocked-state example. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. M2 source work has started with an exact source-document-to-metric binding contract; it is backend infrastructure, not a working data feed. The importer is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 153 passing tests; test count measures verification coverage, not product completeness.
 
 Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The offline page still does not accept a file or run an import. The localhost Import Demo runs only the checked-in invented CSV through the same parser, reconciliation and receipt pipeline used by the command-line workflow; it accepts no upload or caller-selected path. The adjacent M1 Conformance view shows four synthetic checks verified, four Fidelity-specific checks blocked on external evidence and private persistence not implemented. It now derives the October 3 engineering recommendation: accept only the synthetic evidence, defer Fidelity validation and continue the fallback; it cannot record founder approval or release authorization.
 
@@ -56,7 +56,7 @@ The first screen prototype will use clearly labeled synthetic values and let the
 
 Product briefings lead with what the founder can try, its next visible deliverable/date, tests, risks and decisions. The connected local preview is available; browser/device QA and founder feedback remain pending. The [metric-semantics contract](docs/METRICS.md) is now implemented as a backend dependency; sourced values and research integration remain pending.
 
-Latest asynchronous review: [September 21 M1 concept and iteration packet](docs/reviews/2026-09-21-M1.md). It presents evidence and recommended decisions; it is not a completed meeting or founder approval.
+Latest asynchronous review: [September 28 M2 concept and iteration packet](docs/reviews/2026-09-28-M2.md). It presents evidence and recommended defaults; it is not a completed meeting or founder approval.
 
 ## Run the foundation
 
@@ -86,6 +86,8 @@ The `atlas.ingestion` interface and `--reconcile` command validate versioned nor
 The `atlas.reference` contracts resolve effective-dated security identities without treating ticker labels as stable IDs and block dataset use unless current evidence explicitly permits the requested purpose. See [security master and data-rights contract](docs/SECURITY_MASTER.md). No real watchlist records or provider permissions are populated yet.
 
 The `atlas.provenance` contract records when a source revision became available and selects only evidence available at a historical decision time. See [point-in-time provenance](docs/PROVENANCE.md). This is synthetic contract infrastructure, not a populated research dataset or backtest.
+
+The `atlas.source_evidence` contract binds a selected metric observation to one exact instrument-level source record before releasing its value. See [research source-document contract](docs/RESEARCH_SOURCE_CONTRACT.md). It verifies internal consistency and timing, not publisher authenticity, accuracy or permission.
 
 `--research-demo` runs the combined point-in-time, effective-identity and current-data-rights gate using invented metadata. A `ready` result means those three contract gates passed only; it is not a statement about source accuracy, investment quality or commercial readiness.
 

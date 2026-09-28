@@ -9,8 +9,8 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R03 | Standard covered-call/CSP expiry scenario arithmetic | Bankruptcy, upside cap, breakeven, coverage and reserve cases pass | IMPLEMENTED |
 | R04 | Fidelity export importer | Reconcile balances and positions; report all rejected rows; no silent omission | PARTIAL: bounded synthetic CSV/profile mapping, normalized reconciliation and public-safe conformance view; Fidelity adapter/export validation pending |
 | R05 | Customer mandate | Capture goals, horizon, liquidity, account types, tax context, loss tolerance, experience and restrictions | PLANNED |
-| R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity resolver and data-rights gate; sourced population/persistence pending |
-| R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PLANNED |
+| R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity, data-rights, observation and exact source-document binding contracts; sourced population/persistence pending |
+| R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PARTIAL: sourced metric readiness contract; populated metrics, thesis/counter-thesis and report UI pending |
 | R08 | Macro and market regime | Release/vintage dates and causal exposure mapping; no certainty from regimes | PLANNED |
 | R09 | Equity strategy testing | Chronological walk-forward, costs, benchmark alignment and holdout | PLANNED |
 | R10 | Options research | Executable chain freshness, liquidity, IV/Greeks, expiry, earnings/dividend and assignment risks | PLANNED |
@@ -18,7 +18,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R12 | Weekly research report | Data as-of, changes, ranked candidates, thesis risks, blocked items, next checks | PLANNED |
 | R13 | Private customer application | Authentication, consent, access isolation, deletion/export and audit logs | PLANNED |
 | R14 | Operations | Idempotent jobs, retries, monitoring, backup/restore and rollback | PLANNED |
-| R15 | Reproducible evidence | Versioned data references, config, code SHA, result checksums and experiment registry | PARTIAL: point-in-time observation/source/payload/transform contract; registry pending |
+| R15 | Reproducible evidence | Versioned data references, config, code SHA, result checksums and experiment registry | PARTIAL: point-in-time observation/source-document/payload/transform binding; storage and registry pending |
 | R16 | Commercial gate | Counsel, independent security review, licensing and founder acceptance | PLANNED |
 
 ## Research universe

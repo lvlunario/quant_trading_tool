@@ -81,3 +81,21 @@ def assess_metric_input(payload, observations, securities, rights, *,
         return MetricReadiness('blocked', ('metric_unavailable',))
     return MetricReadiness('ready', ('metadata_binding_numeric_passed',),
                            selected.observation_id, payload)
+
+
+def assess_sourced_metric_input(payload, observations, securities, rights, source, *,
+                                series_id, decision_at, use_case, now=None) -> MetricReadiness:
+    """Release a metric only when its selected observation binds to exact source bytes."""
+    from .source_evidence import assess_source_binding
+
+    metric = assess_metric_input(payload, observations, securities, rights,
+        series_id=series_id, decision_at=decision_at, use_case=use_case, now=now)
+    if metric.status != 'ready':
+        return metric
+    selected = next(record for record in observations
+                    if record.observation_id == metric.observation_id)
+    source_decision = assess_source_binding(source, selected, now=now)
+    if source_decision.status != 'ready':
+        return MetricReadiness('blocked', source_decision.codes)
+    return MetricReadiness('ready', ('metadata_binding_numeric_source_passed',),
+                           metric.observation_id, metric.payload)

@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 28 morning: began dependency-safe M2 work with an immutable
+instrument-level source-document record and a sourced-metric gate. Exact
+instrument/provider/dataset identity, URI, digest, availability and retrieval
+time must agree before a metric payload is released; 153 local tests pass. The
+contract does not authenticate publishers, prove accuracy or grant rights.
+Next: add macro release/vintage records without coercing them into security
+identities, then expose a synthetic source trace in Research.
+
 September 27 evening: added a fail-closed M1 disposition derivation and surfaced it on `/m1-status`. The recommendation accepts only synthetic engineering evidence, defers Fidelity validation, continues the fallback and leaves the December target conditional; tampered conformance evidence is rejected and no founder/release approval can be recorded. Next: keep the October 3 draft synchronized with current-head CI and reassess only if authorized private-export evidence arrives.
 
 September 27 afternoon: added a typed M1 conformance model and allowlisted `/m1-status` view. It reports four verified-synthetic checks, four Fidelity-specific checks blocked on external evidence and private persistence as not implemented; three tests keep the counts, claims and public-safe rendering consistent. This is engineering evidence, not founder acceptance. Next: assemble the October 3 M1 review packet from this model and add explicit downgrade options if the authorized export/private boundary remain unavailable.
