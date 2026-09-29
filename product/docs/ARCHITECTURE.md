@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+September 29 M2 intake increment: `atlas.source_intake` accepts only
+already-retrieved exact bytes, enforces a 5 MiB bound and controlled
+encoding/signature checks, checks current purpose-specific data rights before
+hashing, and emits `ResearchSourceRecord` metadata without retaining content.
+It performs no network retrieval, persistence, publisher authentication,
+malware scan or fact extraction. See [permitted source intake contract](SOURCE_INTAKE.md).
+
 September 28 M2 macro-vintage increment: `atlas.macro_vintages` gives economic
 series a dedicated identity rather than a fake security/ticker. Each reporting
 period retains original and revised releases with Decimal/missing values,

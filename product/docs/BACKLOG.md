@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 29 morning: added a bounded, permission-gated research-source intake
+boundary. It rejects empty/oversized or malformed declared content, checks
+current purpose-specific rights before hashing, captures retrieval time and
+exact SHA-256, and returns metadata without retaining document bytes. Seven new
+tests raise the local suite to 170. Next: connect one checked-in synthetic source
+fixture through intake, observation and metric readiness for an end-to-end
+non-network demonstration.
+
 September 28 evening: exposed the exact synthetic source binding and macro
 release-vintage states in Research. Two projection tests fail if document,
 provider, dataset, timing, original/revised values, selected revision or the
