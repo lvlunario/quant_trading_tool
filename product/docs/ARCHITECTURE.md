@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+September 29 M2 workflow increment: `atlas.source_workflow` runs one checked-in
+invented JSON source through the permission-first intake boundary, strict typed
+extraction, point-in-time observation construction, effective security identity
+and exact-source metric readiness. The CLI exposes only a redacted report. The
+adapter accepts no path or URL and is deliberately not reusable for real source
+files; provider retrieval, private persistence and extraction qualification
+remain separate work.
+
 September 29 M2 intake increment: `atlas.source_intake` accepts only
 already-retrieved exact bytes, enforces a 5 MiB bound and controlled
 encoding/signature checks, checks current purpose-specific data rights before

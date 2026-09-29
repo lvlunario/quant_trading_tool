@@ -16,6 +16,8 @@ def main():
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--demo", action="store_true")
     source.add_argument("--research-demo", action="store_true")
+    source.add_argument("--source-demo", action="store_true",
+                        help="fixed invented research source through all release gates")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -62,6 +64,11 @@ def main():
                 raise ValueError("Input exceeds 1 MB limit")
             source_bytes = args.synthetic_csv_demo.read_bytes()
             report = synthetic_csv_report(source_bytes, ledger_path=args.ledger)
+        elif args.source_demo:
+            from .source_workflow import synthetic_source_report
+
+            fixture = Path(__file__).parents[1] / 'fixtures' / 'synthetic-research-source.json'
+            report = synthetic_source_report(fixture.read_bytes())
         elif args.research_demo:
             from datetime import date, timedelta
             from .provenance import ObservationRecord, assess_research_input

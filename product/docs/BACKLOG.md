@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 29 afternoon: connected a checked-in invented JSON document through
+permission-first source intake, exact-byte hashing, strict typed metric
+extraction, point-in-time observation, effective security identity and
+exact-source readiness. `python -m atlas --source-demo` emits only a redacted
+report; missing metrics remain blocked and altered bytes change provenance. Six
+new tests raise the local suite to 176. Next: define extraction-result quality
+states and surface this composed readiness trace in the Research workflow
+without implying a live feed.
+
 September 29 morning: added a bounded, permission-gated research-source intake
 boundary. It rejects empty/oversized or malformed declared content, checks
 current purpose-specific rights before hashing, captures retrieval time and

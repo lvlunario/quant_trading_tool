@@ -33,6 +33,16 @@ class CliTests(unittest.TestCase):
         self.assertEqual((report['mode'], report['status']), ('synthetic', 'ready'))
         self.assertIn('no real data', report['readiness'])
 
+    def test_source_demo_runs_fixed_fixture_without_raw_content(self):
+        run = subprocess.run([sys.executable, '-m', 'atlas', '--source-demo'],
+                             capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['mode'], report['status']), ('synthetic', 'ready'))
+        self.assertEqual(report['metric']['value'], '123.40')
+        self.assertNotIn('source_uri', run.stdout)
+        self.assertNotIn('Reported revenue', run.stdout)
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

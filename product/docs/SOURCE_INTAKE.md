@@ -31,3 +31,13 @@ accurate, or that extracted facts are correct. It has no immutable object store,
 duplicate-document ledger, provider-specific downloader, robots/rate-limit
 policy, antivirus/sandbox, HTML sanitization or extraction pipeline. Those are
 separate controls before live-source ingestion or customer use.
+
+## Fixed synthetic workflow
+
+`python -m atlas --source-demo` passes the checked-in invented JSON fixture
+through this admission sequence before parsing it. Atlas then constructs a
+typed metric payload and observation and applies the existing point-in-time,
+identity, rights, payload and exact-source binding gates. The output is a
+redacted verification report; the command accepts no path, upload or URL. This
+demonstrates contract composition only and does not qualify an extraction rule
+or external provider.

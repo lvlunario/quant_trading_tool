@@ -10,7 +10,7 @@ Project decisions are now delegated to engineering: the private read-only/paper 
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: four local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a contract-backed synthetic metric, its exact document/provider/dataset provenance and an invented macro series with original, revised and not-yet-available states. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. M2 now has exact source-document-to-metric binding, a separate macro release/vintage contract and a bounded permission-gated source intake boundary; the preview remains a presentation projection, not a working data feed. The importer is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 170 passing tests; test count measures verification coverage, not product completeness.
+Today: five local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a contract-backed synthetic metric, its exact document/provider/dataset provenance and an invented macro series with original, revised and not-yet-available states. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. M2 now has exact source-document-to-metric binding, a separate macro release/vintage contract, a bounded permission-gated source intake boundary and a fixed end-to-end synthetic source workflow; the preview remains a presentation projection, not a working data feed. The importer is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 176 passing tests; test count measures verification coverage, not product completeness.
 
 Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The offline page still does not accept a file or run an import. The localhost Import Demo runs only the checked-in invented CSV through the same parser, reconciliation and receipt pipeline used by the command-line workflow; it accepts no upload or caller-selected path. The adjacent M1 Conformance view shows four synthetic checks verified, four Fidelity-specific checks blocked on external evidence and private persistence not implemented. It now derives the October 3 engineering recommendation: accept only the synthetic evidence, defer Fidelity validation and continue the fallback; it cannot record founder approval or release authorization.
 
@@ -67,6 +67,7 @@ cd product
 python -m unittest discover -s tests -v
 python -m atlas --demo
 python -m atlas --research-demo
+python -m atlas --source-demo
 python -m atlas --broker-demo
 python -m atlas --synthetic-csv-demo fixtures/synthetic-broker.csv
 python -m atlas --synthetic-csv-demo fixtures/synthetic-broker.csv \
@@ -94,6 +95,13 @@ strict size/encoding checks and explicit current permission for the intended
 use, then returns exact-byte metadata without retaining content. See [permitted
 source intake contract](docs/SOURCE_INTAKE.md). It does not fetch, persist,
 authenticate or extract documents.
+
+`--source-demo` runs the checked-in invented JSON source through permission
+checking, exact-byte intake, typed extraction, point-in-time observation,
+security identity and sourced-metric readiness. Its redacted output contains a
+digest and released metric fields, not the URI or raw document. This is a fixed
+contract demonstration—not a provider adapter, general upload or accuracy
+claim.
 
 The `atlas.macro_vintages` contract keeps original and revised economic releases separate and selects only the vintage available at a historical decision time. See [macro release and vintage contract](docs/MACRO_VINTAGES.md). No real macro provider or economic forecast is included.
 
