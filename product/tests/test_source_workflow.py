@@ -25,6 +25,9 @@ class SyntheticSourceWorkflowTests(unittest.TestCase):
         self.assertEqual(report['source_sha256'], sha256(self.source_bytes).hexdigest())
         self.assertEqual(report['metric']['value'], '123.40')
         self.assertEqual(report['metric']['period_end'], '2026-06-30')
+        self.assertEqual(report['extraction']['status'], 'ready')
+        self.assertEqual(report['extraction']['method'], 'deterministic_parser')
+        self.assertEqual(report['extraction']['review_status'], 'not_required')
         self.assertIn('all synthetic source gates passed', report['readiness'])
 
     def test_missing_rights_block_before_metric_release(self):

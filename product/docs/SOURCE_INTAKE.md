@@ -41,3 +41,7 @@ identity, rights, payload and exact-source binding gates. The output is a
 redacted verification report; the command accepts no path, upload or URL. This
 demonstrates contract composition only and does not qualify an extraction rule
 or external provider.
+
+The composed workflow now adds an independent extraction-quality decision after
+intake and before metric release. See [extraction-quality
+contract](EXTRACTION_QUALITY.md).

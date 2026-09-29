@@ -47,7 +47,7 @@ class PreviewTests(unittest.TestCase):
 
     def test_disclosures_have_labels(self):
         tags = [tag for tag, _ in self.page.elements]
-        self.assertEqual(tags.count('details'), 7)
+        self.assertEqual(tags.count('details'), 8)
         self.assertEqual(tags.count('summary'), tags.count('details'))
 
     def test_displayed_financial_values_match_kernel_contract(self):
@@ -76,6 +76,12 @@ class PreviewTests(unittest.TestCase):
         expected = synthetic_preview_model()['source_trace']
         actual = {attrs['data-source']: attrs.get('data-value')
                   for _, attrs in self.page.elements if 'data-source' in attrs}
+        self.assertEqual(actual, expected)
+
+    def test_composed_workflow_trace_includes_extraction_quality(self):
+        expected = synthetic_preview_model()['workflow_trace']
+        actual = {attrs['data-workflow']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-workflow' in attrs}
         self.assertEqual(actual, expected)
 
     def test_macro_trace_preserves_revision_and_unavailable_state(self):

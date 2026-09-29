@@ -1,6 +1,7 @@
 """Synthetic, fixed UX-preview model derived from the deterministic risk kernel."""
 from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal
+from pathlib import Path
 
 from .macro_vintages import MacroReleaseRecord, select_macro_vintage
 from .metric_evidence import MetricPayload, assess_sourced_metric_input
@@ -10,6 +11,7 @@ from .receipts import import_receipt
 from .reference import DataRightsRecord, SecurityRecord
 from .risk import snapshot_report, standard_option_payoff
 from .source_evidence import ResearchSourceRecord
+from .source_workflow import synthetic_source_report
 
 
 PREVIEW_AS_OF = datetime(2026, 9, 12, tzinfo=timezone.utc)
@@ -88,6 +90,12 @@ def synthetic_preview_model():
         use_case='internal_research', now=PREVIEW_AS_OF)
     if research.status != 'ready':
         raise AssertionError("Synthetic research trace is inconsistent")
+    fixture = (Path(__file__).parents[1] / 'fixtures' /
+               'synthetic-research-source.json')
+    workflow = synthetic_source_report(fixture.read_bytes(), now=PREVIEW_AS_OF)
+    if (workflow['status'] != 'ready' or
+            workflow['extraction']['status'] != 'ready'):
+        raise AssertionError("Synthetic source workflow is inconsistent")
 
     macro_initial = MacroReleaseRecord(
         'MREL_DEMO12345678', 'MAC_DEMO12345678', 'PRV_MACRO1234',
@@ -140,6 +148,17 @@ def synthetic_preview_model():
                 "available_at": source.available_at.isoformat(),
                 "retrieved_at": source.retrieved_at.isoformat(),
                 "binding": "exact_source_binding_passed",
+            },
+            "workflow_trace": {
+                "status": workflow['status'],
+                "source_sha256": workflow['source_sha256'],
+                "metric_id": workflow['metric']['metric_id'],
+                "value": workflow['metric']['value'],
+                "extraction_status": workflow['extraction']['status'],
+                "method": workflow['extraction']['method'],
+                "review_status": workflow['extraction']['review_status'],
+                "quality_code": workflow['extraction']['codes'][0],
+                "release_code": workflow['codes'][0],
             },
             "macro_trace": {
                 "series_id": macro_initial.macro_series_id,

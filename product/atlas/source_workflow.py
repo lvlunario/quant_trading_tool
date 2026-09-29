@@ -8,6 +8,7 @@ from datetime import date, datetime, timedelta, timezone
 from decimal import Decimal, InvalidOperation
 import json
 
+from .extraction_quality import ExtractionEvidence, assess_extraction_quality
 from .metric_evidence import MetricPayload, assess_sourced_metric_input
 from .metrics import MetricDefinition, MetricValue
 from .provenance import ObservationRecord
@@ -96,6 +97,26 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
 
     payload = _metric_payload(record['metric'])
     source = intake.record
+    extraction = ExtractionEvidence(
+        'EXT_DEMO12345678', source.document_id,
+        payload.metric.definition.metric_id, source.source_sha256,
+        payload.payload_sha256, 'deterministic_parser',
+        'atlas.synthetic_json@1.0.0', source.retrieved_at, 'not_required', None)
+    quality = assess_extraction_quality(extraction, source, payload, now=now)
+    extraction_report = {
+        'status': quality.status, 'codes': list(quality.codes),
+        'extraction_id': quality.extraction_id, 'method': extraction.method,
+        'extractor_version': extraction.extractor_version,
+        'review_status': extraction.review_status,
+    }
+    if quality.status != 'ready':
+        return {
+            'schema_version': 1, 'mode': 'synthetic', 'status': 'blocked',
+            'codes': list(quality.codes), 'byte_count': intake.byte_count,
+            'source_sha256': source.source_sha256, 'metric': None,
+            'extraction': extraction_report,
+            'readiness': 'no metric released; extraction quality blocked',
+        }
     observation = ObservationRecord(
         'OBS_DEMO12345678', 'SER_DEMO12345678', record['revision'],
         source.instrument_id, source.provider_id, source.dataset_id,
@@ -128,6 +149,7 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
         'codes': list(decision.codes), 'byte_count': intake.byte_count,
         'source_sha256': source.source_sha256, 'document_id': source.document_id,
         'observation_id': decision.observation_id, 'metric': metric,
+        'extraction': extraction_report,
         'readiness': ('all synthetic source gates passed; no provider connection, '
                       'publisher authentication, accuracy claim or investment conclusion'),
     }

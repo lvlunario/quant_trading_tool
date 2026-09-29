@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+September 29 M2 extraction increment: `atlas.extraction_quality` binds a
+versioned extraction method and review state to the exact source document and
+canonical metric payload. Deterministic parsing may be self-evidencing under a
+fixed contract; manual and AI-assisted extraction require a verified review
+digest. Rejected, unverified, mismatched or temporally impossible evidence
+withholds the value. Research now projects this composed synthetic decision.
+See [extraction-quality contract](EXTRACTION_QUALITY.md).
+
 September 29 M2 workflow increment: `atlas.source_workflow` runs one checked-in
 invented JSON source through the permission-first intake boundary, strict typed
 extraction, point-in-time observation construction, effective security identity

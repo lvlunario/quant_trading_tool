@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 29 evening: added extraction-quality evidence that binds method,
+version, timing and review state to exact source and metric payload hashes.
+Deterministic extraction can pass its fixed contract; manual or AI-assisted
+extraction requires a verified review digest, while unverified/rejected or
+mismatched evidence releases no value. Research now shows the composed
+intake-to-metric decision. Six new tests raise the local suite to 182. Next:
+define provider-extractor conformance fixtures and sampling criteria without
+claiming a live provider or qualified extraction accuracy.
+
 September 29 afternoon: connected a checked-in invented JSON document through
 permission-first source intake, exact-byte hashing, strict typed metric
 extraction, point-in-time observation, effective security identity and
