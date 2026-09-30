@@ -55,6 +55,19 @@ class CliTests(unittest.TestCase):
         self.assertNotIn('Reported revenue', run.stdout)
         self.assertNotIn('"source"', run.stdout)
 
+    def test_provider_qualification_demo_blocks_without_external_evidence(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--provider-qualification-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['status'], 'blocked')
+        self.assertEqual(report['evidence_scope'], 'none')
+        self.assertFalse(report['release_authorized'])
+        self.assertIn('authorization_evidence_missing', report['codes'])
+        for private_field in ('corpus_digest', 'reviewer_ids', 'receipt_id'):
+            self.assertNotIn(private_field, run.stdout)
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

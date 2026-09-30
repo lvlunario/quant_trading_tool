@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+September 30 M2 qualification increment: `atlas.provider_qualification`
+separates public policy from private evidence and binds qualification to an
+exact provider, dataset and extractor version. The adopted minimum gate requires
+an authorized representative corpus, full declared-format coverage, two
+reviewers, 30 documents, 200 checked fields, at least 99% exact matches and zero
+critical or semantic errors. Missing, synthetic-only, expired or mismatched
+evidence blocks. Reports exclude evidence identifiers and cannot authorize a
+release. See [provider qualification protocol](PROVIDER_QUALIFICATION.md).
+
 September 30 M2 conformance increment: `atlas.extractor_conformance` evaluates
 one versioned invented provider/dataset/extractor profile against a bounded
 manifest of positive and negative cases. Required category coverage and

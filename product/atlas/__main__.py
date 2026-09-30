@@ -20,6 +20,8 @@ def main():
                         help="fixed invented research source through all release gates")
     source.add_argument("--extractor-conformance-demo", action="store_true",
                         help="fixed synthetic extractor cases; no provider connection")
+    source.add_argument("--provider-qualification-demo", action="store_true",
+                        help="redacted protocol status; no provider data")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -72,6 +74,14 @@ def main():
             fixture = (Path(__file__).parents[1] / 'fixtures' /
                        'synthetic-extractor-conformance.json')
             report = evaluate_synthetic_extractor(fixture.read_bytes())
+        elif args.provider_qualification_demo:
+            from .provider_qualification import (
+                assess_provider_qualification,
+                default_provider_qualification_policy,
+            )
+
+            report = assess_provider_qualification(
+                default_provider_qualification_policy())
         elif args.source_demo:
             from .source_workflow import synthetic_source_report
 

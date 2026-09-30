@@ -33,6 +33,16 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 30 afternoon: adopted and implemented a fail-closed private provider
+qualification protocol. An exact provider/dataset/extractor version needs a
+current private-boundary receipt, purpose authorization, representative corpus,
+two independent reviewers, at least 30 documents and 200 field checks, full
+declared-format coverage, at least 99% exact matches and zero critical or
+semantic errors. Synthetic, missing, expired or mismatched evidence remains
+blocked; public reports exclude evidence IDs and cannot authorize release. Nine
+new tests raise the local suite to 199. Next: connect the qualification status
+to the Research readiness projection without exposing private evidence.
+
 September 30 morning: added a versioned synthetic extractor profile and six
 checked-in conformance cases covering nominal, missing, schema, identity, unit
 and period behavior. The zero-tolerance policy blocks false accepts, false

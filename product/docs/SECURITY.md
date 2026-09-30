@@ -11,7 +11,7 @@ The inherited public repository tracks a `.env` file. Its contents were not insp
 | Account takeover | Managed authentication, MFA, short sessions, rate limits | Session/recovery abuse tests |
 | Tenant data leakage | Server-side object authorization and tenant-scoped data | Cross-tenant negative tests |
 | Credential leakage | Managed secrets, least privilege, log redaction, scanning | Scan and rotation drill |
-| Bad/stale/poisoned data | Schema checks, source provenance, reconciliation, extraction conformance and freshness gates | Corrupt/stale/provider-conflict plus false-accept/reject fixtures |
+| Bad/stale/poisoned data | Schema checks, source provenance, reconciliation, extraction conformance, private provider qualification and freshness gates | Corrupt/stale/provider-conflict, false-accept/reject and qualification-threshold fixtures |
 | LLM fabrication or injection | Evidence-bound summaries, isolated tools, deterministic math | Adversarial-source test set |
 | Duplicate jobs or actions | Idempotency keys, atomic state and audit history | Retry/crash/replay tests |
 | Data loss/outage | Encrypted backups, restore rehearsal, incident runbooks | Measured restore and rollback |
