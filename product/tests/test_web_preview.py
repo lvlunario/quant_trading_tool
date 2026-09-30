@@ -110,6 +110,17 @@ class WebPreviewTests(unittest.TestCase):
         _, _, lab = self.request("GET", "/")
         self.assertIn('href="/overview"', lab)
 
+    def test_provider_qualification_projection_is_blocked_and_redacted(self):
+        status, _, page = self.request("GET", "/overview")
+        self.assertEqual(status, 200)
+        self.assertIn('data-qualification="status" data-value="blocked"', page)
+        self.assertIn('data-qualification="release_authorized" data-value="false"',
+                      page)
+        self.assertIn('private_boundary_evidence_missing', page)
+        for private_field in ('corpus_digest', 'label_set_digest', 'reviewer_ids',
+                              'authorization_receipt_id'):
+            self.assertNotIn(private_field, page)
+
     def test_import_demo_runs_fixed_fixture_through_redacted_contract(self):
         status, headers, page = self.request("GET", "/import-demo")
         self.assertEqual(status, 200)

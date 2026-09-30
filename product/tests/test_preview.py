@@ -47,7 +47,7 @@ class PreviewTests(unittest.TestCase):
 
     def test_disclosures_have_labels(self):
         tags = [tag for tag, _ in self.page.elements]
-        self.assertEqual(tags.count('details'), 8)
+        self.assertEqual(tags.count('details'), 9)
         self.assertEqual(tags.count('summary'), tags.count('details'))
 
     def test_displayed_financial_values_match_kernel_contract(self):
@@ -89,6 +89,15 @@ class PreviewTests(unittest.TestCase):
         actual = {attrs['data-macro']: attrs.get('data-value')
                   for _, attrs in self.page.elements if 'data-macro' in attrs}
         self.assertEqual(actual, expected)
+
+    def test_provider_qualification_is_blocked_and_contract_backed(self):
+        expected = synthetic_preview_model()['qualification_trace']
+        actual = {attrs['data-qualification']: attrs.get('data-value')
+                  for _, attrs in self.page.elements
+                  if 'data-qualification' in attrs}
+        self.assertEqual(actual, expected)
+        self.assertEqual(actual['status'], 'blocked')
+        self.assertEqual(actual['release_authorized'], 'false')
 
     def test_import_receipts_match_redacted_backend_contract(self):
         expected = synthetic_preview_model()['import_receipts']

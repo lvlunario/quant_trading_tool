@@ -9,6 +9,12 @@ critical or semantic errors. Missing, synthetic-only, expired or mismatched
 evidence blocks. Reports exclude evidence identifiers and cannot authorize a
 release. See [provider qualification protocol](PROVIDER_QUALIFICATION.md).
 
+The fixed Research projection consumes the no-evidence qualification decision
+and displays only its controlled status, counts, rates and blocking code. It
+does not construct an independent UI status or expose corpus/label hashes,
+reviewer identities or authorization receipts. A regression test requires the
+offline HTML and localhost overview to remain equal to the backend decision.
+
 September 30 M2 conformance increment: `atlas.extractor_conformance` evaluates
 one versioned invented provider/dataset/extractor profile against a bounded
 manifest of positive and negative cases. Required category coverage and

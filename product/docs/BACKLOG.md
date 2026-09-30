@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 30 evening: projected the provider-qualification gate into the fixed
+Research screen. The contract-backed view shows blocked status, absent private
+evidence, zero measured sample counts, unavailable quality rates, five unmet
+gates and release authorization false. It contains no corpus/label digests,
+reviewer IDs or authorization receipts. Two projection/privacy tests raise the
+local suite to 201. Next: prepare the October 3 M1 disposition packet with the
+current synthetic evidence and explicit Fidelity deferral, then continue the
+October 17 sourced-workbench slice.
+
 September 30 afternoon: adopted and implemented a fail-closed private provider
 qualification protocol. An exact provider/dataset/extractor version needs a
 current private-boundary receipt, purpose authorization, representative corpus,

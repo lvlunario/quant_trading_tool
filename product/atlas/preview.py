@@ -7,6 +7,8 @@ from .macro_vintages import MacroReleaseRecord, select_macro_vintage
 from .metric_evidence import MetricPayload, assess_sourced_metric_input
 from .metrics import MetricDefinition, MetricValue
 from .provenance import ObservationRecord
+from .provider_qualification import (assess_provider_qualification,
+                                     default_provider_qualification_policy)
 from .receipts import import_receipt
 from .reference import DataRightsRecord, SecurityRecord
 from .risk import snapshot_report, standard_option_payoff
@@ -126,6 +128,11 @@ def synthetic_preview_model():
         now=PREVIEW_AS_OF)
     if macro_early.status != 'missing' or macro_late.status != 'selected':
         raise AssertionError("Synthetic macro vintage trace is inconsistent")
+    qualification = assess_provider_qualification(
+        default_provider_qualification_policy(), now=PREVIEW_AS_OF)
+    if (qualification['status'] != 'blocked' or
+            qualification['release_authorized']):
+        raise AssertionError("Provider qualification boundary is inconsistent")
     return {"portfolio": portfolio, "put_outcomes": outcomes,
             "import_receipts": synthetic_import_receipts(),
             "research_trace": {
@@ -170,5 +177,19 @@ def synthetic_preview_model():
                 "selected_revision": str(macro_late.revision),
                 "selected_value": str(macro_late.value),
                 "unavailable_code": macro_early.code,
+            },
+            "qualification_trace": {
+                "status": qualification['status'],
+                "evidence_scope": qualification['evidence_scope'],
+                "document_count": str(qualification['document_count']),
+                "field_check_count": str(qualification['field_check_count']),
+                "exact_match_rate": (qualification['exact_match_rate'] or
+                                     'unavailable'),
+                "format_coverage_rate": (qualification['format_coverage_rate'] or
+                                         'unavailable'),
+                "missing_gate_count": str(len(qualification['codes'])),
+                "primary_code": qualification['codes'][0],
+                "release_authorized": str(
+                    qualification['release_authorized']).lower(),
             },
             "model_status": "fixed synthetic values calculated by atlas.risk"}
