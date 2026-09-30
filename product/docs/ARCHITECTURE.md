@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+September 30 M2 conformance increment: `atlas.extractor_conformance` evaluates
+one versioned invented provider/dataset/extractor profile against a bounded
+manifest of positive and negative cases. Required category coverage and
+zero-tolerance false-accept, false-reject and expectation-mismatch limits fail
+closed. Results contain case classifications but no source objects. This is
+synthetic contract regression evidence, not provider compatibility or measured
+production accuracy. See [extractor conformance contract](EXTRACTOR_CONFORMANCE.md).
+
 September 29 M2 extraction increment: `atlas.extraction_quality` binds a
 versioned extraction method and review state to the exact source document and
 canonical metric payload. Deterministic parsing may be self-evidencing under a

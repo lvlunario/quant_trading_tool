@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+September 30 morning: added a versioned synthetic extractor profile and six
+checked-in conformance cases covering nominal, missing, schema, identity, unit
+and period behavior. The zero-tolerance policy blocks false accepts, false
+rejects, expectation mismatches, incomplete category coverage and undersized
+suites; redacted output contains no source objects. Eight new tests raise the
+local suite to 190. This does not measure real-provider accuracy. Next: define a
+private real-provider qualification protocol and keep implementation blocked
+until authorized representative documents exist.
+
 September 29 evening: added extraction-quality evidence that binds method,
 version, timing and review state to exact source and metric payload hashes.
 Deterministic extraction can pass its fixed contract; manual or AI-assisted

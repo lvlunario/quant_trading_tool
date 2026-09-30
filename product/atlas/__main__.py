@@ -18,6 +18,8 @@ def main():
     source.add_argument("--research-demo", action="store_true")
     source.add_argument("--source-demo", action="store_true",
                         help="fixed invented research source through all release gates")
+    source.add_argument("--extractor-conformance-demo", action="store_true",
+                        help="fixed synthetic extractor cases; no provider connection")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -64,6 +66,12 @@ def main():
                 raise ValueError("Input exceeds 1 MB limit")
             source_bytes = args.synthetic_csv_demo.read_bytes()
             report = synthetic_csv_report(source_bytes, ledger_path=args.ledger)
+        elif args.extractor_conformance_demo:
+            from .extractor_conformance import evaluate_synthetic_extractor
+
+            fixture = (Path(__file__).parents[1] / 'fixtures' /
+                       'synthetic-extractor-conformance.json')
+            report = evaluate_synthetic_extractor(fixture.read_bytes())
         elif args.source_demo:
             from .source_workflow import synthetic_source_report
 

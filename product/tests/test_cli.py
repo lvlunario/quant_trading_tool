@@ -43,6 +43,18 @@ class CliTests(unittest.TestCase):
         self.assertNotIn('source_uri', run.stdout)
         self.assertNotIn('Reported revenue', run.stdout)
 
+    def test_extractor_conformance_demo_is_synthetic_and_redacted(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--extractor-conformance-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['status'], 'conformant_synthetic')
+        self.assertEqual(report['matched_case_count'], 6)
+        self.assertIn('no real provider', report['qualification'])
+        self.assertNotIn('Reported revenue', run.stdout)
+        self.assertNotIn('"source"', run.stdout)
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

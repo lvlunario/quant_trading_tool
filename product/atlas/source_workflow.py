@@ -140,6 +140,7 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
             'value': str(decision.payload.metric.value),
             'unit': definition.unit,
             'currency': definition.currency,
+            'period': definition.period,
             'period_start': decision.payload.period_start.isoformat(),
             'period_end': decision.payload.period_end.isoformat(),
             'transform_version': definition.transform_version,

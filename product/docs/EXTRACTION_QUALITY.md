@@ -31,3 +31,7 @@ deterministic parser can consistently extract the wrong field, and a review hash
 does not prove reviewer competence or source truth. Provider-specific fixtures,
 independent sampling, period/unit reconciliation and error-rate measurement are
 still required before a real extractor is accepted.
+
+The checked-in invented provider profile exercises these states through the
+[synthetic extractor conformance contract](EXTRACTOR_CONFORMANCE.md). Its result
+is regression evidence only, not an accuracy estimate.
