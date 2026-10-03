@@ -111,3 +111,35 @@ def recommend_m1_disposition(report=None) -> dict:
             'source_specific_profile_and_reconciliation_evidence',
         ),
     }
+
+
+def m1_milestone_handoff(report=None) -> dict:
+    """Finalize the delegated engineering handoff without granting acceptance.
+
+    The handoff is intentionally derived from the validated disposition rather
+    than maintained as a second independent set of milestone claims.
+    """
+    disposition = recommend_m1_disposition(report)
+    if (disposition['synthetic_scope'] !=
+            'recommend_accept_engineering_evidence' or
+            disposition['fidelity_scope'] !=
+            'recommend_defer_external_validation' or
+            disposition['phase_progression'] !=
+            'continue_synthetic_fallback' or
+            disposition['founder_approval_recorded'] is not False or
+            disposition['release_authorized'] is not False):
+        raise ValueError('unsupported_m1_handoff')
+    return {
+        'schema_version': 1,
+        'milestone': 'M1 Portfolio Truth',
+        'milestone_date': disposition['evaluated_milestone'],
+        'engineering_state': 'synthetic_scope_accepted_for_progression',
+        'fidelity_state': 'deferred_pending_private_evidence',
+        'next_phase': 'M2 Sourced Research',
+        'next_deadline': '2026-10-17',
+        'december_target': disposition['december_target'],
+        'founder_approval_recorded': False,
+        'release_authorized': False,
+        'data_notice': ('public-safe engineering handoff; no holdings, account '
+                        'data, Fidelity export or private evidence'),
+    }

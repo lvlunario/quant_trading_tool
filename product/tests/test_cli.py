@@ -68,6 +68,20 @@ class CliTests(unittest.TestCase):
         for private_field in ('corpus_digest', 'reviewer_ids', 'receipt_id'):
             self.assertNotIn(private_field, run.stdout)
 
+    def test_m1_handoff_advances_without_recording_approval(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m1-handoff'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['next_phase'], 'M2 Sourced Research')
+        self.assertEqual(report['fidelity_state'],
+                         'deferred_pending_private_evidence')
+        self.assertFalse(report['founder_approval_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for private_field in ('account_id', 'position', 'source_sha256'):
+            self.assertNotIn(private_field, run.stdout)
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

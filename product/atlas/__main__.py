@@ -22,6 +22,8 @@ def main():
                         help="fixed synthetic extractor cases; no provider connection")
     source.add_argument("--provider-qualification-demo", action="store_true",
                         help="redacted protocol status; no provider data")
+    source.add_argument("--m1-handoff", action="store_true",
+                        help="public-safe milestone handoff; no acceptance authority")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -74,6 +76,10 @@ def main():
             fixture = (Path(__file__).parents[1] / 'fixtures' /
                        'synthetic-extractor-conformance.json')
             report = evaluate_synthetic_extractor(fixture.read_bytes())
+        elif args.m1_handoff:
+            from .conformance import m1_milestone_handoff
+
+            report = m1_milestone_handoff()
         elif args.provider_qualification_demo:
             from .provider_qualification import (
                 assess_provider_qualification,

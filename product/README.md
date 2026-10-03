@@ -6,11 +6,11 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated September 30, 2026
+## What you can try and when — updated October 3, 2026
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
-Today: seven local Python command-line demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a contract-backed synthetic metric, its exact document/provider/dataset provenance, the explicit blocked real-provider qualification state and an invented macro series with original, revised and not-yet-available states. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. M2 now has exact source-document-to-metric binding, a separate macro release/vintage contract, a bounded permission-gated source intake boundary, a fixed end-to-end synthetic source workflow, explicit extraction-quality evidence, a zero-tolerance synthetic extractor conformance suite and a fail-closed private-provider qualification protocol; the preview remains a presentation projection, not a working data feed. The importer is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or working stock-analysis feed yet. The latest local suite has 201 passing tests; test count measures verification coverage, not product completeness.
+Today: eight local Python command-line reports/demos, an offline HTML workflow preview, a localhost-only interactive Options Lab and a fixed localhost Import Demo are available using synthetic data. Research shows a contract-backed synthetic metric, its exact document/provider/dataset provenance, the explicit blocked real-provider qualification state and an invented macro series with original, revised and not-yet-available states. M1 now has a runnable broker-mapping demonstration, a versioned synthetic profile and a bounded synthetic CSV command that requires exact headers, derives account totals from explicit footer rows and retains malformed records as failures. An optional private hash-only ledger prevents an identical file from publishing rows twice. The October 3 handoff accepts only this synthetic engineering scope for progression and defers Fidelity validation. M2 now has exact source-document-to-metric binding, a separate macro release/vintage contract, a bounded permission-gated source intake boundary, a fixed end-to-end synthetic source workflow, explicit extraction-quality evidence, a zero-tolerance synthetic extractor conformance suite and a fail-closed private-provider qualification protocol. A dated [weekly public-evidence watchlist report](docs/research/2026-10-03-weekly-watchlist.html) starts the sourced-workbench workflow; it ranks research priority, not securities. The importer is not a Fidelity adapter. There is no integrated browser dashboard, hosted login, Fidelity connection or licensed stock-analysis feed yet. The latest local suite has 207 passing tests; test count measures verification coverage, not product completeness.
 
 Portfolio now shows four contract-backed synthetic import receipts: eligible, blocked, duplicate and replay check required. Each displays only controlled state and row counts—never account aliases, totals, holdings or file paths. The offline page still does not accept a file or run an import. The localhost Import Demo runs only the checked-in invented CSV through the same parser, reconciliation and receipt pipeline used by the command-line workflow; it accepts no upload or caller-selected path. The adjacent M1 Conformance view shows four synthetic checks verified, four Fidelity-specific checks blocked on external evidence and private persistence not implemented. It now derives the October 3 engineering recommendation: accept only the synthetic evidence, defer Fidelity validation and continue the fallback; it cannot record founder approval or release authorization.
 
@@ -33,7 +33,7 @@ Open the displayed `http://127.0.0.1:8765/overview` address. In Portfolio, selec
 |---|---|---|
 | Now | Run portfolio arithmetic, fixed CSV reconciliation, receipt and research-input checks locally | Implemented; synthetic data only; no file upload or account connection |
 | September 19 | Review an early clickable screen prototype: dashboard, holdings, stock research and option scenarios | Offline navigation plus local editable kernel-backed put scenario implemented; M0 engineering baseline conditionally accepted for progression; full browser/device QA and founder workflow feedback pending |
-| October 3 | Try a reconciled portfolio-import workflow | Requires representative redacted Fidelity export; browser delivery is not implied by this milestone |
+| October 3 | Try a reconciled portfolio-import workflow | Synthetic engineering scope accepted for progression; Fidelity validation deferred pending a representative authorized export and provisioned private boundary |
 | October 17 | Review a sourced stock-research workbench and weekly report | Requires verified identities and permitted data; first version may be local/report-based |
 | October 31 | Try documented strategy experiments and option-risk scenarios | Data, benchmark and cost validation required |
 | November 14 | Use the first integrated private browser application | Authentication, approved private storage and data access required |
@@ -70,6 +70,7 @@ python -m atlas --research-demo
 python -m atlas --source-demo
 python -m atlas --extractor-conformance-demo
 python -m atlas --provider-qualification-demo
+python -m atlas --m1-handoff
 python -m atlas --broker-demo
 python -m atlas --synthetic-csv-demo fixtures/synthetic-broker.csv
 python -m atlas --synthetic-csv-demo fixtures/synthetic-broker.csv \
@@ -121,6 +122,11 @@ protocol and intentionally returns blocked while the private boundary,
 authorized representative corpus, independent labels and measured quality are
 absent. Its output omits evidence identifiers and can never authorize release.
 See [private provider qualification](docs/PROVIDER_QUALIFICATION.md).
+
+`--m1-handoff` returns the October 3 machine-readable disposition. It advances
+only the verified synthetic engineering scope to M2, keeps Fidelity validation
+deferred and cannot record founder approval or authorize release. See the
+[M1 disposition](docs/reviews/2026-10-03-M1-disposition.md).
 
 The `atlas.macro_vintages` contract keeps original and revised economic releases separate and selects only the vintage available at a historical decision time. See [macro release and vintage contract](docs/MACRO_VINTAGES.md). No real macro provider or economic forecast is included.
 

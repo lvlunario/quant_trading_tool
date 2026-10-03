@@ -2,7 +2,8 @@
 from copy import deepcopy
 import unittest
 
-from atlas.conformance import m1_import_conformance, recommend_m1_disposition
+from atlas.conformance import (m1_import_conformance, m1_milestone_handoff,
+                               recommend_m1_disposition)
 
 
 class ConformanceTests(unittest.TestCase):
@@ -48,6 +49,24 @@ class ConformanceTests(unittest.TestCase):
         report['counts']['verified_synthetic'] += 1
         with self.assertRaises(ValueError):
             recommend_m1_disposition(report)
+
+    def test_handoff_advances_only_synthetic_scope_to_m2(self):
+        handoff = m1_milestone_handoff()
+        self.assertEqual(handoff['engineering_state'],
+                         'synthetic_scope_accepted_for_progression')
+        self.assertEqual(handoff['fidelity_state'],
+                         'deferred_pending_private_evidence')
+        self.assertEqual((handoff['next_phase'], handoff['next_deadline']),
+                         ('M2 Sourced Research', '2026-10-17'))
+        self.assertFalse(handoff['founder_approval_recorded'])
+        self.assertFalse(handoff['release_authorized'])
+        self.assertIn('no holdings', handoff['data_notice'])
+
+    def test_handoff_rejects_tampered_source_report(self):
+        report = deepcopy(m1_import_conformance())
+        report['overall_status'] = 'complete'
+        with self.assertRaises(ValueError):
+            m1_milestone_handoff(report)
         report = deepcopy(m1_import_conformance())
         report['checks'][4]['status'] = 'verified_synthetic'
         report['counts'] = {'verified_synthetic': 5,

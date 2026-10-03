@@ -9,7 +9,7 @@ Priority order is dependency-driven. GitHub issue links will accompany the launc
 | UX-01 | Clickable synthetic screen prototype for founder feedback | P0 | Sep 19 | Product/application | Navigation and sample workflows usable; no live data implied |
 | DAT-01 | Redacted Fidelity sample and import contract | P0 | Sep 19 | Founder/data | Format and cash/core semantics resolved |
 | DAT-02 | Import/reconciliation implementation | P0 | Oct 3 | Data/QA | All rows accounted; duplicate/unsupported cases explicit |
-| RES-01 | Security master, CRBS identity and provider rights | P0 | Oct 3 | Research/data | Stable IDs and licensed access plan |
+| RES-01 | Security master, CRBS identity and provider rights | P0 | Oct 3 | Research/data | Public identities verified for the dated watchlist; CRBS remains explicitly blocked; licensed access plan still open |
 | RES-02 | Sourced weekly report and macro vintage handling | P1 | Oct 17 | Research | Facts, assumptions and dates distinguishable |
 | QNT-01 | Baselines and chronological evaluation | P1 | Oct 31 | Quant/QA | Holdout and transaction-cost evidence |
 | OPT-01 | Chain adapters, portfolio reservations and assignment scenarios | P1 | Oct 31 | Quant/integration | No double-use of cash/shares; stale chain blocks ranking |
@@ -32,6 +32,17 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 | Symbol ambiguity | Confirm CRBS issuer; verify SPCX via primary source | Open |
 
 ## Next concrete increment
+
+October 3 morning: finalized the M1 machine-readable handoff from the validated
+conformance model. The synthetic import evidence is accepted for program
+progression, Fidelity-specific validation remains deferred, and neither founder
+approval nor release authorization can be recorded. Added the first dated M2
+weekly public-evidence watchlist packet covering the required symbols plus AVGO,
+with effective identity checks, macro context, observation/hypothesis separation,
+research-decision frames and explicit missing licensed data. Six new tests raise
+the local suite to 207. Next: turn the verified public identities and source
+ledger into an effective-dated research-workbench dataset while keeping CRBS
+blocked and provider qualification fail closed.
 
 September 30 evening: projected the provider-qualification gate into the fixed
 Research screen. The contract-backed view shows blocked status, absent private
