@@ -9,7 +9,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 | R03 | Standard covered-call/CSP expiry scenario arithmetic | Bankruptcy, upside cap, breakeven, coverage and reserve cases pass | IMPLEMENTED |
 | R04 | Fidelity export importer | Reconcile balances and positions; report all rejected rows; no silent omission | PARTIAL: bounded synthetic CSV/profile mapping, normalized reconciliation and public-safe conformance view; Fidelity adapter/export validation pending |
 | R05 | Customer mandate | Capture goals, horizon, liquidity, account types, tax context, loss tolerance, experience and restrictions | PLANNED |
-| R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity, data-rights, bounded permission-gated intake, observation and exact source-document binding contracts; provider retrieval and persistence pending |
+| R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity/data-rights/source contracts plus a strict dated public watchlist snapshot resolving eight Nasdaq securities and blocking CRBS; historical intervals, provider retrieval, license review and persistence pending |
 | R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PARTIAL: fixed synthetic end-to-end source workflow, extraction-quality evidence, synthetic conformance suite, private-provider qualification gate and bounded intake/readiness contracts; private evidence execution, populated metrics, thesis/counter-thesis and full report UI pending |
 | R08 | Macro and market regime | Release/vintage dates and causal exposure mapping; no certainty from regimes | PARTIAL: typed point-in-time macro-vintage and rights gate; populated series, exposure mapping and UI pending |
 | R09 | Equity strategy testing | Chronological walk-forward, costs, benchmark alignment and holdout | PLANNED |
@@ -23,7 +23,7 @@ Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not a
 
 ## Research universe
 
-Requested symbols: NVDA, MU, QCOM, PLTR, SPCX, CRBS, QBTS, RGTI. Treat this as a watchlist request, not current holdings or endorsed candidates. MyInvestor catalog lookup on September 12 returned SPCX as Space Exploration Technologies class A on XNAS, but no CRBS match. Preserve this as provider-reported discovery, not verified exchange history. Confirm CRBS's intended issuer and verify all securities using primary exchange/issuer records before production. Do not silently substitute CRSP or another symbol. New listings and symbol reuse require effective-dated identifiers and explicit insufficient-history flags. The implemented resolver currently contains no production security records; see [the R06 contract](SECURITY_MASTER.md).
+Requested symbols: NVDA, MU, QCOM, PLTR, SPCX, CRBS, QBTS, RGTI. Treat this as a watchlist request, not current holdings or endorsed candidates. The October 3 public snapshot resolves the eight authoritative current identities plus AVGO from Nasdaq evidence and keeps CRBS blocked after Nasdaq/SEC search. It intentionally begins each current interval at the evidence cutoff rather than inventing historical listing dates. Do not silently substitute CRSP or another symbol. New listings and symbol reuse require effective-dated identifiers and explicit insufficient-history flags; see [the R06 contract](SECURITY_MASTER.md).
 
 ## Metric dictionary scope
 

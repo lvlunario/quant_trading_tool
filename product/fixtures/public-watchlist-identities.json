@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-03T00:00:00+00:00",
+  "records": [
+    {"instrument_id":"INS_WATCH2026100301","issuer_id":"ISS_WATCH2026100301","issuer_name":"NVIDIA Corporation","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"NVDA","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/nvda","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100302","issuer_id":"ISS_WATCH2026100302","issuer_name":"Micron Technology, Inc.","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"MU","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/mu","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100303","issuer_id":"ISS_WATCH2026100303","issuer_name":"QUALCOMM Incorporated","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"QCOM","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/qcom","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100304","issuer_id":"ISS_WATCH2026100304","issuer_name":"Palantir Technologies Inc.","security_name":"Class A Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"PLTR","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/pltr","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100305","issuer_id":"ISS_WATCH2026100305","issuer_name":"Space Exploration Technologies Corp.","security_name":"Class A Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"SPCX","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/spcx","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100306","issuer_id":"ISS_WATCH2026100306","issuer_name":"D-Wave Quantum Inc.","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"QBTS","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/qbts","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100307","issuer_id":"ISS_WATCH2026100307","issuer_name":"Rigetti Computing, Inc.","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"RGTI","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/rgti","observed_at":"2026-10-03T00:00:00+00:00"},
+    {"instrument_id":"INS_WATCH2026100308","issuer_id":"ISS_WATCH2026100308","issuer_name":"Broadcom Inc.","security_name":"Common Stock","exchange_mic":"XNAS","currency":"USD","security_class":"common_stock","symbol":"AVGO","effective_from":"2026-10-03","effective_to":null,"source_uri":"https://www.nasdaq.com/market-activity/stocks/avgo","observed_at":"2026-10-03T00:00:00+00:00"}
+  ],
+  "blocked": [
+    {"symbol":"CRBS","code":"unresolved_no_authoritative_match","checked_at":"2026-10-03T00:00:00+00:00","checked_sources":["https://www.nasdaq.com/market-activity/stocks","https://www.sec.gov/edgar/search/"]}
+  ]
+}

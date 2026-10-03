@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 3 afternoon: populated the first strict public watchlist identity
+snapshot for eight resolved Nasdaq securities plus AVGO and a separately blocked
+CRBS record. The loader requires the exact universe, primary Nasdaq/SEC sources,
+one dated observation, unique stable identities and current resolution; missing,
+duplicate, future, overlapping or unapproved evidence fails. Seven new tests
+raise the local suite to 214. Next: connect these instrument IDs to a small
+point-in-time sourced-metric workbench projection without inventing prices or
+provider rights.
+
 October 3 morning: finalized the M1 machine-readable handoff from the validated
 conformance model. The synthetic import evidence is accepted for program
 progression, Fidelity-specific validation remains deferred, and neither founder

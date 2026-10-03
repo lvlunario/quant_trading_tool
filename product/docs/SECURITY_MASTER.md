@@ -1,6 +1,6 @@
 # Security master and data-rights contract
 
-Requirement R06; [tracking issue #4](https://github.com/lvlunario/quant_trading_tool/issues/4). This foundation defines fail-closed identity and permission decisions. It does **not** populate or verify the requested watchlist, grant a data license, or authorize commercial use.
+Requirement R06; [tracking issue #4](https://github.com/lvlunario/quant_trading_tool/issues/4). This foundation defines fail-closed identity and permission decisions. It now includes a bounded October 3 public identity snapshot; it does **not** grant a data license, establish complete history, or authorize commercial use.
 
 ## Effective-dated security identity
 
@@ -16,7 +16,21 @@ Requirement R06; [tracking issue #4](https://github.com/lvlunario/quant_trading_
 
 Names and ticker labels are not identity. This matters for symbol changes, listings on multiple venues, corporate actions and historical backtests: a present-day ticker lookup cannot safely identify what a historical row represented.
 
-The repository contains synthetic tests only. It intentionally does not seed NVDA, MU, QCOM, PLTR, SPCX, QBTS or RGTI until records are sourced and reviewed. `CRBS` is explicitly tested as `missing`; its intended issuer remains a founder decision and no substitute is inferred.
+`fixtures/public-watchlist-identities.json` is the first non-financial public
+identity snapshot. It records issuer, class, XNAS MIC, symbol, evidence URL and
+observation time for NVDA, MU, QCOM, PLTR, SPCX, QBTS, RGTI and additional
+candidate AVGO. Each interval starts on the October 3 evidence cutoff unless a
+separate historical record is later reviewed; the snapshot must not be used to
+claim earlier listing history. `CRBS` is a distinct blocked entry with a dated
+Nasdaq/SEC search scope, and no substitute is inferred.
+
+`load_public_watchlist_registry` enforces the exact nine-symbol universe,
+primary Nasdaq/SEC HTTPS sources, one observation time, unique identities and
+successful current-date resolution. Unknown fields, omitted or duplicated
+symbols, future evidence, unapproved source hosts and any attempt to replace or
+promote CRBS fail closed. `python -m atlas --watchlist-registry-demo` emits only
+public symbols, counts and the blocked reason—no prices, holdings or account
+data.
 
 ## Dataset permission evidence
 
@@ -39,6 +53,6 @@ The repository contains synthetic tests only. It intentionally does not seed NVD
 4. Record corporate actions and identifier changes as new effective-dated evidence instead of overwriting history.
 5. Before customer use, add persistent private storage, controlled updates, four-eyes review, provenance exports, retention and periodic rights revalidation.
 
-Still pending: primary-source population, CUSIP/ISIN/FIGI policy and licensing, corporate-action ingestion, provider selection, qualified legal review, persistence and customer-facing integration.
+Still pending: verified pre-cutoff listing history, CUSIP/ISIN/FIGI policy and licensing, corporate-action ingestion, provider selection, qualified legal review, persistence and customer-facing integration.
 
 Observation records reference these stable instrument/provider/dataset IDs but do not bypass either gate; see [point-in-time provenance](PROVENANCE.md).

@@ -24,6 +24,8 @@ def main():
                         help="redacted protocol status; no provider data")
     source.add_argument("--m1-handoff", action="store_true",
                         help="public-safe milestone handoff; no acceptance authority")
+    source.add_argument("--watchlist-registry-demo", action="store_true",
+                        help="dated public security identities; no prices or holdings")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -76,6 +78,12 @@ def main():
             fixture = (Path(__file__).parents[1] / 'fixtures' /
                        'synthetic-extractor-conformance.json')
             report = evaluate_synthetic_extractor(fixture.read_bytes())
+        elif args.watchlist_registry_demo:
+            from .watchlist_registry import load_public_watchlist_registry
+
+            fixture = (Path(__file__).parents[1] / 'fixtures' /
+                       'public-watchlist-identities.json')
+            report = load_public_watchlist_registry(fixture.read_bytes()).public_summary()
         elif args.m1_handoff:
             from .conformance import m1_milestone_handoff
 

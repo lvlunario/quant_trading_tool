@@ -82,6 +82,18 @@ class CliTests(unittest.TestCase):
         for private_field in ('account_id', 'position', 'source_sha256'):
             self.assertNotIn(private_field, run.stdout)
 
+    def test_watchlist_registry_demo_reports_identity_not_market_data(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--watchlist-registry-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['resolved_count'], report['blocked_count']), (8, 1))
+        self.assertEqual(report['blocked'][0]['symbol'], 'CRBS')
+        self.assertIn('AVGO', report['resolved_symbols'])
+        for excluded in ('"price"', '"quantity"', '"account"', '"recommendation"'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)
