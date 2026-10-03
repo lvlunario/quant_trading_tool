@@ -35,8 +35,25 @@ failed check returns no metric payload.
 - Data-rights permission remains a separate gate. A byte-perfect source can
   still be prohibited for the requested use.
 
+## Public candidate catalog
+
+`atlas.source_catalog` adds a narrower, pre-intake boundary for the dated M2
+research queue. The checked-in October 3 catalog links the resolved NVDA, MU
+and AVGO instrument IDs to official issuer-release HTTPS addresses and their
+publication dates. It accepts only the exact three-name universe, the registry's
+observation cutoff and an allowlisted issuer domain for each candidate.
+
+A catalog entry is an address to investigate, not a `ResearchSourceRecord`.
+The loader therefore requires `rights_state=not_evaluated` and
+`extraction_state=not_attempted`; it stores no retrieved bytes or digest and
+cannot carry a metric value. Its public summary always reports the metric as
+unavailable and blocks progression pending rights and extraction review.
+
 ## Verification
 
 Tests cover exact successful binding; instrument/provider/dataset drift;
 URI/hash drift; availability/retrieval ordering; future retrieval; invalid
-identifiers/types/times; and preservation of prior metric-gate failures.
+identifiers/types/times; and preservation of prior metric-gate failures. The
+candidate-catalog tests separately cover exact universe/order, stable-identity
+matching, domain restrictions, cutoff consistency and rejection of prematurely
+promoted rights, extraction or metric fields.

@@ -33,13 +33,22 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 3 evening: connected the resolved NVDA, MU and AVGO identities to a
+strict dated catalog of official issuer-release addresses. The loader requires
+the exact three-name universe, instrument match, observation cutoff and
+allowlisted issuer domains. It rejects metric fields and any claim that rights
+or extraction have already passed; the demo reports every metric unavailable.
+Seven new tests raise the local suite to 221. Next: add an explicit rights-review
+record and bounded retrieval plan before any source bytes or values may enter
+the research evidence pipeline.
+
 October 3 afternoon: populated the first strict public watchlist identity
 snapshot for eight resolved Nasdaq securities plus AVGO and a separately blocked
 CRBS record. The loader requires the exact universe, primary Nasdaq/SEC sources,
 one dated observation, unique stable identities and current resolution; missing,
 duplicate, future, overlapping or unapproved evidence fails. Seven new tests
-raise the local suite to 214. Next: connect these instrument IDs to a small
-point-in-time sourced-metric workbench projection without inventing prices or
+raise the local suite to 214. Superseded next step: the first three identities
+are now connected to blocked source candidates without inventing prices or
 provider rights.
 
 October 3 morning: finalized the M1 machine-readable handoff from the validated

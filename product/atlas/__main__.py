@@ -26,6 +26,8 @@ def main():
                         help="public-safe milestone handoff; no acceptance authority")
     source.add_argument("--watchlist-registry-demo", action="store_true",
                         help="dated public security identities; no prices or holdings")
+    source.add_argument("--source-catalog-demo", action="store_true",
+                        help="public source candidates; metrics remain unavailable")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -78,6 +80,16 @@ def main():
             fixture = (Path(__file__).parents[1] / 'fixtures' /
                        'synthetic-extractor-conformance.json')
             report = evaluate_synthetic_extractor(fixture.read_bytes())
+        elif args.source_catalog_demo:
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes())
+            report = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(),
+                registry).public_summary()
         elif args.watchlist_registry_demo:
             from .watchlist_registry import load_public_watchlist_registry
 

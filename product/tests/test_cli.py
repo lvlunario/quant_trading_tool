@@ -94,6 +94,21 @@ class CliTests(unittest.TestCase):
         for excluded in ('"price"', '"quantity"', '"account"', '"recommendation"'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_source_catalog_demo_withholds_metrics_and_recommendations(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--source-catalog-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['candidate_count'], 3)
+        self.assertTrue(all(item['metric_status'] == 'unavailable'
+                            for item in report['items']))
+        self.assertTrue(all(item['decision'] ==
+                            'blocked_pending_rights_and_extraction'
+                            for item in report['items']))
+        for excluded in ('"metric_value"', '"price"', '"recommendation"'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)
