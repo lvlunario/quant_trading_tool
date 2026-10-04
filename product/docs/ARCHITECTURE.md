@@ -8,6 +8,14 @@ HTML/PDF/JSON, with redirects, byte retention and network fetching disabled.
 This is review tracking and planning, not permission or a downloader. See the
 [source-rights review contract](SOURCE_RIGHTS_REVIEW.md).
 
+The afternoon extension, `atlas.rights_evidence`, keeps completed terms reviews
+in a separate immutable register. It requires exact document/use-case binding,
+opaque reviewer references, terms hashes and times, validity, a controlled
+conclusion/action set and an eight-item manual checklist. Latest non-conflicting
+evidence may pass only the rights decision; technical retrieval remains disabled
+and release authorization remains false. The public register is empty, so the
+current watchlist remains blocked.
+
 September 30 M2 qualification increment: `atlas.provider_qualification`
 separates public policy from private evidence and binds qualification to an
 exact provider, dataset and extractor version. The adopted minimum gate requires

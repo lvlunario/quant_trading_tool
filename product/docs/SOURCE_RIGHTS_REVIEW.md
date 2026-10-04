@@ -14,6 +14,35 @@ This narrow first version prevents a public URL, an issuer label or the absence
 of a paywall from being interpreted as permission. A later reviewed-evidence
 schema is required before Atlas can represent verified or prohibited rights.
 
+## Reviewed-evidence schema
+
+`atlas.rights_evidence` provides that separate schema without changing the
+blocked queue. Each immutable record binds an opaque review ID and reviewer
+reference to the exact document/symbol/use case, terms URI and SHA-256 evidence,
+terms observation time, review time, validity deadline, conclusion and permitted
+actions. Conclusions are `permitted`, `prohibited` or `needs_counsel`.
+
+For internal research, an explicitly permitted decision must include both
+`retrieve_once` and `extract_internal`. Optional private retention or excerpt
+citation is recorded separately. Customer display and redistribution require
+different future use-case reviews; they cannot enter this schema as actions.
+
+The manual checklist is exact and ordered:
+
+1. identify the source owner;
+2. capture the terms version;
+3. evaluate the intended use;
+4. evaluate automated access;
+5. evaluate retention;
+6. evaluate display;
+7. evaluate redistribution; and
+8. set an expiry or re-review date.
+
+Missing, conflicting, expired, prohibited, counsel-required or incomplete-action
+evidence blocks. Public summaries omit terms URIs, evidence hashes, review IDs
+and reviewer references. A passing rights decision still reports technical
+retrieval disabled and release authorization false.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:
@@ -30,7 +59,10 @@ returns blocked until actual terms evidence is reviewed under a future schema.
 
 ## Verification
 
-Tests require the review universe and order to equal the source catalog, reject
+Queue tests require the review universe and order to equal the source catalog, reject
 future/backdated assessments and unsupported use cases, reject unknown fields,
 and prevent any rights-state promotion or retrieval-policy relaxation. The CLI
 returns a distinct blocked exit code without exposing source or evidence fields.
+Reviewed-evidence tests cover the complete checklist, timing, exact identities,
+unique review IDs, action scope, latest-review selection, same-time conflicts,
+expiry and redacted reporting. The public evidence register remains empty.

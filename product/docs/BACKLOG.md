@@ -33,13 +33,22 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 4 afternoon: added a separate reviewed-terms evidence register and exact
+eight-item manual checklist. The assessor distinguishes permitted, prohibited,
+counsel-required, expired, conflicting, action-incomplete and missing reviews;
+public output omits terms/evidence/reviewer identifiers. Rights approval cannot
+enable technical retrieval or authorize release. The checked-in public register
+is empty, so all three candidates remain blocked. Eight tests raise the local
+suite to 236. Next: project the missing-review decisions into the Research view
+so workflow gaps are visible without exposing review evidence.
+
 October 4 morning: added an exact document-level rights-review manifest for the
 three public issuer-source candidates. All reviews remain `not_started`; terms
 URIs, evidence hashes, reviewers and conclusions are absent. The future intake
 envelope is capped at 5 MiB and HTML/PDF/JSON, while redirects, byte retention
 and network fetching remain disabled. Seven tests raise the local suite to 228.
-Next: define the reviewed-evidence schema and manual verification checklist;
-do not retrieve documents until genuine terms evidence is available.
+Superseded next step: the reviewed-evidence schema and manual checklist are now
+implemented; genuine terms evidence remains absent and retrieval stays disabled.
 
 October 3 evening: connected the resolved NVDA, MU and AVGO identities to a
 strict dated catalog of official issuer-release addresses. The loader requires

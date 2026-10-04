@@ -123,6 +123,21 @@ class CliTests(unittest.TestCase):
                          '"metric_value"', '"recommendation"'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_rights_evidence_demo_reports_missing_reviews_safely(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--rights-evidence-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['status'], report['rights_allowed_count']),
+                         ('blocked', 0))
+        self.assertTrue(all(item['decision'] == 'missing_review_evidence'
+                            for item in report['items']))
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('"terms_uri"', '"evidence_sha256"', '"review_id"',
+                         '"reviewer_reference"', '"metric_value"'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)
