@@ -16,6 +16,13 @@ evidence may pass only the rights decision; technical retrieval remains disabled
 and release authorization remains false. The public register is empty, so the
 current watchlist remains blocked.
 
+The evening Research projection reloads the checked-in identity, candidate and
+rights-evidence fixtures through those same contracts. It allowlists only queue
+status, counts, symbol-level decision codes, technical retrieval status and the
+false release flag. Terms addresses, hashes, document/review identifiers and
+reviewer references never enter the projection. The standalone HTML remains a
+fixed regression target and does not perform a review or fetch at runtime.
+
 September 30 M2 qualification increment: `atlas.provider_qualification`
 separates public policy from private evidence and binds qualification to an
 exact provider, dataset and extractor version. The adopted minimum gate requires

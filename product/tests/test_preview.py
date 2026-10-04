@@ -47,7 +47,7 @@ class PreviewTests(unittest.TestCase):
 
     def test_disclosures_have_labels(self):
         tags = [tag for tag, _ in self.page.elements]
-        self.assertEqual(tags.count('details'), 9)
+        self.assertEqual(tags.count('details'), 10)
         self.assertEqual(tags.count('summary'), tags.count('details'))
 
     def test_displayed_financial_values_match_kernel_contract(self):
@@ -97,6 +97,16 @@ class PreviewTests(unittest.TestCase):
                   if 'data-qualification' in attrs}
         self.assertEqual(actual, expected)
         self.assertEqual(actual['status'], 'blocked')
+        self.assertEqual(actual['release_authorized'], 'false')
+
+    def test_source_rights_queue_is_blocked_and_contract_backed(self):
+        expected = synthetic_preview_model()['rights_trace']
+        actual = {attrs['data-rights']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-rights' in attrs}
+        self.assertEqual(actual, expected)
+        self.assertEqual(actual['rights_allowed_count'], '0')
+        self.assertEqual(actual['technical_retrieval_status'],
+                         'disabled_separate_gate')
         self.assertEqual(actual['release_authorized'], 'false')
 
     def test_import_receipts_match_redacted_backend_contract(self):

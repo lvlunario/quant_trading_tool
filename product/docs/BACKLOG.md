@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 4 evening: projected the checked-in reviewed-rights decision into the
+Research preview. NVDA, MU and AVGO each show `missing_review_evidence`; zero of
+three candidates are allowed, technical retrieval remains a disabled separate
+gate and release remains unauthorized. The view allowlists no terms URI, hash,
+review or reviewer identifier. Two structural/privacy tests raise the local
+suite to 238. Next: compose identity, source, rights, extraction and metric gaps
+into a versioned public-safe research work-item status for the October 17
+workbench without fetching or inventing evidence.
+
 October 4 afternoon: added a separate reviewed-terms evidence register and exact
 eight-item manual checklist. The assessor distinguishes permitted, prohibited,
 counsel-required, expired, conflicting, action-incomplete and missing reviews;

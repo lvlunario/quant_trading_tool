@@ -11,12 +11,46 @@ from .provider_qualification import (assess_provider_qualification,
                                      default_provider_qualification_policy)
 from .receipts import import_receipt
 from .reference import DataRightsRecord, SecurityRecord
+from .rights_evidence import (assess_reviewed_rights,
+                              load_reviewed_rights_evidence)
 from .risk import snapshot_report, standard_option_payoff
+from .source_catalog import load_public_source_catalog
 from .source_evidence import ResearchSourceRecord
 from .source_workflow import synthetic_source_report
+from .watchlist_registry import load_public_watchlist_registry
 
 
 PREVIEW_AS_OF = datetime(2026, 9, 12, tzinfo=timezone.utc)
+RIGHTS_PREVIEW_AS_OF = datetime(2026, 10, 4, 7, tzinfo=timezone.utc)
+
+
+def public_rights_preview_trace():
+    """Project only allowlisted reviewed-rights status into the preview."""
+    fixtures = Path(__file__).parents[1] / 'fixtures'
+    registry = load_public_watchlist_registry(
+        (fixtures / 'public-watchlist-identities.json').read_bytes(),
+        now=RIGHTS_PREVIEW_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / 'public-research-sources.json').read_bytes(), registry,
+        now=RIGHTS_PREVIEW_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / 'public-source-rights-evidence.json').read_bytes(), catalog,
+        now=RIGHTS_PREVIEW_AS_OF)
+    summary = assess_reviewed_rights(
+        catalog, evidence, at=RIGHTS_PREVIEW_AS_OF).public_summary()
+    if (summary['status'] != 'blocked' or summary['rights_allowed_count'] != 0 or
+            summary['technical_retrieval_status'] != 'disabled_separate_gate' or
+            summary['release_authorized']):
+        raise AssertionError('Public rights preview boundary is inconsistent')
+    return {
+        'status': summary['status'],
+        'review_count': str(summary['review_count']),
+        'rights_allowed_count': str(summary['rights_allowed_count']),
+        'technical_retrieval_status': summary['technical_retrieval_status'],
+        'release_authorized': str(summary['release_authorized']).lower(),
+        **{f"{item['symbol'].lower()}_decision": item['decision']
+           for item in summary['items']},
+    }
 
 
 def synthetic_import_receipts():
@@ -192,4 +226,5 @@ def synthetic_preview_model():
                 "release_authorized": str(
                     qualification['release_authorized']).lower(),
             },
+            "rights_trace": public_rights_preview_trace(),
             "model_status": "fixed synthetic values calculated by atlas.risk"}

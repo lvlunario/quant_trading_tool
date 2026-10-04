@@ -121,6 +121,19 @@ class WebPreviewTests(unittest.TestCase):
                               'authorization_receipt_id'):
             self.assertNotIn(private_field, page)
 
+    def test_rights_projection_is_blocked_and_redacted(self):
+        status, _, page = self.request("GET", "/overview")
+        self.assertEqual(status, 200)
+        self.assertIn('data-rights="status" data-value="blocked"', page)
+        self.assertEqual(page.count('data-value="missing_review_evidence"'), 3)
+        self.assertIn(
+            'data-rights="technical_retrieval_status" '
+            'data-value="disabled_separate_gate"', page)
+        self.assertIn('data-rights="release_authorized" data-value="false"', page)
+        for private_field in ('terms_uri', 'evidence_sha256', 'reviewer_reference',
+                              'review_id'):
+            self.assertNotIn(private_field, page)
+
     def test_import_demo_runs_fixed_fixture_through_redacted_contract(self):
         status, headers, page = self.request("GET", "/import-demo")
         self.assertEqual(status, 200)
