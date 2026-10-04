@@ -28,6 +28,8 @@ def main():
                         help="dated public security identities; no prices or holdings")
     source.add_argument("--source-catalog-demo", action="store_true",
                         help="public source candidates; metrics remain unavailable")
+    source.add_argument("--source-rights-demo", action="store_true",
+                        help="rights review plan; retrieval remains disabled")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -90,6 +92,19 @@ def main():
             report = load_public_source_catalog(
                 (fixtures / 'public-research-sources.json').read_bytes(),
                 registry).public_summary()
+        elif args.source_rights_demo:
+            from .source_catalog import load_public_source_catalog
+            from .source_rights import load_source_rights_manifest
+            from .watchlist_registry import load_public_watchlist_registry
+
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes())
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry)
+            report = load_source_rights_manifest(
+                (fixtures / 'public-source-rights-review.json').read_bytes(),
+                catalog).public_summary()
         elif args.watchlist_registry_demo:
             from .watchlist_registry import load_public_watchlist_registry
 

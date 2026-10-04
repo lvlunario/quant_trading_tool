@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 4 M2 rights-review increment: `atlas.source_rights` requires one
+document-level review record for every dated public source candidate. Version 1
+accepts only `not_started`, contains no terms evidence or reviewer assertion and
+returns a blocked result. Its future retrieval envelope is limited to 5 MiB and
+HTML/PDF/JSON, with redirects, byte retention and network fetching disabled.
+This is review tracking and planning, not permission or a downloader. See the
+[source-rights review contract](SOURCE_RIGHTS_REVIEW.md).
+
 September 30 M2 qualification increment: `atlas.provider_qualification`
 separates public policy from private evidence and binds qualification to an
 exact provider, dataset and extractor version. The adopted minimum gate requires

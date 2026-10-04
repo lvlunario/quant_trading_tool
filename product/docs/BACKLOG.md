@@ -33,14 +33,21 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 4 morning: added an exact document-level rights-review manifest for the
+three public issuer-source candidates. All reviews remain `not_started`; terms
+URIs, evidence hashes, reviewers and conclusions are absent. The future intake
+envelope is capped at 5 MiB and HTML/PDF/JSON, while redirects, byte retention
+and network fetching remain disabled. Seven tests raise the local suite to 228.
+Next: define the reviewed-evidence schema and manual verification checklist;
+do not retrieve documents until genuine terms evidence is available.
+
 October 3 evening: connected the resolved NVDA, MU and AVGO identities to a
 strict dated catalog of official issuer-release addresses. The loader requires
 the exact three-name universe, instrument match, observation cutoff and
 allowlisted issuer domains. It rejects metric fields and any claim that rights
 or extraction have already passed; the demo reports every metric unavailable.
-Seven new tests raise the local suite to 221. Next: add an explicit rights-review
-record and bounded retrieval plan before any source bytes or values may enter
-the research evidence pipeline.
+Seven new tests raise the local suite to 221. Superseded next step: the blocked
+rights-review record and bounded retrieval plan are now implemented.
 
 October 3 afternoon: populated the first strict public watchlist identity
 snapshot for eight resolved Nasdaq securities plus AVGO and a separately blocked

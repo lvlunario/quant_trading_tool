@@ -49,6 +49,11 @@ The loader therefore requires `rights_state=not_evaluated` and
 cannot carry a metric value. Its public summary always reports the metric as
 unavailable and blocks progression pending rights and extraction review.
 
+The October 4 [source-rights review boundary](SOURCE_RIGHTS_REVIEW.md) adds an
+exact document-level queue and conservative retrieval envelope. It records only
+that review has not started and network retrieval remains disabled; it does not
+promote any candidate into permitted evidence.
+
 ## Verification
 
 Tests cover exact successful binding; instrument/provider/dataset drift;
