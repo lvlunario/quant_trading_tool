@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env*
+private-data/
+reports/
+*.csv
+!fixtures/
+!fixtures/synthetic-broker.csv

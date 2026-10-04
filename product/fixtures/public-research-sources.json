@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-03T00:00:00+00:00",
+  "sources": [
+    {"document_id":"DOC_WATCH2026100301","symbol":"NVDA","instrument_id":"INS_WATCH2026100301","source_kind":"issuer_release","source_uri":"https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027","published_on":"2026-08-26","observed_at":"2026-10-03T00:00:00+00:00","rights_state":"not_evaluated","extraction_state":"not_attempted"},
+    {"document_id":"DOC_WATCH2026100302","symbol":"MU","instrument_id":"INS_WATCH2026100302","source_kind":"issuer_release","source_uri":"https://investors.micron.com/news-releases/news-release-details/micron-technology-inc-reports-results-third-quarter-fiscal-2026","published_on":"2026-06-24","observed_at":"2026-10-03T00:00:00+00:00","rights_state":"not_evaluated","extraction_state":"not_attempted"},
+    {"document_id":"DOC_WATCH2026100303","symbol":"AVGO","instrument_id":"INS_WATCH2026100308","source_kind":"issuer_release","source_uri":"https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial-results-and-quarterly-dividend","published_on":"2026-06-03","observed_at":"2026-10-03T00:00:00+00:00","rights_state":"not_evaluated","extraction_state":"not_attempted"}
+  ]
+}
