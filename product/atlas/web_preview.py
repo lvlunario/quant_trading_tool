@@ -10,17 +10,30 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from secrets import token_urlsafe
 from urllib.parse import parse_qs
 from decimal import Decimal
+from datetime import datetime, timezone
 from pathlib import Path
 
 from .conformance import m1_import_conformance, recommend_m1_disposition
 from .import_workflow import synthetic_csv_report
+from .research_work_items import compose_research_work_queue
+from .rights_evidence import (assess_reviewed_rights,
+                              load_reviewed_rights_evidence)
 from .risk import standard_option_payoff
+from .source_catalog import load_public_source_catalog
+from .watchlist_registry import load_public_watchlist_registry
 
 
 MAX_BODY_BYTES = 2_048
 FIELDS = ("strike", "premium_per_share", "terminal_price", "fees", "available_cash")
 DEFAULTS = {"strike": "50", "premium_per_share": "2", "terminal_price": "48",
             "fees": "0", "available_cash": "5000"}
+WORKBENCH_AS_OF = datetime(2026, 10, 5, tzinfo=timezone.utc)
+RESEARCH_ROUTE_FILTERS = {
+    "/research-work-items": "all",
+    "/research-work-items/identity": "identity_unresolved",
+    "/research-work-items/source": "source_candidate_missing",
+    "/research-work-items/rights": "missing_review_evidence",
+}
 
 
 def render_overview():
@@ -31,7 +44,73 @@ def render_overview():
         "<!-- interactive-import-link -->",
         '<p><a href="/import-demo">Run fixed synthetic import demo →</a> · '
         '<a href="/m1-status">View M1 conformance →</a></p>').replace(
+        "<!-- interactive-research-work-items-link -->",
+        '<p><a href="/research-work-items">Open Research workbench →</a></p>').replace(
         '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
+
+
+def public_research_work_queue():
+    """Build the checked-in public-safe queue at a fixed evidence cutoff."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    return compose_research_work_queue(registry, catalog, rights).public_summary()
+
+
+def render_research_work_items(filter_code="all"):
+    """Render a redacted work queue selected only by a fixed route mapping."""
+    allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
+    if filter_code not in allowed:
+        raise ValueError("invalid_research_workbench_filter")
+    report = public_research_work_queue()
+    items = report["items"]
+    if filter_code != "all":
+        items = [item for item in items
+                 if item["primary_blocker"] == filter_code]
+    filter_labels = {
+        "all": "All blocked work",
+        "identity_unresolved": "Identity",
+        "source_candidate_missing": "Source candidate",
+        "missing_review_evidence": "Rights review",
+    }
+    route_for = {value: route for route, value in RESEARCH_ROUTE_FILTERS.items()}
+    nav = " · ".join(
+        f'<a href="{escape(route_for[code], quote=True)}"'
+        f'{" aria-current=\"page\"" if code == filter_code else ""}>'
+        f'{escape(label)}</a>'
+        for code, label in filter_labels.items())
+    rows = "".join(
+        '<tr data-work-item="true" data-primary-blocker="{blocker}" '
+        'data-status="{status}"><th scope="row">{symbol}</th>'
+        '<td>{identity}</td><td>{source}</td><td>{rights}</td>'
+        '<td>{blocker_label}</td><td>{action}</td></tr>'.format(
+            blocker=escape(item["primary_blocker"], quote=True),
+            status=escape(item["status"], quote=True),
+            symbol=escape(item["symbol"]),
+            identity=escape(item["identity_status"].replace("_", " ").title()),
+            source=escape(item["source_status"].replace("_", " ").title()),
+            rights=escape(item["rights_status"].replace("_", " ").title()),
+            blocker_label=escape(item["primary_blocker"].replace("_", " ").title()),
+            action=escape(item["next_action"].replace("_", " ").title()))
+        for item in items)
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Research Workbench</title>
+<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body data-workbench-filter="{escape(filter_code, quote=True)}"><a href="/overview">Return to five-area overview</a>
+<h1>Research workbench</h1><p class="warning"><strong>Workflow status only.</strong> No source bytes, metric values, recommendations, holdings or release authority.</p>
+<div class="summary"><span><strong>{report['work_item_count']}</strong> total work items</span><span><strong>{report['blocked_count']}</strong> blocked</span><span><strong>{report['catalogued_source_count']}</strong> source candidates</span><span><strong>{report['rights_allowed_count']}</strong> rights allowed</span><span><strong>{len(items)}</strong> shown</span></div>
+<nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>
+<p>Filters are fixed server routes. This page has no query input, upload, network retrieval or persistence.</p></body></html>'''
 
 
 def render_import_demo():
@@ -176,7 +255,8 @@ def make_handler(token):
 
         def do_GET(self):
             if not self._valid_host() or self.path not in {
-                    "/", "/overview", "/checklist", "/import-demo", "/m1-status"}:
+                    "/", "/overview", "/checklist", "/import-demo", "/m1-status",
+                    *RESEARCH_ROUTE_FILTERS}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
             if self.path == "/overview":
@@ -187,6 +267,9 @@ def make_handler(token):
                 self._send(200, render_import_demo())
             elif self.path == "/m1-status":
                 self._send(200, render_m1_status())
+            elif self.path in RESEARCH_ROUTE_FILTERS:
+                self._send(200, render_research_work_items(
+                    RESEARCH_ROUTE_FILTERS[self.path]))
             else:
                 self._send(200, render_page(token=token))
 

@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 5 afternoon: exposed the nine-name research work queue as a read-only
+localhost workbench. All, Identity, Source candidate and Rights review views use
+four exact routes; query strings and arbitrary filters are rejected. The view
+shows only controlled workflow state and actions, never source/review evidence,
+holdings or metrics. Two HTTP/privacy tests raise the local suite to 247. Next:
+add the first complete source candidates for the five resolved names that remain
+blocked at source discovery, without retrieving source content.
+
 October 5 morning: added a versioned public-safe M2 research work queue across
 the full nine-name universe. It distinguishes CRBS identity resolution, five
 missing source candidates and three missing terms reviews; extraction and all

@@ -15,6 +15,10 @@ Research-work-item tests require the exact nine-name universe, aligned registry,
 catalog and rights assessment times, controlled blocker/action codes and release
 false. They prove that rights permission alone advances only to missing source
 evidence and that public output omits source/review evidence and financial fields.
+Workbench HTTP tests require all nine rows on the default route, exact 1/5/3
+identity/source/rights subsets on fixed routes, no form or evidence identifiers,
+and rejection of query-driven or arbitrary filters. These are structural and
+privacy controls; they do not establish browser usability or accessibility.
 
 UX-01 preview tests require its displayed portfolio and option values to equal a fixed model calculated by the deterministic risk kernel. Its synthetic research trace must equal the metric payload admitted by the combined point-in-time, identity, rights and evidence-binding gate. The reviewed-rights projection must equal the backend empty-register decision, show all three candidates blocked and omit terms/reviewer evidence fields. The provider-qualification projection must equal the backend no-evidence decision and must omit private evidence fields. Tests also check document structure and offline boundaries. These checks prevent mockup/model drift; they do not verify browser rendering, accessibility, usability or current data.
 

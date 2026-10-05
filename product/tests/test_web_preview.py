@@ -5,7 +5,8 @@ from urllib.parse import urlencode
 import unittest
 
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
-                               render_m1_status, render_page, serve_preview)
+                               render_m1_status, render_page,
+                               render_research_work_items, serve_preview)
 
 
 class WebPreviewTests(unittest.TestCase):
@@ -103,6 +104,7 @@ class WebPreviewTests(unittest.TestCase):
         self.assertIn('href="/">Open interactive Options Lab', page)
         self.assertIn('href="/import-demo">Run fixed synthetic import demo', page)
         self.assertIn('href="/m1-status">View M1 conformance', page)
+        self.assertIn('href="/research-work-items">Open Research workbench', page)
         self.assertIn('href="/checklist"', page)
         self.assertNotIn('<!-- interactive-options-link -->', page)
         for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
@@ -178,3 +180,36 @@ class WebPreviewTests(unittest.TestCase):
         for path in ('/.env', '/../.env', '/docs/PROGRAM.md', '/overview?file=.env'):
             status, _, _ = self.request("GET", path)
             self.assertEqual(status, 404)
+
+    def test_research_workbench_shows_redacted_nine_name_queue(self):
+        status, headers, page = self.request("GET", "/research-work-items")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertEqual(page.count('data-work-item="true"'), 9)
+        self.assertEqual(page.count('data-status="blocked"'), 9)
+        for symbol in ("NVDA", "MU", "QCOM", "PLTR", "SPCX", "CRBS",
+                       "QBTS", "RGTI", "AVGO"):
+            self.assertIn(f'<th scope="row">{symbol}</th>', page)
+        self.assertIn('<strong>0</strong> rights allowed', page)
+        self.assertNotIn('<form', page)
+        for excluded in ('source_uri', 'terms_uri', 'document_id', 'review_id',
+                         'reviewer_reference', 'sha256', 'metric_value'):
+            self.assertNotIn(excluded, page.lower())
+
+    def test_research_workbench_filters_are_fixed_routes(self):
+        expected = {
+            "/research-work-items/identity": (1, "identity_unresolved"),
+            "/research-work-items/source": (5, "source_candidate_missing"),
+            "/research-work-items/rights": (3, "missing_review_evidence"),
+        }
+        for path, (count, blocker) in expected.items():
+            with self.subTest(path=path):
+                status, _, page = self.request("GET", path)
+                self.assertEqual(status, 200)
+                self.assertEqual(page.count('data-work-item="true"'), count)
+                self.assertEqual(page.count(
+                    f'data-primary-blocker="{blocker}"'), count)
+        status, _, _ = self.request("GET", "/research-work-items?filter=rights")
+        self.assertEqual(status, 404)
+        with self.assertRaisesRegex(ValueError, 'invalid_research_workbench_filter'):
+            render_research_work_items("../../.env")
