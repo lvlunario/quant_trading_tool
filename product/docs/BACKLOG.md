@@ -33,6 +33,16 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 5 evening: completed the public metadata candidate catalog for every
+resolved watchlist identity by adding QCOM, PLTR, SPCX, QBTS and RGTI official
+issuer-release addresses and matching unreviewed rights records. The workbench
+now has zero resolved-name source-discovery gaps: CRBS remains blocked at
+identity and all eight resolved names remain blocked at terms review. Two tests
+cover exact issuer hosts and workflow-state advancement, raising the local suite
+to 249. Next: prepare the eight-source manual rights-review worksheet with
+evidence slots while recording no permission conclusion until a real review is
+completed.
+
 October 5 afternoon: exposed the nine-name research work queue as a read-only
 localhost workbench. All, Identity, Source candidate and Rights review views use
 four exact routes; query strings and arbitrary filters are rejected. The view

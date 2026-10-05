@@ -127,7 +127,7 @@ class WebPreviewTests(unittest.TestCase):
         status, _, page = self.request("GET", "/overview")
         self.assertEqual(status, 200)
         self.assertIn('data-rights="status" data-value="blocked"', page)
-        self.assertEqual(page.count('data-value="missing_review_evidence"'), 3)
+        self.assertEqual(page.count('data-value="missing_review_evidence"'), 8)
         self.assertIn(
             'data-rights="technical_retrieval_status" '
             'data-value="disabled_separate_gate"', page)
@@ -199,8 +199,8 @@ class WebPreviewTests(unittest.TestCase):
     def test_research_workbench_filters_are_fixed_routes(self):
         expected = {
             "/research-work-items/identity": (1, "identity_unresolved"),
-            "/research-work-items/source": (5, "source_candidate_missing"),
-            "/research-work-items/rights": (3, "missing_review_evidence"),
+            "/research-work-items/source": (0, "source_candidate_missing"),
+            "/research-work-items/rights": (8, "missing_review_evidence"),
         }
         for path, (count, blocker) in expected.items():
             with self.subTest(path=path):

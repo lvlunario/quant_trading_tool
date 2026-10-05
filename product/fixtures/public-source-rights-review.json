@@ -12,6 +12,11 @@
   "reviews": [
     {"document_id":"DOC_WATCH2026100301","symbol":"NVDA","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
     {"document_id":"DOC_WATCH2026100302","symbol":"MU","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
-    {"document_id":"DOC_WATCH2026100303","symbol":"AVGO","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null}
+    {"document_id":"DOC_WATCH2026100303","symbol":"AVGO","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100304","symbol":"QCOM","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100305","symbol":"PLTR","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100306","symbol":"SPCX","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100307","symbol":"QBTS","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100308","symbol":"RGTI","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null}
   ]
 }

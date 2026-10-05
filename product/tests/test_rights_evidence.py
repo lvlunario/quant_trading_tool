@@ -77,7 +77,7 @@ class ReviewedRightsEvidenceTests(unittest.TestCase):
         summary = assess_reviewed_rights(
             self.catalog, loaded, at=self.now).public_summary()
         self.assertEqual((summary['status'], summary['rights_allowed_count']),
-                         ('ready', 3))
+                         ('ready', 8))
         self.assertEqual(summary['technical_retrieval_status'],
                          'disabled_separate_gate')
         self.assertFalse(summary['release_authorized'])

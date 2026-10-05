@@ -100,7 +100,7 @@ class CliTests(unittest.TestCase):
             capture_output=True, text=True)
         self.assertEqual(run.returncode, 0)
         report = json.loads(run.stdout)
-        self.assertEqual(report['candidate_count'], 3)
+        self.assertEqual(report['candidate_count'], 8)
         self.assertTrue(all(item['metric_status'] == 'unavailable'
                             for item in report['items']))
         self.assertTrue(all(item['decision'] ==
@@ -115,7 +115,7 @@ class CliTests(unittest.TestCase):
             capture_output=True, text=True)
         self.assertEqual(run.returncode, 3)
         report = json.loads(run.stdout)
-        self.assertEqual((report['status'], report['review_count']), ('blocked', 3))
+        self.assertEqual((report['status'], report['review_count']), ('blocked', 8))
         self.assertFalse(report['retrieval_policy']['network_fetch_enabled'])
         self.assertTrue(all(item['decision'] == 'terms_evidence_required'
                             for item in report['items']))
@@ -147,7 +147,7 @@ class CliTests(unittest.TestCase):
         self.assertEqual((report['work_item_count'], report['blocked_count']),
                          (9, 9))
         self.assertEqual((report['catalogued_source_count'],
-                          report['rights_allowed_count']), (3, 0))
+                          report['rights_allowed_count']), (8, 0))
         self.assertFalse(report['release_authorized'])
         for excluded in ('source_uri', 'terms_uri', 'document_id', 'review_id',
                          'sha256', 'metric_value', '"recommendation"'):

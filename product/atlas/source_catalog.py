@@ -9,13 +9,15 @@ from .reference import resolve_security
 from .watchlist_registry import WatchlistRegistry
 
 
-_EXPECTED_SYMBOLS = ('NVDA', 'MU', 'AVGO')
+_EXPECTED_SYMBOLS = ('NVDA', 'MU', 'AVGO', 'QCOM', 'PLTR', 'SPCX', 'QBTS', 'RGTI')
 _SOURCE_KEYS = frozenset({
     'document_id', 'symbol', 'instrument_id', 'source_kind', 'source_uri',
     'published_on', 'observed_at', 'rights_state', 'extraction_state',
 })
 _PRIMARY_HOSTS = frozenset({
     'nvidianews.nvidia.com', 'investors.micron.com', 'investors.broadcom.com',
+    'investor.qualcomm.com', 'investors.palantir.com', 'ir.spacex.com',
+    'ir.dwavequantum.com', 'investors.rigetti.com',
 })
 
 
@@ -143,4 +145,3 @@ def load_public_source_catalog(raw: bytes, registry: WatchlistRegistry, *, now=N
     if (tuple(symbols) != _EXPECTED_SYMBOLS or len(documents) != len(set(documents))):
         raise ValueError('incomplete_source_catalog')
     return PublicSourceCatalog(as_of, tuple(candidates))
-

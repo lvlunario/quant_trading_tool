@@ -27,9 +27,10 @@ class SourceRightsManifestTests(unittest.TestCase):
         manifest = load_source_rights_manifest(
             self.raw, self.catalog, now=self.now)
         summary = manifest.public_summary()
-        self.assertEqual((summary['status'], summary['review_count']), ('blocked', 3))
+        self.assertEqual((summary['status'], summary['review_count']), ('blocked', 8))
         self.assertEqual([item['symbol'] for item in summary['items']],
-                         ['NVDA', 'MU', 'AVGO'])
+                         ['NVDA', 'MU', 'AVGO', 'QCOM', 'PLTR', 'SPCX',
+                          'QBTS', 'RGTI'])
         for item in summary['items']:
             self.assertEqual(item['rights_status'], 'not_started')
             self.assertEqual(item['retrieval_status'], 'blocked')

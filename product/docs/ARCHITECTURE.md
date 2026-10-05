@@ -4,8 +4,8 @@ October 5 M2 workbench increment: `atlas.research_work_items` composes the
 effective-dated watchlist registry, public source catalog and reviewed-rights
 decision into one versioned public-safe queue. Every work item remains blocked
 until its earliest unmet dependency is resolved. Current primary blockers are
-unresolved identity for CRBS, missing source candidates for five resolved names
-and missing review evidence for NVDA, MU and AVGO. Even a permitted rights state
+unresolved identity for CRBS and missing review evidence for all eight resolved
+names. The catalog now has no resolved-name source-discovery gaps. Even a permitted rights state
 advances only to missing source evidence; it never enables retrieval, extraction,
 metrics or release. The report omits source/review identifiers, URIs, hashes,
 prices and recommendations.

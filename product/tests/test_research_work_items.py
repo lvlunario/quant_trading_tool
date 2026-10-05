@@ -38,12 +38,12 @@ class ResearchWorkItemTests(unittest.TestCase):
         self.assertEqual((report['work_item_count'], report['blocked_count']),
                          (9, 9))
         self.assertEqual((report['catalogued_source_count'],
-                          report['rights_allowed_count']), (3, 0))
+                          report['rights_allowed_count']), (8, 0))
         by_symbol = {item['symbol']: item for item in report['items']}
         self.assertEqual(by_symbol['NVDA']['primary_blocker'],
                          'missing_review_evidence')
         self.assertEqual(by_symbol['QCOM']['primary_blocker'],
-                         'source_candidate_missing')
+                         'missing_review_evidence')
         self.assertEqual(by_symbol['CRBS']['primary_blocker'],
                          'identity_unresolved')
 
@@ -56,13 +56,25 @@ class ResearchWorkItemTests(unittest.TestCase):
                          'disabled_separate_gate')
         self.assertFalse(report['release_authorized'])
 
+    def test_new_candidates_advance_from_discovery_to_rights_review(self):
+        report = self.report()
+        by_symbol = {item['symbol']: item for item in report['items']}
+        for symbol in ('QCOM', 'PLTR', 'SPCX', 'QBTS', 'RGTI'):
+            with self.subTest(symbol=symbol):
+                self.assertEqual(by_symbol[symbol]['source_status'],
+                                 'catalogued_public_candidate')
+                self.assertEqual(by_symbol[symbol]['primary_blocker'],
+                                 'missing_review_evidence')
+                self.assertEqual(by_symbol[symbol]['next_action'],
+                                 'complete_terms_review')
+
     def test_rights_permission_still_requires_source_evidence(self):
         permitted = RightsEvidenceReport(
             self.now, tuple(
                 RightsEvidenceItem(item.symbol, True, 'explicitly_permitted')
                 for item in self.rights.items))
         report = self.report(permitted)
-        self.assertEqual(report['rights_allowed_count'], 3)
+        self.assertEqual(report['rights_allowed_count'], 8)
         catalogued = [item for item in report['items']
                       if item['source_status'] == 'catalogued_public_candidate']
         self.assertTrue(all(item['primary_blocker'] == 'source_evidence_missing'

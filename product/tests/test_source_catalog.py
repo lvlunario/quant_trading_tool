@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import unittest
+from urllib.parse import urlsplit
 
 from atlas.source_catalog import load_public_source_catalog
 from atlas.watchlist_registry import load_public_watchlist_registry
@@ -20,18 +21,35 @@ class PublicSourceCatalogTests(unittest.TestCase):
     def payload(self):
         return json.loads(self.raw)
 
-    def test_three_advance_sources_are_catalogued_but_blocked(self):
+    def test_eight_resolved_sources_are_catalogued_but_blocked(self):
         catalog = load_public_source_catalog(self.raw, self.registry, now=self.now)
         summary = catalog.public_summary()
-        self.assertEqual(summary['candidate_count'], 3)
+        self.assertEqual(summary['candidate_count'], 8)
         self.assertEqual([item['symbol'] for item in summary['items']],
-                         ['NVDA', 'MU', 'AVGO'])
+                         ['NVDA', 'MU', 'AVGO', 'QCOM', 'PLTR', 'SPCX',
+                          'QBTS', 'RGTI'])
         for item in summary['items']:
             self.assertEqual(item['identity_status'], 'resolved')
             self.assertEqual(item['metric_status'], 'unavailable')
             self.assertEqual(item['decision'],
                              'blocked_pending_rights_and_extraction')
         self.assertIn('no retrieved bytes', summary['readiness'])
+
+    def test_each_candidate_uses_its_expected_official_issuer_host(self):
+        catalog = load_public_source_catalog(self.raw, self.registry, now=self.now)
+        expected = {
+            'NVDA': 'nvidianews.nvidia.com',
+            'MU': 'investors.micron.com',
+            'AVGO': 'investors.broadcom.com',
+            'QCOM': 'investor.qualcomm.com',
+            'PLTR': 'investors.palantir.com',
+            'SPCX': 'ir.spacex.com',
+            'QBTS': 'ir.dwavequantum.com',
+            'RGTI': 'investors.rigetti.com',
+        }
+        self.assertEqual(
+            {item.symbol: urlsplit(item.source_uri).hostname
+             for item in catalog.candidates}, expected)
 
     def test_metric_value_or_unknown_field_cannot_enter_catalog(self):
         payload = self.payload()
@@ -80,4 +98,3 @@ class PublicSourceCatalogTests(unittest.TestCase):
         for raw in variants:
             with self.subTest(size=len(raw)), self.assertRaises(ValueError):
                 load_public_source_catalog(raw, self.registry, now=self.now)
-
