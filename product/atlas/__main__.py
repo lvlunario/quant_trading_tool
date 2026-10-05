@@ -32,6 +32,8 @@ def main():
                         help="rights review plan; retrieval remains disabled")
     source.add_argument("--rights-evidence-demo", action="store_true",
                         help="reviewed terms evidence status; no retrieval authority")
+    source.add_argument("--research-work-items-demo", action="store_true",
+                        help="public-safe M2 work queue; metrics remain unavailable")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -123,6 +125,25 @@ def main():
                 (fixtures / 'public-source-rights-evidence.json').read_bytes(),
                 catalog)
             report = assess_reviewed_rights(catalog, records).public_summary()
+        elif args.research_work_items_demo:
+            from .research_work_items import compose_research_work_queue
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes())
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog)
+            rights = assess_reviewed_rights(catalog, evidence)
+            report = compose_research_work_queue(
+                registry, catalog, rights).public_summary()
         elif args.watchlist_registry_demo:
             from .watchlist_registry import load_public_watchlist_registry
 

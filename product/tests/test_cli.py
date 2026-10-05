@@ -138,6 +138,21 @@ class CliTests(unittest.TestCase):
                          '"reviewer_reference"', '"metric_value"'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_research_work_items_demo_reports_gaps_without_evidence(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--research-work-items-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['work_item_count'], report['blocked_count']),
+                         (9, 9))
+        self.assertEqual((report['catalogued_source_count'],
+                          report['rights_allowed_count']), (3, 0))
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('source_uri', 'terms_uri', 'document_id', 'review_id',
+                         'sha256', 'metric_value', '"recommendation"'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

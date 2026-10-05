@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 5 morning: added a versioned public-safe M2 research work queue across
+the full nine-name universe. It distinguishes CRBS identity resolution, five
+missing source candidates and three missing terms reviews; extraction and all
+metrics remain unavailable. Rights permission alone advances only to missing
+source evidence. Seven tests raise the local suite to 245. Next: expose this
+work-item report as a read-only Research workbench route with controlled filters
+and no evidence-bearing query inputs.
+
 October 4 evening: projected the checked-in reviewed-rights decision into the
 Research preview. NVDA, MU and AVGO each show `missing_review_evidence`; zero of
 three candidates are allowed, technical retrieval remains a disabled separate
