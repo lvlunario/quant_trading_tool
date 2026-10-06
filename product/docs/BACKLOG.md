@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 6 afternoon: projected the blank rights-review worksheet into the
+read-only Research workbench as aggregate progress only. The panel shows eight
+pending reviews and zero of 64 per-source checks complete while excluding source
+addresses, document/review identifiers and evidence-field names. Two tests raise
+the local suite to 256. Next: add a fail-closed bridge from completed private
+rights evidence to a separate technical source-capture authorization receipt;
+actual review execution remains external and private.
+
 October 6 morning: added a deterministic blank manual rights-review worksheet
 for all eight source candidates. It binds exact public sources to nine evidence
 slots, three conclusions, four bounded actions and the eight-step checklist;

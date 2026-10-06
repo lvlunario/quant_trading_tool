@@ -24,6 +24,9 @@ The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private
 boundary and must not enter this repository, issues, PRs or CI output.
+The localhost workbench may expose only aggregate task/check counts and blocked
+gate states from that worksheet; it must not expose source addresses, document
+or review identifiers, evidence-field names or completed evidence.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

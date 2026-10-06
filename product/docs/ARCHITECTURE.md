@@ -17,6 +17,12 @@ conclusions/actions and pending checklist. Completed evidence belongs in the
 selected private boundary; the worksheet cannot promote review state, enable
 retrieval or authorize release.
 
+The afternoon projection adds a separate `public_readiness_summary` allowlist.
+It exposes only review-task and checklist counts, private-storage requirement,
+disabled technical-retrieval state and the false release flag. The Research
+workbench renders that summary on every fixed filter route; source addresses,
+document/review identifiers and evidence-field names never enter the page.
+
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1
 accepts only `not_started`, contains no terms evidence or reviewer assertion and

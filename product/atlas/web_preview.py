@@ -18,8 +18,10 @@ from .import_workflow import synthetic_csv_report
 from .research_work_items import compose_research_work_queue
 from .rights_evidence import (assess_reviewed_rights,
                               load_reviewed_rights_evidence)
+from .rights_review_worksheet import build_rights_review_worksheet
 from .risk import standard_option_payoff
 from .source_catalog import load_public_source_catalog
+from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
 
 
@@ -65,12 +67,29 @@ def public_research_work_queue():
     return compose_research_work_queue(registry, catalog, rights).public_summary()
 
 
+def public_rights_review_readiness():
+    """Build a count-only projection of the blank private review worksheet."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    manifest = load_source_rights_manifest(
+        (fixtures / "public-source-rights-review.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    return build_rights_review_worksheet(
+        catalog, manifest).public_readiness_summary()
+
+
 def render_research_work_items(filter_code="all"):
     """Render a redacted work queue selected only by a fixed route mapping."""
     allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
     if filter_code not in allowed:
         raise ValueError("invalid_research_workbench_filter")
     report = public_research_work_queue()
+    worksheet = public_rights_review_readiness()
     items = report["items"]
     if filter_code != "all":
         items = [item for item in items
@@ -103,10 +122,20 @@ def render_research_work_items(filter_code="all"):
         for item in items)
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Research Workbench</title>
-<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span,section{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}section{{margin:18px 0}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
 <body data-workbench-filter="{escape(filter_code, quote=True)}"><a href="/overview">Return to five-area overview</a>
 <h1>Research workbench</h1><p class="warning"><strong>Workflow status only.</strong> No source bytes, metric values, recommendations, holdings or release authority.</p>
 <div class="summary"><span><strong>{report['work_item_count']}</strong> total work items</span><span><strong>{report['blocked_count']}</strong> blocked</span><span><strong>{report['catalogued_source_count']}</strong> source candidates</span><span><strong>{report['rights_allowed_count']}</strong> rights allowed</span><span><strong>{len(items)}</strong> shown</span></div>
+<section data-rights-worksheet-status="{escape(worksheet['status'], quote=True)}"
+ data-review-tasks="{worksheet['review_task_count']}"
+ data-pending-reviews="{worksheet['pending_review_count']}"
+ data-required-checks="{worksheet['required_check_count']}"
+ data-completed-checks="{worksheet['completed_check_count']}"
+ data-retrieval-status="{escape(worksheet['technical_retrieval_status'], quote=True)}"
+ data-release-authorized="{str(worksheet['release_authorized']).lower()}">
+<h2>Rights review worksheet readiness</h2>
+<p><strong>{worksheet['pending_review_count']} of {worksheet['review_task_count']} reviews pending</strong> · {worksheet['completed_check_count']} of {worksheet['required_check_count']} required checks complete.</p>
+<p>Evidence must be completed in approved private storage. Technical retrieval remains disabled and release remains unauthorized.</p></section>
 <nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
 <div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>

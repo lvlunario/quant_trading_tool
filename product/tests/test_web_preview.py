@@ -196,6 +196,23 @@ class WebPreviewTests(unittest.TestCase):
                          'reviewer_reference', 'sha256', 'metric_value'):
             self.assertNotIn(excluded, page.lower())
 
+    def test_research_workbench_shows_count_only_worksheet_readiness(self):
+        status, _, page = self.request("GET", "/research-work-items")
+        self.assertEqual(status, 200)
+        self.assertIn('data-rights-worksheet-status="blocked"', page)
+        self.assertIn('data-review-tasks="8"', page)
+        self.assertIn('data-pending-reviews="8"', page)
+        self.assertIn('data-required-checks="64"', page)
+        self.assertIn('data-completed-checks="0"', page)
+        self.assertIn('data-retrieval-status="disabled_separate_gate"', page)
+        self.assertIn('data-release-authorized="false"', page)
+        self.assertIn('8 of 8 reviews pending', page)
+        self.assertIn('0 of 64 required checks complete', page)
+        for private_field in ('source_uri', 'document_id', 'terms_uri',
+                              'evidence_sha256', 'reviewer_reference',
+                              'review_id'):
+            self.assertNotIn(private_field, page.lower())
+
     def test_research_workbench_filters_are_fixed_routes(self):
         expected = {
             "/research-work-items/identity": (1, "identity_unresolved"),

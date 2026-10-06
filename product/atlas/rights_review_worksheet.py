@@ -45,6 +45,24 @@ class RightsReviewWorksheet:
     use_case: str
     items: tuple[RightsReviewWorksheetItem, ...]
 
+    def public_readiness_summary(self):
+        """Return count-only readiness without source or review evidence fields."""
+        review_task_count = len(self.items)
+        required_check_count = review_task_count * len(REVIEW_CHECKLIST)
+        return {
+            'schema_version': 1,
+            'status': 'blocked',
+            'review_task_count': review_task_count,
+            'pending_review_count': review_task_count,
+            'required_check_count': required_check_count,
+            'completed_check_count': 0,
+            'pending_check_count': required_check_count,
+            'evidence_storage': 'private_outside_repository',
+            'technical_retrieval_status': 'disabled_separate_gate',
+            'release_authorized': False,
+            'next_action': 'complete_manual_terms_review_privately',
+        }
+
     def template_summary(self):
         return {
             'schema_version': 1,

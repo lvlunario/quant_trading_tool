@@ -51,6 +51,28 @@ class RightsReviewWorksheetTests(unittest.TestCase):
         self.assertEqual(report['evidence_storage'], 'private_outside_repository')
         self.assertFalse(report['release_authorized'])
 
+    def test_public_readiness_is_count_only_and_blocked(self):
+        report = build_rights_review_worksheet(
+            self.catalog, self.manifest).public_readiness_summary()
+        self.assertEqual(report, {
+            'schema_version': 1,
+            'status': 'blocked',
+            'review_task_count': 8,
+            'pending_review_count': 8,
+            'required_check_count': 64,
+            'completed_check_count': 0,
+            'pending_check_count': 64,
+            'evidence_storage': 'private_outside_repository',
+            'technical_retrieval_status': 'disabled_separate_gate',
+            'release_authorized': False,
+            'next_action': 'complete_manual_terms_review_privately',
+        })
+        serialized = str(report).lower()
+        for private_field in ('source_uri', 'document_id', 'terms_uri',
+                              'evidence_sha256', 'reviewer_reference',
+                              'review_id'):
+            self.assertNotIn(private_field, serialized)
+
     def test_misaligned_or_promoted_manifest_fails_closed(self):
         missing = replace(self.manifest, reviews=self.manifest.reviews[:-1])
         promoted_review = replace(self.manifest.reviews[0], review_state='complete')

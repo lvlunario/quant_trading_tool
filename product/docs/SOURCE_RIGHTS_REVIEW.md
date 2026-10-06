@@ -56,6 +56,11 @@ approved private boundary outside this repository. Generating the worksheet is
 work preparation, not a completed review, legal advice, permission, retrieval
 enablement or release authorization.
 
+The Research workbench projects only aggregate readiness from this template:
+eight reviews pending, zero of 64 per-source checklist steps complete, private
+evidence storage required, retrieval disabled and release unauthorized. It does
+not expose source addresses, document/review identifiers or evidence fields.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:
