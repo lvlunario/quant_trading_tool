@@ -10,6 +10,13 @@ advances only to missing source evidence; it never enables retrieval, extraction
 metrics or release. The report omits source/review identifiers, URIs, hashes,
 prices and recommendations.
 
+October 6 worksheet increment: `atlas.rights_review_worksheet` joins the exact
+catalog and unreviewed manifest into eight deterministic review tasks. It lists
+only public source bindings plus the exact evidence-slot names, allowed
+conclusions/actions and pending checklist. Completed evidence belongs in the
+selected private boundary; the worksheet cannot promote review state, enable
+retrieval or authorize release.
+
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1
 accepts only `not_started`, contains no terms evidence or reviewer assertion and

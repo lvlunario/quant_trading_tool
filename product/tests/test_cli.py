@@ -138,6 +138,24 @@ class CliTests(unittest.TestCase):
                          '"reviewer_reference"', '"metric_value"'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_rights_review_worksheet_demo_is_blank_and_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--rights-review-worksheet-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['status'], report['candidate_count']),
+                         ('blocked', 8))
+        self.assertTrue(report['template_only'])
+        self.assertTrue(all(item['review_state'] == 'not_started'
+                            for item in report['items']))
+        self.assertTrue(all(step['status'] == 'pending'
+                            for step in report['checklist']))
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('"reviewer_reference":', '"terms_uri":',
+                         '"evidence_sha256":', '"conclusion":'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_work_items_demo_reports_gaps_without_evidence(self):
         run = subprocess.run(
             [sys.executable, '-m', 'atlas', '--research-work-items-demo'],

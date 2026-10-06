@@ -32,6 +32,8 @@ def main():
                         help="rights review plan; retrieval remains disabled")
     source.add_argument("--rights-evidence-demo", action="store_true",
                         help="reviewed terms evidence status; no retrieval authority")
+    source.add_argument("--rights-review-worksheet-demo", action="store_true",
+                        help="blank eight-source review worksheet; no rights decision")
     source.add_argument("--research-work-items-demo", action="store_true",
                         help="public-safe M2 work queue; metrics remain unavailable")
     source.add_argument("--broker-demo", action="store_true",
@@ -109,6 +111,21 @@ def main():
             report = load_source_rights_manifest(
                 (fixtures / 'public-source-rights-review.json').read_bytes(),
                 catalog).public_summary()
+        elif args.rights_review_worksheet_demo:
+            from .rights_review_worksheet import build_rights_review_worksheet
+            from .source_catalog import load_public_source_catalog
+            from .source_rights import load_source_rights_manifest
+            from .watchlist_registry import load_public_watchlist_registry
+
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes())
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry)
+            manifest = load_source_rights_manifest(
+                (fixtures / 'public-source-rights-review.json').read_bytes(), catalog)
+            report = build_rights_review_worksheet(
+                catalog, manifest).template_summary()
         elif args.rights_evidence_demo:
             from .rights_evidence import (
                 assess_reviewed_rights, load_reviewed_rights_evidence,

@@ -43,6 +43,19 @@ evidence blocks. Public summaries omit terms URIs, evidence hashes, review IDs
 and reviewer references. A passing rights decision still reports technical
 retrieval disabled and release authorization false.
 
+## Blank review worksheet
+
+`python -m atlas --rights-review-worksheet-demo` binds every current source
+candidate to one blank review task. The template includes the public document
+and source address, the exact reviewed-evidence field names, allowed conclusions
+and actions, and all eight checklist steps marked `pending`. It carries no
+terms address, hash, reviewer reference, conclusion or permitted-action value.
+
+Completed worksheets and captured terms evidence must be stored only in the
+approved private boundary outside this repository. Generating the worksheet is
+work preparation, not a completed review, legal advice, permission, retrieval
+enablement or release authorization.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:

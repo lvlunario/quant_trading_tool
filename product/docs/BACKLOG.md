@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 6 morning: added a deterministic blank manual rights-review worksheet
+for all eight source candidates. It binds exact public sources to nine evidence
+slots, three conclusions, four bounded actions and the eight-step checklist;
+every task remains `not_started` and completed evidence is directed outside the
+repository. Five tests raise the local suite to 254. Next: project worksheet
+readiness into the Research workbench without exposing source URLs or evidence
+fields, while actual reviews remain an external/private dependency.
+
 October 5 evening: completed the public metadata candidate catalog for every
 resolved watchlist identity by adding QCOM, PLTR, SPCX, QBTS and RGTI official
 issuer-release addresses and matching unreviewed rights records. The workbench
