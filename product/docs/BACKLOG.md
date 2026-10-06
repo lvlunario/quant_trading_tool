@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 6 evening: added a redacted two-key source-capture authorization
+receipt. Rights permission alone now stops at `technical_approval_missing`; an
+exact, current technical approval is independently required and limited to one
+bounded capture with no redirects or source-byte retention. The checked-in
+state authorizes zero captures and release remains false. Seven tests raise the
+local suite to 263. Next: project this capture-gate receipt into the Research
+workbench without exposing approval or source identifiers.
+
 October 6 afternoon: projected the blank rights-review worksheet into the
 read-only Research workbench as aggregate progress only. The panel shows eight
 pending reviews and zero of 64 per-source checks complete while excluding source

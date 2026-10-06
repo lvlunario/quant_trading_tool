@@ -27,6 +27,11 @@ boundary and must not enter this repository, issues, PRs or CI output.
 The localhost workbench may expose only aggregate task/check counts and blocked
 gate states from that worksheet; it must not expose source addresses, document
 or review identifiers, evidence-field names or completed evidence.
+The source-capture receipt applies two-key control: a reviewed rights decision
+and a separate exact-document technical approval. Approvals must be current,
+bounded to one retrieval, capped at 5 MiB, restricted to HTML/PDF/JSON, and
+forbid redirects and byte retention. Public receipts omit approval identifiers
+and source/evidence details. The contract does not fetch or release data.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

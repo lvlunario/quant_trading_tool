@@ -156,6 +156,22 @@ class CliTests(unittest.TestCase):
                          '"evidence_sha256":', '"conclusion":'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_source_capture_authorization_demo_requires_both_keys(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--source-capture-authorization-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['candidate_count'],
+                          report['rights_ready_count'],
+                          report['capture_authorized_count']), (8, 0, 0))
+        self.assertEqual(report['source_bytes_status'], 'not_provided')
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('authorization_id', 'document_id', 'source_uri',
+                         'terms_uri', 'evidence_sha256', 'reviewer_reference'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_work_items_demo_reports_gaps_without_evidence(self):
         run = subprocess.run(
             [sys.executable, '-m', 'atlas', '--research-work-items-demo'],

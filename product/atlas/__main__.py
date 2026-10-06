@@ -34,6 +34,8 @@ def main():
                         help="reviewed terms evidence status; no retrieval authority")
     source.add_argument("--rights-review-worksheet-demo", action="store_true",
                         help="blank eight-source review worksheet; no rights decision")
+    source.add_argument("--source-capture-authorization-demo", action="store_true",
+                        help="two-key capture receipt; no fetch or source bytes")
     source.add_argument("--research-work-items-demo", action="store_true",
                         help="public-safe M2 work queue; metrics remain unavailable")
     source.add_argument("--broker-demo", action="store_true",
@@ -142,6 +144,29 @@ def main():
                 (fixtures / 'public-source-rights-evidence.json').read_bytes(),
                 catalog)
             report = assess_reviewed_rights(catalog, records).public_summary()
+        elif args.source_capture_authorization_demo:
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes(), now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry,
+                now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            report = assess_source_capture_authorization(
+                catalog, rights, at=now).public_summary()
         elif args.research_work_items_demo:
             from .research_work_items import compose_research_work_queue
             from .rights_evidence import (

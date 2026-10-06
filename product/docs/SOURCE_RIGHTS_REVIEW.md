@@ -61,6 +61,16 @@ eight reviews pending, zero of 64 per-source checklist steps complete, private
 evidence storage required, retrieval disabled and release unauthorized. It does
 not expose source addresses, document/review identifiers or evidence fields.
 
+## Technical source-capture authorization
+
+`python -m atlas --source-capture-authorization-demo` combines the rights
+decision with a separate exact-document technical approval. Both must be
+current before capture can be authorized. Approvals permit only one bounded
+capture, at most 5 MiB, using HTML/PDF/JSON without redirects or byte retention.
+The checked-in evidence and approval sets authorize zero captures. The receipt
+contains no approval ID, document ID, source/terms address, evidence hash or
+reviewer reference and never authorizes release.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:

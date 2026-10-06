@@ -23,6 +23,14 @@ disabled technical-retrieval state and the false release flag. The Research
 workbench renders that summary on every fixed filter route; source addresses,
 document/review identifiers and evidence-field names never enter the page.
 
+The evening source-capture authorization increment introduces a two-key bridge
+between `RightsEvidenceReport` and future technical capture. A candidate needs
+both an explicitly permitted rights result and a current approval bound to the
+exact catalog document. Technical approvals are limited to one retrieval,
+5 MiB, HTML/PDF/JSON, no redirects and no source-byte retention. The public
+receipt omits approval/document/source/evidence identifiers and never grants
+release authority. It performs no network operation and receives no bytes.
+
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1
 accepts only `not_started`, contains no terms evidence or reviewer assertion and
