@@ -31,6 +31,12 @@ exact catalog document. Technical approvals are limited to one retrieval,
 receipt omits approval/document/source/evidence identifiers and never grants
 release authority. It performs no network operation and receives no bytes.
 
+October 7 workbench projection rebuilds that receipt from the checked-in empty
+rights register and an empty approval set at the fixed workbench cutoff. The UI
+allowlists only candidate, rights-ready and capture-authorized counts, source-byte
+status and release false. No approval/document identifier, source/terms address,
+hash or reviewer value enters the page.
+
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1
 accepts only `not_started`, contains no terms evidence or reviewer assertion and

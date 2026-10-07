@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 7 morning: projected the two-key source-capture receipt into every fixed
+Research workbench route. The new panel shows zero of eight rights-ready, zero
+capture-authorized, no source bytes and release false while excluding approval,
+document, URL, hash and reviewer fields. One HTTP/privacy test raises the local
+suite to 264. Next: define a public-safe M2 acceptance trace connecting identity,
+source discovery, rights review, capture authorization, extraction and metric
+release without claiming any blocked gate has passed.
+
 October 6 evening: added a redacted two-key source-capture authorization
 receipt. Rights permission alone now stops at `technical_approval_missing`; an
 exact, current technical approval is independently required and limited to one

@@ -213,6 +213,22 @@ class WebPreviewTests(unittest.TestCase):
                               'review_id'):
             self.assertNotIn(private_field, page.lower())
 
+    def test_research_workbench_shows_redacted_capture_gate(self):
+        status, _, page = self.request("GET", "/research-work-items")
+        self.assertEqual(status, 200)
+        self.assertIn('data-capture-gate-status="blocked"', page)
+        self.assertIn('data-capture-candidates="8"', page)
+        self.assertIn('data-rights-ready="0"', page)
+        self.assertIn('data-capture-authorized="0"', page)
+        self.assertIn('data-source-bytes-status="not_provided"', page)
+        self.assertIn('data-capture-release-authorized="false"', page)
+        self.assertIn('0 of 8 rights-ready', page)
+        self.assertIn('0 of 8 capture-authorized', page)
+        for private_field in ('authorization_id', 'document_id', 'source_uri',
+                              'terms_uri', 'evidence_sha256',
+                              'reviewer_reference'):
+            self.assertNotIn(private_field, page.lower())
+
     def test_research_workbench_filters_are_fixed_routes(self):
         expected = {
             "/research-work-items/identity": (1, "identity_unresolved"),

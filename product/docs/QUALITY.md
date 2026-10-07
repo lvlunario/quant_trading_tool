@@ -25,7 +25,8 @@ false. They prove that rights permission alone advances only to missing source
 evidence and that public output omits source/review evidence and financial fields.
 Workbench HTTP tests require all nine rows on the default route, exact 1/0/8
 identity/source/rights subsets on fixed routes, a count-only blank-worksheet
-projection, no form or evidence identifiers, and rejection of query-driven or
+projection, a count-only two-key capture projection, no form or evidence
+identifiers, and rejection of query-driven or
 arbitrary filters. These are structural and
 privacy controls; they do not establish browser usability or accessibility.
 

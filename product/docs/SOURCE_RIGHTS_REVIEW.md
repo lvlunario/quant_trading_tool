@@ -71,6 +71,10 @@ The checked-in evidence and approval sets authorize zero captures. The receipt
 contains no approval ID, document ID, source/terms address, evidence hash or
 reviewer reference and never authorizes release.
 
+The Research workbench renders only candidate, rights-ready and authorized
+counts plus source-byte absence and release false. It does not display approval
+or document identifiers, source/terms addresses, hashes or reviewer references.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:

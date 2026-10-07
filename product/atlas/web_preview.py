@@ -20,6 +20,7 @@ from .rights_evidence import (assess_reviewed_rights,
                               load_reviewed_rights_evidence)
 from .rights_review_worksheet import build_rights_review_worksheet
 from .risk import standard_option_payoff
+from .source_capture_authorization import assess_source_capture_authorization
 from .source_catalog import load_public_source_catalog
 from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
@@ -83,6 +84,23 @@ def public_rights_review_readiness():
         catalog, manifest).public_readiness_summary()
 
 
+def public_source_capture_authorization():
+    """Build the checked-in two-key capture receipt with no private approvals."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    return assess_source_capture_authorization(
+        catalog, rights, at=WORKBENCH_AS_OF).public_summary()
+
+
 def render_research_work_items(filter_code="all"):
     """Render a redacted work queue selected only by a fixed route mapping."""
     allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
@@ -90,6 +108,7 @@ def render_research_work_items(filter_code="all"):
         raise ValueError("invalid_research_workbench_filter")
     report = public_research_work_queue()
     worksheet = public_rights_review_readiness()
+    capture = public_source_capture_authorization()
     items = report["items"]
     if filter_code != "all":
         items = [item for item in items
@@ -136,6 +155,15 @@ def render_research_work_items(filter_code="all"):
 <h2>Rights review worksheet readiness</h2>
 <p><strong>{worksheet['pending_review_count']} of {worksheet['review_task_count']} reviews pending</strong> · {worksheet['completed_check_count']} of {worksheet['required_check_count']} required checks complete.</p>
 <p>Evidence must be completed in approved private storage. Technical retrieval remains disabled and release remains unauthorized.</p></section>
+<section data-capture-gate-status="{escape(capture['status'], quote=True)}"
+ data-capture-candidates="{capture['candidate_count']}"
+ data-rights-ready="{capture['rights_ready_count']}"
+ data-capture-authorized="{capture['capture_authorized_count']}"
+ data-source-bytes-status="{escape(capture['source_bytes_status'], quote=True)}"
+ data-capture-release-authorized="{str(capture['release_authorized']).lower()}">
+<h2>Source capture authorization</h2>
+<p><strong>{capture['rights_ready_count']} of {capture['candidate_count']} rights-ready</strong> · {capture['capture_authorized_count']} of {capture['candidate_count']} capture-authorized.</p>
+<p>Two independent keys are required: reviewed rights and an exact-document technical approval. No source bytes are provided and release remains unauthorized.</p></section>
 <nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
 <div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>
