@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 7 afternoon: added a public-safe ordered M2 gate trace spanning identity,
+source discovery, rights review, capture authorization, extraction and metric
+release. The current pass counts are 8/8/0/0/0/0 across the nine-name universe;
+the trace rejects misaligned or non-monotonic state, exposes no per-security or
+evidence identifiers, and records neither milestone acceptance nor release
+authority. Six tests raise the local suite to 270. Next: project the six-stage
+trace into the Research workbench as an accessible count-only progress view.
+
 October 7 morning: projected the two-key source-capture receipt into every fixed
 Research workbench route. The new panel shows zero of eight rights-ready, zero
 capture-authorized, no source bytes and release false while excluding approval,

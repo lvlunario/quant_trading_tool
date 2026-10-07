@@ -187,6 +187,21 @@ class CliTests(unittest.TestCase):
                          'sha256', 'metric_value', '"recommendation"'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m2_acceptance_trace_is_ordered_public_and_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m2-acceptance-trace'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual([item['passed_count'] for item in report['stages']],
+                         [8, 8, 0, 0, 0, 0])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('symbol', 'source_uri', 'terms_uri', 'document_id',
+                         'authorization_id', 'review_id', 'sha256',
+                         'metric_value', 'recommendation'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

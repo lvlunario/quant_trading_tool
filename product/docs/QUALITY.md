@@ -19,6 +19,10 @@ expired and future approvals, unsafe policy rejection and the fully blocked
 checked-in CLI state. These tests validate the gate contract, not a downloader,
 private approval process or source permission.
 
+M2 acceptance-trace tests lock the gate order, current 8/8/0/0/0/0 pass counts,
+monotonic progression, input alignment, blocked acceptance/release flags and
+the absence of evidence-bearing or financial fields from CLI output.
+
 Research-work-item tests require the exact nine-name universe, aligned registry,
 catalog and rights assessment times, controlled blocker/action codes and release
 false. They prove that rights permission alone advances only to missing source

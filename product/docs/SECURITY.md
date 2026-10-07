@@ -35,6 +35,9 @@ and source/evidence details. The contract does not fetch or release data.
 The workbench projection is an explicit allowlist of aggregate capture counts,
 source-byte absence and the false release flag. Approval/document identifiers,
 source/terms addresses, hashes and reviewer references are excluded.
+The M2 acceptance trace narrows this further to aggregate gate counts. It emits
+no symbols, source/review/approval identifiers, URLs, hashes, financial values
+or recommendations, and it cannot accept source bytes or mark acceptance.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

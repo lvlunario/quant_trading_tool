@@ -75,6 +75,15 @@ The Research workbench renders only candidate, rights-ready and authorized
 counts plus source-byte absence and release false. It does not display approval
 or document identifiers, source/terms addresses, hashes or reviewer references.
 
+## Public M2 gate trace
+
+`python -m atlas --m2-acceptance-trace` composes the exact checked-in identity,
+source, rights and capture decisions into ordered aggregate counts. Extraction
+and metric release remain zero because no authorized source bytes or verified
+metric evidence are accepted by this trace version. This is engineering
+readiness evidence, not a completed rights review, milestone acceptance or
+release authorization.
+
 ## Retrieval plan
 
 The manifest records a conservative future intake envelope:

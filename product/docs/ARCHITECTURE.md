@@ -37,6 +37,13 @@ allowlists only candidate, rights-ready and capture-authorized counts, source-by
 status and release false. No approval/document identifier, source/terms address,
 hash or reviewer value enters the page.
 
+The M2 acceptance trace is a pure projection over the public identity registry,
+source catalog, rights report and source-capture receipt. It validates exact
+universe/order alignment and monotonic gate counts, then publishes only six
+aggregate stages. Extraction and metric release are hard-blocked because this
+version accepts neither source bytes nor downstream evidence. The trace always
+records `milestone_acceptance_recorded=false` and `release_authorized=false`.
+
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1
 accepts only `not_started`, contains no terms evidence or reviewer assertion and
