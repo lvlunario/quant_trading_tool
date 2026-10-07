@@ -15,6 +15,7 @@ from pathlib import Path
 
 from .conformance import m1_import_conformance, recommend_m1_disposition
 from .import_workflow import synthetic_csv_report
+from .m2_acceptance_trace import build_m2_acceptance_trace
 from .research_work_items import compose_research_work_queue
 from .rights_evidence import (assess_reviewed_rights,
                               load_reviewed_rights_evidence)
@@ -101,6 +102,25 @@ def public_source_capture_authorization():
         catalog, rights, at=WORKBENCH_AS_OF).public_summary()
 
 
+def public_m2_acceptance_trace():
+    """Build the ordered aggregate M2 trace from checked-in gate evidence."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    capture = assess_source_capture_authorization(
+        catalog, rights, at=WORKBENCH_AS_OF)
+    return build_m2_acceptance_trace(
+        registry, catalog, rights, capture).public_summary()
+
+
 def render_research_work_items(filter_code="all"):
     """Render a redacted work queue selected only by a fixed route mapping."""
     allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
@@ -109,6 +129,7 @@ def render_research_work_items(filter_code="all"):
     report = public_research_work_queue()
     worksheet = public_rights_review_readiness()
     capture = public_source_capture_authorization()
+    trace = public_m2_acceptance_trace()
     items = report["items"]
     if filter_code != "all":
         items = [item for item in items
@@ -139,6 +160,18 @@ def render_research_work_items(filter_code="all"):
             blocker_label=escape(item["primary_blocker"].replace("_", " ").title()),
             action=escape(item["next_action"].replace("_", " ").title()))
         for item in items)
+    trace_rows = "".join(
+        '<tr data-m2-gate="{gate}" data-gate-status="{status}" '
+        'data-passed-count="{passed}" data-blocked-count="{blocked}">'
+        '<th scope="row">{label}</th><td>{passed} of {total}</td>'
+        '<td>{blocked} of {total}</td><td>{blocker}</td></tr>'.format(
+            gate=escape(stage["gate"], quote=True),
+            status=escape(stage["status"], quote=True),
+            passed=stage["passed_count"], blocked=stage["blocked_count"],
+            total=trace["universe_count"],
+            label=escape(stage["gate"].replace("_", " ").title()),
+            blocker=escape(stage["blocker"].replace("_", " ").title()))
+        for stage in trace["stages"])
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Research Workbench</title>
 <style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span,section{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}section{{margin:18px 0}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
@@ -164,6 +197,14 @@ def render_research_work_items(filter_code="all"):
 <h2>Source capture authorization</h2>
 <p><strong>{capture['rights_ready_count']} of {capture['candidate_count']} rights-ready</strong> · {capture['capture_authorized_count']} of {capture['candidate_count']} capture-authorized.</p>
 <p>Two independent keys are required: reviewed rights and an exact-document technical approval. No source bytes are provided and release remains unauthorized.</p></section>
+<section data-m2-trace-status="{escape(trace['status'], quote=True)}"
+ data-m2-universe-count="{trace['universe_count']}"
+ data-milestone-acceptance-recorded="{str(trace['milestone_acceptance_recorded']).lower()}"
+ data-m2-release-authorized="{str(trace['release_authorized']).lower()}">
+<h2>M2 gate trace</h2>
+<p>Ordered engineering readiness across the full research universe. Later gates cannot advance beyond their prerequisites.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Gate</th><th>Passed</th><th>Blocked</th><th>Current blocker</th></tr></thead><tbody>{trace_rows}</tbody></table></div>
+<p>No milestone acceptance or release authority is recorded.</p></section>
 <nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
 <div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>

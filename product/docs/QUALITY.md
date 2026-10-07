@@ -22,6 +22,8 @@ private approval process or source permission.
 M2 acceptance-trace tests lock the gate order, current 8/8/0/0/0/0 pass counts,
 monotonic progression, input alignment, blocked acceptance/release flags and
 the absence of evidence-bearing or financial fields from CLI output.
+The workbench trace test also checks all four fixed routes, exact six-stage
+ordering/counts, false milestone/release flags and the same privacy exclusions.
 
 Research-work-item tests require the exact nine-name universe, aligned registry,
 catalog and rights assessment times, controlled blocker/action codes and release

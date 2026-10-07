@@ -6,7 +6,14 @@ import unittest
 
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
                                render_m1_status, render_page,
+                               public_m2_acceptance_trace,
                                render_research_work_items, serve_preview)
+
+
+RESEARCH_PATHS = (
+    "/research-work-items", "/research-work-items/identity",
+    "/research-work-items/source", "/research-work-items/rights",
+)
 
 
 class WebPreviewTests(unittest.TestCase):
@@ -228,6 +235,27 @@ class WebPreviewTests(unittest.TestCase):
                               'terms_uri', 'evidence_sha256',
                               'reviewer_reference'):
             self.assertNotIn(private_field, page.lower())
+
+    def test_research_workbench_shows_ordered_public_m2_trace(self):
+        trace = public_m2_acceptance_trace()
+        self.assertEqual([stage['passed_count'] for stage in trace['stages']],
+                         [8, 8, 0, 0, 0, 0])
+        for path in RESEARCH_PATHS:
+            with self.subTest(path=path):
+                status, _, page = self.request("GET", path)
+                self.assertEqual(status, 200)
+                self.assertIn('data-m2-trace-status="blocked"', page)
+                self.assertIn('data-m2-universe-count="9"', page)
+                self.assertEqual(page.count('data-m2-gate="'), 6)
+                self.assertIn('data-milestone-acceptance-recorded="false"', page)
+                self.assertIn('data-m2-release-authorized="false"', page)
+                self.assertIn('data-m2-gate="identity" data-gate-status="blocked" data-passed-count="8" data-blocked-count="1"', page)
+                self.assertIn('data-m2-gate="metric_release" data-gate-status="blocked" data-passed-count="0" data-blocked-count="9"', page)
+                for private_field in ('authorization_id', 'document_id',
+                                      'source_uri', 'terms_uri', 'review_id',
+                                      'reviewer_reference', 'sha256',
+                                      'metric_value'):
+                    self.assertNotIn(private_field, page.lower())
 
     def test_research_workbench_filters_are_fixed_routes(self):
         expected = {

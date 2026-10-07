@@ -43,6 +43,10 @@ universe/order alignment and monotonic gate counts, then publishes only six
 aggregate stages. Extraction and metric release are hard-blocked because this
 version accepts neither source bytes nor downstream evidence. The trace always
 records `milestone_acceptance_recorded=false` and `release_authorized=false`.
+The Research workbench rebuilds that trace at its fixed evidence cutoff and
+renders an allowlisted table of gate name, pass count, blocked count and blocker.
+The projection is identical on every fixed Research filter route and contains
+no per-security or evidence-bearing fields.
 
 October 4 M2 rights-review increment: `atlas.source_rights` requires one
 document-level review record for every dated public source candidate. Version 1

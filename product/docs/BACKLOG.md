@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 7 evening: projected the ordered six-stage M2 trace into every fixed
+Research workbench route. The accessible table displays pass/blocked counts and
+controlled blockers for the 8/8/0/0/0/0 state, with milestone acceptance and
+release explicitly false. One HTTP/contract/privacy test raises the local suite
+to 271. Next: define the first synthetic, end-to-end M2 conformance scenario
+that proves a permitted mock source can pass every technical gate without
+weakening the blocked public-source state.
+
 October 7 afternoon: added a public-safe ordered M2 gate trace spanning identity,
 source discovery, rights review, capture authorization, extraction and metric
 release. The current pass counts are 8/8/0/0/0/0 across the nine-name universe;
