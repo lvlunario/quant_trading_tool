@@ -26,6 +26,7 @@ from .source_capture_authorization import assess_source_capture_authorization
 from .source_catalog import load_public_source_catalog
 from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
+from .weekly_research_report import build_synthetic_weekly_research_report
 
 
 MAX_BODY_BYTES = 2_048
@@ -33,6 +34,7 @@ FIELDS = ("strike", "premium_per_share", "terminal_price", "fees", "available_ca
 DEFAULTS = {"strike": "50", "premium_per_share": "2", "terminal_price": "48",
             "fees": "0", "available_cash": "5000"}
 WORKBENCH_AS_OF = datetime(2026, 10, 5, tzinfo=timezone.utc)
+WEEKLY_REVIEW_AS_OF = datetime(2026, 10, 8, 11, 0, tzinfo=timezone.utc)
 RESEARCH_ROUTE_FILTERS = {
     "/research-work-items": "all",
     "/research-work-items/identity": "identity_unresolved",
@@ -50,7 +52,8 @@ def render_overview():
         '<p><a href="/import-demo">Run fixed synthetic import demo →</a> · '
         '<a href="/m1-status">View M1 conformance →</a></p>').replace(
         "<!-- interactive-research-work-items-link -->",
-        '<p><a href="/research-work-items">Open Research workbench →</a></p>').replace(
+        '<p><a href="/research-work-items">Open Research workbench →</a> · '
+        '<a href="/weekly-review">Open synthetic Weekly Review →</a></p>').replace(
         '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
 
 
@@ -198,7 +201,7 @@ def render_research_work_items(filter_code="all"):
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Research Workbench</title>
 <style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span,section{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}section{{margin:18px 0}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
-<body data-workbench-filter="{escape(filter_code, quote=True)}"><a href="/overview">Return to five-area overview</a>
+<body data-workbench-filter="{escape(filter_code, quote=True)}"><a href="/overview">Return to five-area overview</a> · <a href="/weekly-review">Open synthetic Weekly Review</a>
 <h1>Research workbench</h1><p class="warning"><strong>Workflow status only.</strong> No source bytes, metric values, recommendations, holdings or release authority.</p>
 <div class="summary"><span><strong>{report['work_item_count']}</strong> total work items</span><span><strong>{report['blocked_count']}</strong> blocked</span><span><strong>{report['catalogued_source_count']}</strong> source candidates</span><span><strong>{report['rights_allowed_count']}</strong> rights allowed</span><span><strong>{len(items)}</strong> shown</span></div>
 <section data-rights-worksheet-status="{escape(worksheet['status'], quote=True)}"
@@ -245,6 +248,43 @@ def render_research_work_items(filter_code="all"):
 <div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>
 <p>Filters are fixed server routes. This page has no query input, upload, network retrieval or persistence.</p></body></html>'''
+
+
+def render_weekly_review():
+    """Render only the fixed dated synthetic report through a field allowlist."""
+    report = build_synthetic_weekly_research_report(
+        period_end=WEEKLY_REVIEW_AS_OF.date(),
+        generated_at=WEEKLY_REVIEW_AS_OF).public_summary()
+    section_labels = {
+        'observation': 'Observation',
+        'hypothesis': 'Hypothesis',
+        'counterargument': 'Counterargument',
+        'missing_evidence': 'Missing evidence',
+    }
+    sections = ''.join(
+        '<section data-weekly-section="{section}" '
+        'data-evidence-status="{evidence}" data-source-status="{source}">'
+        '<h2>{label}</h2><p>{text}</p><dl><dt>As of</dt><dd>{as_of}</dd>'
+        '<dt>Evidence</dt><dd>{evidence_label}</dd>'
+        '<dt>Source state</dt><dd>{source_label}</dd></dl></section>'.format(
+            section=escape(item['section'], quote=True),
+            evidence=escape(item['evidence_status'], quote=True),
+            source=escape(item['source_status'], quote=True),
+            label=escape(section_labels[item['section']]),
+            text=escape(item['text']), as_of=escape(item['as_of']),
+            evidence_label=escape(
+                item['evidence_status'].replace('_', ' ').title()),
+            source_label=escape(item['source_status'].replace('_', ' ').title()))
+        for item in report['sections'])
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Weekly Review · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:900px;margin:auto;padding:24px}}.meta,section{{background:#fff;border:1px solid #c4d5dc;border-radius:10px;padding:18px;margin:18px 0}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body data-weekly-review-mode="{escape(report['mode'], quote=True)}" data-weekly-review-status="{escape(report['status'], quote=True)}" data-investment-conclusion="{str(report['investment_conclusion']).lower()}" data-milestone-acceptance-recorded="{str(report['milestone_acceptance_recorded']).lower()}" data-release-authorized="{str(report['release_authorized']).lower()}">
+<a href="/overview">Return to five-area overview</a> · <a href="/research-work-items">Open Research workbench</a>
+<h1>Weekly Review</h1><p class="warning"><strong>Synthetic structure demonstration.</strong> Invented statements only—no current issuer research, portfolio conclusion, recommendation or release authority.</p>
+<div class="meta"><strong>Period ending {escape(report['period_end'])}</strong><br>Generated {escape(report['generated_at'])}</div>
+{sections}
+<p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
 
 
 def render_import_demo():
@@ -390,6 +430,7 @@ def make_handler(token):
         def do_GET(self):
             if not self._valid_host() or self.path not in {
                     "/", "/overview", "/checklist", "/import-demo", "/m1-status",
+                    "/weekly-review",
                     *RESEARCH_ROUTE_FILTERS}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
@@ -401,6 +442,8 @@ def make_handler(token):
                 self._send(200, render_import_demo())
             elif self.path == "/m1-status":
                 self._send(200, render_m1_status())
+            elif self.path == "/weekly-review":
+                self._send(200, render_weekly_review())
             elif self.path in RESEARCH_ROUTE_FILTERS:
                 self._send(200, render_research_work_items(
                     RESEARCH_ROUTE_FILTERS[self.path]))

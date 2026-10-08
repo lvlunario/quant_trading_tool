@@ -8,7 +8,8 @@ from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
                                render_m1_status, render_page,
                                public_m2_acceptance_trace,
                                public_m2_synthetic_conformance,
-                               render_research_work_items, serve_preview)
+                               render_research_work_items, render_weekly_review,
+                               serve_preview)
 
 
 RESEARCH_PATHS = (
@@ -113,6 +114,7 @@ class WebPreviewTests(unittest.TestCase):
         self.assertIn('href="/import-demo">Run fixed synthetic import demo', page)
         self.assertIn('href="/m1-status">View M1 conformance', page)
         self.assertIn('href="/research-work-items">Open Research workbench', page)
+        self.assertIn('href="/weekly-review">Open synthetic Weekly Review', page)
         self.assertIn('href="/checklist"', page)
         self.assertNotIn('<!-- interactive-options-link -->', page)
         for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
@@ -299,3 +301,39 @@ class WebPreviewTests(unittest.TestCase):
         self.assertEqual(status, 404)
         with self.assertRaisesRegex(ValueError, 'invalid_research_workbench_filter'):
             render_research_work_items("../../.env")
+
+    def test_weekly_review_renders_exact_typed_claim_sequence(self):
+        status, headers, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertIn('data-weekly-review-mode="synthetic"', page)
+        self.assertIn('data-weekly-review-status="ready"', page)
+        markers = [
+            'data-weekly-section="observation"',
+            'data-weekly-section="hypothesis"',
+            'data-weekly-section="counterargument"',
+            'data-weekly-section="missing_evidence"',
+        ]
+        self.assertEqual(page.count('data-weekly-section="'), 4)
+        self.assertEqual(sorted(page.index(marker) for marker in markers),
+                         [page.index(marker) for marker in markers])
+        self.assertIn('data-evidence-status="synthetic_verified" '
+                      'data-source-status="synthetic_fixture"', page)
+        self.assertIn('data-evidence-status="unavailable" '
+                      'data-source-status="missing"', page)
+        self.assertIn('Period ending 2026-10-08', page)
+        self.assertEqual(page, render_weekly_review())
+
+    def test_weekly_review_is_readonly_synthetic_and_redacted(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn('data-investment-conclusion="false"', page)
+        self.assertIn('data-milestone-acceptance-recorded="false"', page)
+        self.assertIn('data-release-authorized="false"', page)
+        for excluded in ('<form', '<input', '<button', 'statement_id',
+                         'source_uri', 'document_id', 'review_id', 'sha256',
+                         'metric_value', '"recommendation":', 'nvda', 'mu',
+                         'qcom', 'pltr', 'spcx', 'crbs', 'qbts', 'rgti'):
+            self.assertNotIn(excluded, page.lower())
+        status, _, _ = self.request("GET", "/weekly-review?period=latest")
+        self.assertEqual(status, 404)

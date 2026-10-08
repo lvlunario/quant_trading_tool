@@ -17,6 +17,11 @@ claim type. They reject future periods, naive generation times, missing,
 duplicate or reordered sections and attempts to promote assumptions into
 verified observations. The CLI/privacy check excludes real watchlist symbols,
 metric values and recommendation fields.
+Weekly Review HTTP tests require that same order and evidence semantics on one
+exact allowlisted route, no-store response handling, false
+conclusion/acceptance/release flags and exclusion of real watchlist symbols,
+evidence identifiers and all form/action controls. Query-driven report dates
+are rejected rather than interpreted.
 
 Source-capture authorization tests enforce the independent two-key rule,
 exact catalog-document binding, current approval time, safe size/content limits,

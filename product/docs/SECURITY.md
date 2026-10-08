@@ -54,6 +54,10 @@ source bytes. Its fixed invented claims carry explicit evidence states, expose
 no real issuer or portfolio data and hard-code investment conclusion, milestone
 acceptance and release authority to false. It is a structure demonstration,
 not research advice or permission to publish.
+Its Weekly Review projection uses a fixed timestamp and explicit field
+allowlist. It excludes statement/source/document/review identifiers, real
+symbols and financial values, accepts no query parameters, and offers no form,
+upload, fetch, persistence, approval or release action.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

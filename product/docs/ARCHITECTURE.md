@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 9 Weekly Review projection: `atlas.web_preview` renders the fixed typed
+weekly report through the exact `/weekly-review` route. The renderer allowlists
+only period/generation dates, section label/text and evidence/source states; it
+omits statement IDs and exposes no input or action control. Query strings are
+rejected, and the page retains false investment-conclusion, acceptance and
+release flags.
+
 October 8 weekly-report increment: `atlas.weekly_research_report` defines a
 dated, immutable four-section shell with exact ordering and section-specific
 evidence semantics. Observations may cite only the invented fixture;
@@ -170,7 +177,7 @@ September 16: `atlas.metric_evidence` binds versioned metric definitions/Decimal
 
 September 15 metric increment: `atlas.metrics` defines immutable semantic versions and finite Decimal/unavailable values, rejecting incompatible same-definition comparisons. See [metric contract](METRICS.md). Value-to-provenance hash binding and readiness integration remain pending; no formula text is executed.
 
-September 15 navigation increment, extended October 5: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, `/import-demo` for the checked-in synthetic CSV receipt, `/m1-status` for the public-safe M1 evidence boundary, `/checklist` for escaped read-only acceptance instructions, and `/research-work-items` plus three fixed child routes for the redacted M2 queue. Workbench filtering is route-controlled; query strings, caller-selected files and directory listings are rejected. The downloadable offline page remains standalone; interactive links are inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
+September 15 navigation increment, extended October 9: the local preview uses an exact route allowlist: `/overview` for the fixed five-area page, `/` for the kernel-backed put form, `/import-demo` for the checked-in synthetic CSV receipt, `/m1-status` for the public-safe M1 evidence boundary, `/checklist` for escaped read-only acceptance instructions, `/weekly-review` for the fixed synthetic report, and `/research-work-items` plus three fixed child routes for the redacted M2 queue. Workbench filtering is route-controlled; query strings, caller-selected files and directory listings are rejected. The downloadable offline page remains standalone; interactive links are inserted only when served locally. This is still synthetic UX-01 work, not the integrated R13 application.
 
 ## Offline UX preview boundary — September 14
 

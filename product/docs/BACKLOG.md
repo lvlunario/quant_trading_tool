@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 9 morning: projected the fixed synthetic report into an exact,
+read-only `/weekly-review` route. The page renders the four typed claim sections
+in contract order, shows their shared cutoff and evidence/source states, and
+keeps investment conclusion, milestone acceptance and release false. It omits
+statement and evidence identifiers, rejects query-driven dates, and has no
+input or action controls. Two HTTP/privacy tests raise the local suite to 287.
+Next: add a public-safe weekly readiness summary that distinguishes the
+synthetic report shell from the still-blocked sourced weekly report.
+
 October 8 evening: added a dated, fully synthetic weekly research-report
 contract and CLI demo. The exact four-section order separates an observation,
 hypothesis, counterargument and missing evidence; section-specific evidence
