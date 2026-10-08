@@ -202,6 +202,24 @@ class CliTests(unittest.TestCase):
                          'metric_value', 'recommendation'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m2_synthetic_conformance_keeps_public_release_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m2-synthetic-conformance'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['status'], 'passed')
+        self.assertEqual(report['public_source_state']['passed_counts'],
+                         [8, 8, 0, 0, 0, 0])
+        self.assertTrue(all(
+            item['status'] == 'passed'
+            for item in report['synthetic_scenario']['stages']))
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('document_id', 'observation_id', 'source_sha256',
+                         'source_uri', 'terms_uri', 'metric_id', '123.40',
+                         'symbol', 'recommendation'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

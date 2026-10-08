@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 8 morning: added a synthetic end-to-end M2 conformance report. One
+invented permitted source must pass identity, discovery, rights, capture,
+extraction and metric-release gates while the separately built public trace
+must retain zero extraction and zero metric release. Output is aggregate and
+omits source identifiers, hashes and metric values; it cannot record milestone
+acceptance or release authority. Six tests raise the local suite to 277. Next:
+project this conformance result into the Research workbench as a visible
+synthetic-vs-public boundary without exposing the synthetic metric.
+
 October 7 evening: projected the ordered six-stage M2 trace into every fixed
 Research workbench route. The accessible table displays pass/blocked counts and
 controlled blockers for the 8/8/0/0/0/0 state, with milestone acceptance and

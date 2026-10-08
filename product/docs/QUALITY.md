@@ -24,6 +24,12 @@ monotonic progression, input alignment, blocked acceptance/release flags and
 the absence of evidence-bearing or financial fields from CLI output.
 The workbench trace test also checks all four fixed routes, exact six-stage
 ordering/counts, false milestone/release flags and the same privacy exclusions.
+Synthetic M2 conformance tests separately require the invented fixture to pass
+all six technical gates, require public extraction and release to stay at zero,
+block when the invented workflow cannot release a metric, and assert that
+identifiers, hashes and metric values are absent from the summary. Passing this
+scenario proves contract composition, not public-source permission, provider
+accuracy or investment performance.
 
 Research-work-item tests require the exact nine-name universe, aligned registry,
 catalog and rights assessment times, controlled blocker/action codes and release

@@ -45,3 +45,10 @@ or external provider.
 The composed workflow now adds an independent extraction-quality decision after
 intake and before metric release. See [extraction-quality
 contract](EXTRACTION_QUALITY.md).
+
+`python -m atlas --m2-synthetic-conformance` exercises that entire invented
+path and compares its six passed technical gates with the independently built
+public M2 trace. The checked-in public trace must remain blocked at extraction
+and metric release. The conformance summary contains no source identifier,
+digest or metric value and grants no rights, capture, release or acceptance
+authority.

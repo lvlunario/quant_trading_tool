@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+October 8 M2 conformance increment: `atlas.m2_synthetic_conformance` composes
+the fixed invented source workflow with the independently built public M2 gate
+trace. A pass requires the invented source to reach exact-source extraction and
+metric readiness while public extraction and metric-release counts remain
+zero. Its report exposes only gate states and aggregate counts; it carries no
+source identifier, hash or metric value and can never record acceptance or
+authorize release. This demonstrates technical reachability without promoting
+any real/public source.
+
 October 5 M2 workbench increment: `atlas.research_work_items` composes the
 effective-dated watchlist registry, public source catalog and reviewed-rights
 decision into one versioned public-safe queue. Every work item remains blocked

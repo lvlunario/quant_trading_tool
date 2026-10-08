@@ -40,6 +40,8 @@ def main():
                         help="public-safe M2 work queue; metrics remain unavailable")
     source.add_argument("--m2-acceptance-trace", action="store_true",
                         help="ordered M2 gate counts; no acceptance authority")
+    source.add_argument("--m2-synthetic-conformance", action="store_true",
+                        help="invented six-gate proof; public sources stay blocked")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -188,6 +190,37 @@ def main():
             rights = assess_reviewed_rights(catalog, evidence)
             report = compose_research_work_queue(
                 registry, catalog, rights).public_summary()
+        elif args.m2_synthetic_conformance:
+            from .m2_acceptance_trace import build_m2_acceptance_trace
+            from .m2_synthetic_conformance import assess_m2_synthetic_conformance
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes(),
+                now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry,
+                now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            capture = assess_source_capture_authorization(
+                catalog, rights, at=now)
+            public_trace = build_m2_acceptance_trace(
+                registry, catalog, rights, capture)
+            report = assess_m2_synthetic_conformance(
+                (fixtures / 'synthetic-research-source.json').read_bytes(),
+                public_trace, now=now)
         elif args.m2_acceptance_trace:
             from .m2_acceptance_trace import build_m2_acceptance_trace
             from .rights_evidence import (
