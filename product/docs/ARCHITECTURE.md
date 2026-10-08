@@ -2,8 +2,9 @@
 
 October 8 M2 conformance increment: `atlas.m2_synthetic_conformance` composes
 the fixed invented source workflow with the independently built public M2 gate
-trace. A pass requires the invented source to reach exact-source extraction and
-metric readiness while public extraction and metric-release counts remain
+trace. A pass requires an independent exact-source technical approval before
+the invented source can reach byte intake, extraction and metric readiness,
+while public extraction and metric-release counts remain
 zero. Its report exposes only gate states and aggregate counts; it carries no
 source identifier, hash or metric value and can never record acceptance or
 authorize release. This demonstrates technical reachability without promoting

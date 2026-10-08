@@ -31,6 +31,7 @@ def assess_m2_synthetic_conformance(source_bytes, public_trace, *, now=None):
     synthetic_passed = (
         synthetic['status'] == 'ready' and
         synthetic.get('source_sha256') is not None and
+        synthetic.get('capture', {}).get('status') == 'ready' and
         synthetic.get('extraction', {}).get('status') == 'ready' and
         synthetic.get('metric') is not None
     )

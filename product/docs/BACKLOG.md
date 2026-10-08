@@ -38,7 +38,9 @@ invented permitted source must pass identity, discovery, rights, capture,
 extraction and metric-release gates while the separately built public trace
 must retain zero extraction and zero metric release. Output is aggregate and
 omits source identifiers, hashes and metric values; it cannot record milestone
-acceptance or release authority. Six tests raise the local suite to 277. Next:
+acceptance or release authority. The invented path requires an independent,
+exact-source technical approval before byte intake. Seven tests raise the local
+suite to 278. Next:
 project this conformance result into the Research workbench as a visible
 synthetic-vs-public boundary without exposing the synthetic metric.
 

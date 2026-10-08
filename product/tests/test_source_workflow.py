@@ -37,6 +37,15 @@ class SyntheticSourceWorkflowTests(unittest.TestCase):
         self.assertIsNone(report['source_sha256'])
         self.assertIsNone(report['metric'])
 
+    def test_missing_capture_approval_blocks_before_source_parsing(self):
+        report = synthetic_source_report(
+            b'{not-json', now=self.now, capture_approval=None)
+        self.assertEqual(report['status'], 'blocked')
+        self.assertEqual(report['codes'], ['technical_approval_missing'])
+        self.assertEqual(report['capture']['status'], 'blocked')
+        self.assertIsNone(report['source_sha256'])
+        self.assertIsNone(report['metric'])
+
     def test_missing_metric_is_not_converted_to_zero(self):
         raw = json.loads(self.source_bytes)
         raw['metric']['value'] = None

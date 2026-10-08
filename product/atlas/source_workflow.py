@@ -13,6 +13,7 @@ from .metric_evidence import MetricPayload, assess_sourced_metric_input
 from .metrics import MetricDefinition, MetricValue
 from .provenance import ObservationRecord
 from .reference import DataRightsRecord, SecurityRecord
+from .source_capture_authorization import TechnicalCaptureApproval
 from .source_intake import SourceIntakeRequest, intake_research_source
 
 
@@ -22,6 +23,7 @@ _METRIC_KEYS = {
     'null_policy', 'transform_version', 'value', 'missing_reason',
     'period_start', 'period_end',
 }
+_DEFAULT_CAPTURE_APPROVAL = object()
 
 
 def _exact_object(value, keys, code):
@@ -57,7 +59,8 @@ def _metric_payload(raw):
         _date(metric['period_start']), _date(metric['period_end']))
 
 
-def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
+def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None,
+                            capture_approval=_DEFAULT_CAPTURE_APPROVAL):
     """Run invented JSON bytes through every release gate; return no raw content."""
     now = now or datetime.now(timezone.utc)
     if not isinstance(source_bytes, bytes) or not isinstance(now, datetime) or now.tzinfo is None:
@@ -74,6 +77,39 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
         'd' * 64, available_at - timedelta(days=30),
         datetime(2099, 1, 1, tzinfo=timezone.utc))
     permission_records = [default_rights] if rights is None else rights
+    if capture_approval is _DEFAULT_CAPTURE_APPROVAL:
+        capture_approval = TechnicalCaptureApproval(
+            'AUTH_DEMO12345678', request.document_id, 'DEMO',
+            'internal_research', 'retrieve_once', available_at,
+            datetime(2099, 1, 1, tzinfo=timezone.utc), 5 * 1024 * 1024,
+            ('application/json',), False, False)
+    if capture_approval is not None and not isinstance(
+            capture_approval, TechnicalCaptureApproval):
+        raise ValueError('invalid_synthetic_capture_approval')
+    capture_code = None
+    if capture_approval is None:
+        capture_code = 'technical_approval_missing'
+    elif (capture_approval.document_id != request.document_id or
+          capture_approval.symbol != 'DEMO'):
+        capture_code = 'technical_approval_source_mismatch'
+    elif now < capture_approval.approved_at:
+        capture_code = 'technical_approval_not_yet_effective'
+    elif now >= capture_approval.valid_until:
+        capture_code = 'technical_approval_expired'
+    elif (request.content_type not in capture_approval.allowed_content_types or
+          len(source_bytes) > capture_approval.max_source_bytes):
+        capture_code = 'technical_approval_scope_mismatch'
+    if capture_code:
+        return {
+            'schema_version': 1, 'mode': 'synthetic', 'status': 'blocked',
+            'codes': [capture_code], 'byte_count': len(source_bytes),
+            'source_sha256': None, 'metric': None,
+            'capture': {'status': 'blocked', 'decision': capture_code},
+            'readiness': 'no source admitted; synthetic capture gate blocked',
+        }
+    capture_report = {
+        'status': 'ready', 'decision': 'source_capture_authorized',
+    }
     intake = intake_research_source(
         source_bytes, request, permission_records,
         use_case='internal_research', now=now)
@@ -82,6 +118,7 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
             'schema_version': 1, 'mode': 'synthetic', 'status': 'blocked',
             'codes': list(intake.codes), 'byte_count': intake.byte_count,
             'source_sha256': None, 'metric': None,
+            'capture': capture_report,
             'readiness': 'no metric released; synthetic contract demonstration only',
         }
 
@@ -114,6 +151,7 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
             'schema_version': 1, 'mode': 'synthetic', 'status': 'blocked',
             'codes': list(quality.codes), 'byte_count': intake.byte_count,
             'source_sha256': source.source_sha256, 'metric': None,
+            'capture': capture_report,
             'extraction': extraction_report,
             'readiness': 'no metric released; extraction quality blocked',
         }
@@ -150,6 +188,7 @@ def synthetic_source_report(source_bytes: bytes, *, now=None, rights=None):
         'codes': list(decision.codes), 'byte_count': intake.byte_count,
         'source_sha256': source.source_sha256, 'document_id': source.document_id,
         'observation_id': decision.observation_id, 'metric': metric,
+        'capture': capture_report,
         'extraction': extraction_report,
         'readiness': ('all synthetic source gates passed; no provider connection, '
                       'publisher authentication, accuracy claim or investment conclusion'),

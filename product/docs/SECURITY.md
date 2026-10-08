@@ -41,7 +41,8 @@ or recommendations, and it cannot accept source bytes or mark acceptance.
 Its workbench projection uses only gate names, aggregate counts and controlled
 blocker codes; it is read-only, fixed-cutoff and identical across filter routes.
 The synthetic M2 conformance report preserves the same public boundary while
-exercising a separate invented source. It may expose only synthetic stage
+exercising a separate invented source behind an exact, current technical
+capture approval. It may expose only synthetic stage
 states and aggregate public counts—not source/document/observation IDs, hashes,
 addresses or metric values. A technical conformance pass does not grant rights,
 capture authority, release authority or milestone acceptance.
