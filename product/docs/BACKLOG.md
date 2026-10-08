@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 8 evening: added a dated, fully synthetic weekly research-report
+contract and CLI demo. The exact four-section order separates an observation,
+hypothesis, counterargument and missing evidence; section-specific evidence
+states prevent assumptions from being promoted into verified facts. The report
+contains no real issuer, licensed data, portfolio conclusion or recommendation
+and cannot record acceptance or release authority. Six tests raise the local
+suite to 285. Next: project this fixed shell into a read-only Weekly Review
+route without adding upload, fetch, persistence or release actions.
+
 October 8 afternoon: projected the synthetic M2 conformance result into every
 fixed Research workbench route. The new read-only panel contrasts 6/6 invented
 technical gates with the unchanged public 8/8/0/0/0/0 state and keeps release

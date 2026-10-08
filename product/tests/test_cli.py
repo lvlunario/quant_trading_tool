@@ -220,6 +220,22 @@ class CliTests(unittest.TestCase):
                          'symbol', 'recommendation'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_weekly_report_demo_separates_claims_without_release(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--weekly-report-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            [item['section'] for item in report['sections']],
+            ['observation', 'hypothesis', 'counterargument', 'missing_evidence'])
+        self.assertFalse(report['investment_conclusion'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('nvda', 'mu', 'qcom', 'pltr', 'spcx', 'crbs', 'qbts',
+                         'rgti', 'metric_value', '"recommendation":'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

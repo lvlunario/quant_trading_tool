@@ -42,6 +42,8 @@ def main():
                         help="ordered M2 gate counts; no acceptance authority")
     source.add_argument("--m2-synthetic-conformance", action="store_true",
                         help="invented six-gate proof; public sources stay blocked")
+    source.add_argument("--weekly-report-demo", action="store_true",
+                        help="dated invented research shell; no recommendation")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -190,6 +192,12 @@ def main():
             rights = assess_reviewed_rights(catalog, evidence)
             report = compose_research_work_queue(
                 registry, catalog, rights).public_summary()
+        elif args.weekly_report_demo:
+            from .weekly_research_report import (
+                build_synthetic_weekly_research_report,
+            )
+
+            report = build_synthetic_weekly_research_report().public_summary()
         elif args.m2_synthetic_conformance:
             from .m2_acceptance_trace import build_m2_acceptance_trace
             from .m2_synthetic_conformance import assess_m2_synthetic_conformance

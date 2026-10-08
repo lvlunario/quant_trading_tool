@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 8 weekly-report increment: `atlas.weekly_research_report` defines a
+dated, immutable four-section shell with exact ordering and section-specific
+evidence semantics. Observations may cite only the invented fixture;
+hypotheses and counterarguments remain explicit assumptions; missing evidence
+is unavailable. Missing, duplicate, reordered, future-dated or promoted claims
+fail closed. The public summary cannot record an investment conclusion,
+milestone acceptance or release authority.
+
 October 8 M2 conformance increment: `atlas.m2_synthetic_conformance` composes
 the fixed invented source workflow with the independently built public M2 gate
 trace. A pass requires an independent exact-source technical approval before
