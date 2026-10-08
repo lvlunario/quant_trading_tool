@@ -31,6 +31,9 @@ invented workflow cannot release a metric, and assert that
 identifiers, hashes and metric values are absent from the summary. Passing this
 scenario proves contract composition, not public-source permission, provider
 accuracy or investment performance.
+The workbench projection test repeats the contract across all four fixed routes,
+locks the synthetic 6/6 and public 8/8/0/0/0/0 states, and rejects identifiers,
+hashes and the invented metric value from rendered HTML.
 
 Research-work-item tests require the exact nine-name universe, aligned registry,
 catalog and rights assessment times, controlled blocker/action codes and release

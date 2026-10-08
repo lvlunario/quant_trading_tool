@@ -10,6 +10,12 @@ source identifier, hash or metric value and can never record acceptance or
 authorize release. This demonstrates technical reachability without promoting
 any real/public source.
 
+October 8 workbench projection: `atlas.web_preview` rebuilds the fixed
+conformance scenario at the workbench cutoff and renders only aggregate stage
+counts. Every allowlisted Research route shows 6/6 for the invented path beside
+the unchanged public 8/8/0/0/0/0 trace. No synthetic metric, evidence binding,
+identifier or hash enters HTML, and the projection offers no action endpoint.
+
 October 5 M2 workbench increment: `atlas.research_work_items` composes the
 effective-dated watchlist registry, public source catalog and reviewed-rights
 decision into one versioned public-safe queue. Every work item remains blocked

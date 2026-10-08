@@ -16,6 +16,7 @@ from pathlib import Path
 from .conformance import m1_import_conformance, recommend_m1_disposition
 from .import_workflow import synthetic_csv_report
 from .m2_acceptance_trace import build_m2_acceptance_trace
+from .m2_synthetic_conformance import assess_m2_synthetic_conformance
 from .research_work_items import compose_research_work_queue
 from .rights_evidence import (assess_reviewed_rights,
                               load_reviewed_rights_evidence)
@@ -121,6 +122,27 @@ def public_m2_acceptance_trace():
         registry, catalog, rights, capture).public_summary()
 
 
+def public_m2_synthetic_conformance():
+    """Build the fixed invented-vs-public conformance projection."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    capture = assess_source_capture_authorization(
+        catalog, rights, at=WORKBENCH_AS_OF)
+    trace = build_m2_acceptance_trace(registry, catalog, rights, capture)
+    source_bytes = (fixtures / "synthetic-research-source.json").read_bytes()
+    return assess_m2_synthetic_conformance(
+        source_bytes, trace, now=WORKBENCH_AS_OF)
+
+
 def render_research_work_items(filter_code="all"):
     """Render a redacted work queue selected only by a fixed route mapping."""
     allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
@@ -130,6 +152,7 @@ def render_research_work_items(filter_code="all"):
     worksheet = public_rights_review_readiness()
     capture = public_source_capture_authorization()
     trace = public_m2_acceptance_trace()
+    conformance = public_m2_synthetic_conformance()
     items = report["items"]
     if filter_code != "all":
         items = [item for item in items
@@ -205,6 +228,19 @@ def render_research_work_items(filter_code="all"):
 <p>Ordered engineering readiness across the full research universe. Later gates cannot advance beyond their prerequisites.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Gate</th><th>Passed</th><th>Blocked</th><th>Current blocker</th></tr></thead><tbody>{trace_rows}</tbody></table></div>
 <p>No milestone acceptance or release authority is recorded.</p></section>
+<section data-m2-conformance-status="{escape(conformance['status'], quote=True)}"
+ data-synthetic-stage-count="{len(conformance['synthetic_scenario']['stages'])}"
+ data-synthetic-stages-passed="{sum(stage['status'] == 'passed' for stage in conformance['synthetic_scenario']['stages'])}"
+ data-public-source-status="{escape(conformance['public_source_state']['status'], quote=True)}"
+ data-public-passed-counts="{','.join(str(count) for count in conformance['public_source_state']['passed_counts'])}"
+ data-public-extraction-passed="{conformance['public_source_state']['extraction_passed_count']}"
+ data-public-metric-release-passed="{conformance['public_source_state']['metric_release_passed_count']}"
+ data-conformance-acceptance-recorded="{str(conformance['milestone_acceptance_recorded']).lower()}"
+ data-conformance-release-authorized="{str(conformance['release_authorized']).lower()}">
+<h2>Synthetic versus public conformance</h2>
+<p><strong>Synthetic path: 6 of 6 technical gates passed.</strong> Invented fixture and independent exact-source approval only.</p>
+<p><strong>Public path: blocked.</strong> Gate pass counts remain 8 / 8 / 0 / 0 / 0 / 0; extraction and metric release remain zero.</p>
+<p>Technical reachability does not grant source permission, milestone acceptance or release authority.</p></section>
 <nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
 <div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
 <p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>

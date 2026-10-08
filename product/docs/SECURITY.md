@@ -46,6 +46,9 @@ capture approval. It may expose only synthetic stage
 states and aggregate public counts—not source/document/observation IDs, hashes,
 addresses or metric values. A technical conformance pass does not grant rights,
 capture authority, release authority or milestone acceptance.
+Its workbench projection is read-only and contains only those allowlisted
+aggregate fields on existing fixed routes; it introduces no upload, fetch,
+caller-selected fixture, persistence or action endpoint.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

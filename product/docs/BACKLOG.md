@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 8 afternoon: projected the synthetic M2 conformance result into every
+fixed Research workbench route. The new read-only panel contrasts 6/6 invented
+technical gates with the unchanged public 8/8/0/0/0/0 state and keeps release
+and milestone acceptance false. It excludes the synthetic metric, identifiers,
+addresses and hashes. One HTTP/contract/privacy test raises the local suite to
+279. Next: add a dated, fully synthetic M2 weekly research-report shell that
+separates observations, hypotheses, counterarguments and missing evidence.
+
 October 8 morning: added a synthetic end-to-end M2 conformance report. One
 invented permitted source must pass identity, discovery, rights, capture,
 extraction and metric-release gates while the separately built public trace

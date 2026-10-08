@@ -7,6 +7,7 @@ import unittest
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
                                render_m1_status, render_page,
                                public_m2_acceptance_trace,
+                               public_m2_synthetic_conformance,
                                render_research_work_items, serve_preview)
 
 
@@ -256,6 +257,30 @@ class WebPreviewTests(unittest.TestCase):
                                       'reviewer_reference', 'sha256',
                                       'metric_value'):
                     self.assertNotIn(private_field, page.lower())
+
+    def test_research_workbench_shows_synthetic_public_conformance_boundary(self):
+        report = public_m2_synthetic_conformance()
+        self.assertEqual(report['status'], 'passed')
+        self.assertEqual(report['public_source_state']['passed_counts'],
+                         [8, 8, 0, 0, 0, 0])
+        for path in RESEARCH_PATHS:
+            with self.subTest(path=path):
+                status, _, page = self.request("GET", path)
+                self.assertEqual(status, 200)
+                self.assertIn('data-m2-conformance-status="passed"', page)
+                self.assertIn('data-synthetic-stage-count="6"', page)
+                self.assertIn('data-synthetic-stages-passed="6"', page)
+                self.assertIn('data-public-source-status="blocked"', page)
+                self.assertIn('data-public-passed-counts="8,8,0,0,0,0"', page)
+                self.assertIn('data-public-extraction-passed="0"', page)
+                self.assertIn('data-public-metric-release-passed="0"', page)
+                self.assertIn('data-conformance-acceptance-recorded="false"', page)
+                self.assertIn('data-conformance-release-authorized="false"', page)
+                self.assertIn('Synthetic path: 6 of 6 technical gates passed', page)
+                for excluded in ('authorization_id', 'document_id',
+                                 'observation_id', 'source_uri', 'terms_uri',
+                                 'review_id', 'sha256', 'metric_id', '123.40'):
+                    self.assertNotIn(excluded, page.lower())
 
     def test_research_workbench_filters_are_fixed_routes(self):
         expected = {
