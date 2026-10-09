@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 9 readiness increment: `atlas.weekly_report_readiness` composes the
+typed synthetic weekly report with the public M2 acceptance trace at one exact
+cutoff. It can report the four-section shell ready while keeping sourced
+research blocked at 8/8/0/0/0/0 with zero sourced statements and metrics. This
+version rejects any trace claiming extraction or metric progress because it
+accepts no corresponding source evidence.
+
 October 9 Weekly Review projection: `atlas.web_preview` renders the fixed typed
 weekly report through the exact `/weekly-review` route. The renderer allowlists
 only period/generation dates, section label/text and evidence/source states; it

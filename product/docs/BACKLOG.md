@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 9 afternoon: added a public-safe weekly-report readiness contract, CLI
+demo and visible Weekly Review panel. The contract composes the synthetic report
+with the public M2 trace at one cutoff and reports the shell ready while the
+sourced report remains blocked at 8/8/0/0/0/0 with zero sourced statements and
+metrics. Unsupported nonzero extraction/release claims fail closed. Seven tests
+raise the local suite to 294. Next: define a source-completeness manifest that
+requires every factual weekly-report statement to bind to permitted evidence
+while keeping assumptions and counterarguments explicitly labeled.
+
 October 9 morning: projected the fixed synthetic report into an exact,
 read-only `/weekly-review` route. The page renders the four typed claim sections
 in contract order, shows their shared cutoff and evidence/source states, and

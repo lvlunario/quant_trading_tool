@@ -27,6 +27,7 @@ from .source_catalog import load_public_source_catalog
 from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
 from .weekly_research_report import build_synthetic_weekly_research_report
+from .weekly_report_readiness import assess_weekly_report_readiness
 
 
 MAX_BODY_BYTES = 2_048
@@ -106,23 +107,27 @@ def public_source_capture_authorization():
         catalog, rights, at=WORKBENCH_AS_OF).public_summary()
 
 
-def public_m2_acceptance_trace():
-    """Build the ordered aggregate M2 trace from checked-in gate evidence."""
+def _m2_acceptance_trace(at):
+    """Build the typed M2 trace from checked-in gate evidence at one cutoff."""
     fixtures = Path(__file__).resolve().parents[1] / "fixtures"
     registry = load_public_watchlist_registry(
         (fixtures / "public-watchlist-identities.json").read_bytes(),
-        now=WORKBENCH_AS_OF)
+        now=at)
     catalog = load_public_source_catalog(
         (fixtures / "public-research-sources.json").read_bytes(), registry,
-        now=WORKBENCH_AS_OF)
+        now=at)
     evidence = load_reviewed_rights_evidence(
         (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
-        now=WORKBENCH_AS_OF)
-    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+        now=at)
+    rights = assess_reviewed_rights(catalog, evidence, at=at)
     capture = assess_source_capture_authorization(
-        catalog, rights, at=WORKBENCH_AS_OF)
-    return build_m2_acceptance_trace(
-        registry, catalog, rights, capture).public_summary()
+        catalog, rights, at=at)
+    return build_m2_acceptance_trace(registry, catalog, rights, capture)
+
+
+def public_m2_acceptance_trace(at=WORKBENCH_AS_OF):
+    """Build the ordered aggregate M2 trace from checked-in gate evidence."""
+    return _m2_acceptance_trace(at).public_summary()
 
 
 def public_m2_synthetic_conformance():
@@ -254,7 +259,10 @@ def render_weekly_review():
     """Render only the fixed dated synthetic report through a field allowlist."""
     report = build_synthetic_weekly_research_report(
         period_end=WEEKLY_REVIEW_AS_OF.date(),
-        generated_at=WEEKLY_REVIEW_AS_OF).public_summary()
+        generated_at=WEEKLY_REVIEW_AS_OF)
+    readiness = assess_weekly_report_readiness(
+        report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF)).public_summary()
+    report = report.public_summary()
     section_labels = {
         'observation': 'Observation',
         'hypothesis': 'Hypothesis',
@@ -283,6 +291,10 @@ def render_weekly_review():
 <a href="/overview">Return to five-area overview</a> · <a href="/research-work-items">Open Research workbench</a>
 <h1>Weekly Review</h1><p class="warning"><strong>Synthetic structure demonstration.</strong> Invented statements only—no current issuer research, portfolio conclusion, recommendation or release authority.</p>
 <div class="meta"><strong>Period ending {escape(report['period_end'])}</strong><br>Generated {escape(report['generated_at'])}</div>
+<section data-weekly-readiness-status="{escape(readiness['status'], quote=True)}" data-synthetic-shell-status="{escape(readiness['synthetic_shell']['status'], quote=True)}" data-synthetic-section-count="{readiness['synthetic_shell']['section_count']}" data-sourced-report-status="{escape(readiness['sourced_report']['status'], quote=True)}" data-sourced-universe-count="{readiness['sourced_report']['universe_count']}" data-sourced-passed-counts="{','.join(str(count) for count in readiness['sourced_report']['stage_passed_counts'])}" data-sourced-statement-count="{readiness['sourced_report']['sourced_statement_count']}" data-sourced-metric-count="{readiness['sourced_report']['sourced_metric_count']}">
+<h2>Report readiness</h2><p><strong>Synthetic shell: ready.</strong> Four claim types are separated and dated.</p>
+<p><strong>Sourced report: blocked.</strong> Gate pass counts remain 8 / 8 / 0 / 0 / 0 / 0; there are zero sourced statements and zero sourced metrics.</p>
+<p>The visible shell does not satisfy source rights, capture, extraction or metric-release requirements.</p></section>
 {sections}
 <p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
 

@@ -236,6 +236,23 @@ class CliTests(unittest.TestCase):
                          'rgti', 'metric_value', '"recommendation":'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_weekly_report_readiness_separates_shell_from_sourced_state(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--weekly-report-readiness-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['synthetic_shell']['status'], 'ready')
+        self.assertEqual(report['sourced_report']['status'], 'blocked')
+        self.assertEqual(report['sourced_report']['stage_passed_counts'],
+                         [8, 8, 0, 0, 0, 0])
+        self.assertEqual(report['sourced_report']['sourced_metric_count'], 0)
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('symbol', 'source_uri', 'document_id', 'review_id',
+                         'sha256', 'metric_value', 'statement_id'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)

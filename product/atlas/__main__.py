@@ -44,6 +44,8 @@ def main():
                         help="invented six-gate proof; public sources stay blocked")
     source.add_argument("--weekly-report-demo", action="store_true",
                         help="dated invented research shell; no recommendation")
+    source.add_argument("--weekly-report-readiness-demo", action="store_true",
+                        help="synthetic-ready versus sourced-blocked summary")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -192,6 +194,41 @@ def main():
             rights = assess_reviewed_rights(catalog, evidence)
             report = compose_research_work_queue(
                 registry, catalog, rights).public_summary()
+        elif args.weekly_report_readiness_demo:
+            from .m2_acceptance_trace import build_m2_acceptance_trace
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+            from .weekly_report_readiness import assess_weekly_report_readiness
+            from .weekly_research_report import (
+                build_synthetic_weekly_research_report,
+            )
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes(),
+                now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry,
+                now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            capture = assess_source_capture_authorization(
+                catalog, rights, at=now)
+            trace = build_m2_acceptance_trace(
+                registry, catalog, rights, capture)
+            weekly = build_synthetic_weekly_research_report(
+                period_end=now.date(), generated_at=now)
+            report = assess_weekly_report_readiness(
+                weekly, trace).public_summary()
         elif args.weekly_report_demo:
             from .weekly_research_report import (
                 build_synthetic_weekly_research_report,

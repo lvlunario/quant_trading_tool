@@ -22,6 +22,11 @@ exact allowlisted route, no-store response handling, false
 conclusion/acceptance/release flags and exclusion of real watchlist symbols,
 evidence identifiers and all form/action controls. Query-driven report dates
 are rejected rather than interpreted.
+Weekly-readiness tests require one shared cutoff across the report and M2 trace,
+the exact four-section synthetic shell, the current six-stage public counts,
+zero sourced statements/metrics and false conclusion/acceptance/release flags.
+Mismatched times, wrong input types and unsupported nonzero sourced extraction
+or metric counts fail closed; CLI and UI summaries exclude evidence identifiers.
 
 Source-capture authorization tests enforce the independent two-key rule,
 exact catalog-document binding, current approval time, safe size/content limits,

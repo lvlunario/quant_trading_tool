@@ -337,3 +337,18 @@ class WebPreviewTests(unittest.TestCase):
             self.assertNotIn(excluded, page.lower())
         status, _, _ = self.request("GET", "/weekly-review?period=latest")
         self.assertEqual(status, 404)
+
+    def test_weekly_review_shows_synthetic_ready_and_sourced_blocked(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn(
+            'data-weekly-readiness-status="blocked_sourced_report"', page)
+        self.assertIn('data-synthetic-shell-status="ready"', page)
+        self.assertIn('data-synthetic-section-count="4"', page)
+        self.assertIn('data-sourced-report-status="blocked"', page)
+        self.assertIn('data-sourced-universe-count="9"', page)
+        self.assertIn('data-sourced-passed-counts="8,8,0,0,0,0"', page)
+        self.assertIn('data-sourced-statement-count="0"', page)
+        self.assertIn('data-sourced-metric-count="0"', page)
+        self.assertIn('Synthetic shell: ready', page)
+        self.assertIn('Sourced report: blocked', page)
