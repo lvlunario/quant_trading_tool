@@ -62,6 +62,11 @@ The adjacent readiness summary carries only aggregate gate counts and controlled
 blocker codes. It cannot receive source content, statements or metrics and
 rejects any nonzero sourced extraction/release state rather than publishing an
 unsupported readiness claim.
+The weekly source-completeness manifest contains only required field names and
+controlled claim semantics. It contains no claim, instrument, document,
+observation, reviewer, source, hash or metric value. Actual evidence and
+completed claim records belong in the approved private boundary; publishing a
+schema never establishes permission, accuracy, completeness or release.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 9 evening: added the versioned weekly source-completeness manifest and
+blocked CLI demo. Its four exact rules require permitted evidence bindings for
+observations, explicit support and assumptions for hypotheses, challenges plus
+support-or-gap for counterarguments, and next checks for missing evidence. The
+manifest contains field names only, reports zero complete claims and cannot
+make a report eligible. Six tests raise the local suite to 300. Next: project
+count-only manifest readiness into Weekly Review without exposing evidence
+values.
+
 October 9 afternoon: added a public-safe weekly-report readiness contract, CLI
 demo and visible Weekly Review panel. The contract composes the synthetic report
 with the public M2 trace at one cutoff and reports the shell ready while the

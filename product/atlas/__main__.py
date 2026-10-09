@@ -46,6 +46,8 @@ def main():
                         help="dated invented research shell; no recommendation")
     source.add_argument("--weekly-report-readiness-demo", action="store_true",
                         help="synthetic-ready versus sourced-blocked summary")
+    source.add_argument("--weekly-source-manifest-demo", action="store_true",
+                        help="weekly claim requirements; no source evidence")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -194,6 +196,12 @@ def main():
             rights = assess_reviewed_rights(catalog, evidence)
             report = compose_research_work_queue(
                 registry, catalog, rights).public_summary()
+        elif args.weekly_source_manifest_demo:
+            from .weekly_source_manifest import (
+                build_weekly_source_completeness_manifest,
+            )
+
+            report = build_weekly_source_completeness_manifest().public_summary()
         elif args.weekly_report_readiness_demo:
             from .m2_acceptance_trace import build_m2_acceptance_trace
             from .rights_evidence import (

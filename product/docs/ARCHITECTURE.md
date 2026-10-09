@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+October 9 source-completeness increment: `atlas.weekly_source_manifest` defines
+the exact versioned fields required for observations, hypotheses,
+counterarguments and missing-evidence claims. Observation facts require a
+permitted source binding, rights decision, availability time and extraction
+quality; inference sections require explicit assumptions, support/challenges
+and disconfirming checks. The checked-in manifest contains field names only,
+reports zero complete claims and cannot make a report eligible or authorize
+release.
+
 October 9 readiness increment: `atlas.weekly_report_readiness` composes the
 typed synthetic weekly report with the public M2 acceptance trace at one exact
 cutoff. It can report the four-section shell ready while keeping sourced

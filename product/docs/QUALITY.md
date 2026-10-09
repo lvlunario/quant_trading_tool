@@ -27,6 +27,11 @@ the exact four-section synthetic shell, the current six-stage public counts,
 zero sourced statements/metrics and false conclusion/acceptance/release flags.
 Mismatched times, wrong input types and unsupported nonzero sourced extraction
 or metric counts fail closed; CLI and UI summaries exclude evidence identifiers.
+Source-completeness tests lock the four-rule order, exact evidence requirement
+and required-field set for each claim type. They reject omitted or reordered
+rules, altered field contracts, naive timestamps and any permission for an
+unbound factual claim. The CLI check requires zero complete claims, statements
+and metrics, blocked eligibility and no issuer, evidence value or metric data.
 
 Source-capture authorization tests enforce the independent two-key rule,
 exact catalog-document binding, current approval time, safe size/content limits,

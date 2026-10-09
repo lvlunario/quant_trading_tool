@@ -253,6 +253,29 @@ class CliTests(unittest.TestCase):
                          'sha256', 'metric_value', 'statement_id'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_weekly_source_manifest_defines_fields_without_evidence(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--weekly-source-manifest-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['status'], report['rule_count']),
+                         ('blocked', 4))
+        self.assertEqual(report['rules'][0]['evidence_requirement'],
+                         'permitted_source_binding')
+        self.assertEqual((report['complete_claim_count'],
+                          report['sourced_statement_count'],
+                          report['sourced_metric_count']), (0, 0, 0))
+        self.assertFalse(report['actual_report_eligible'])
+        self.assertFalse(report['investment_conclusion'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('nvda', 'mu', 'qcom', 'pltr', 'spcx', 'crbs',
+                         'qbts', 'rgti', 'source_uri', 'document_value',
+                         'sha256', 'metric_value'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_broker_demo_runs_lossless_mapping_without_position_echo(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--broker-demo'],
                              capture_output=True, text=True)
