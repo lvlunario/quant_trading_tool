@@ -410,3 +410,19 @@ class CliTests(unittest.TestCase):
                               '--preview-port', '8765'], capture_output=True, text=True)
         self.assertEqual(run.returncode, 2)
         self.assertNotIn('8765', run.stderr)
+
+    def test_weekly_claim_receipt_demo_is_count_only_and_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--weekly-claim-receipt-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['required_field_count'], report['provided_field_count'],
+             report['missing_field_count']),
+            (23, 13, 10))
+        self.assertFalse(report['actual_report_eligible'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('claim_id', 'source_document_id', 'observation_id',
+                         'rights_decision', 'instrument_id', '"value"'):
+            self.assertNotIn(excluded, run.stdout)

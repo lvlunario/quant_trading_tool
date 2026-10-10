@@ -32,6 +32,12 @@ and required-field set for each claim type. They reject omitted or reordered
 rules, altered field contracts, naive timestamps and any permission for an
 unbound factual claim. The CLI check requires zero complete claims, statements
 and metrics, blocked eligibility and no issuer, evidence value or metric data.
+Claim-receipt tests lock the fixed 23/13/10 required/provided/missing totals,
+per-section counts and false actual-report/release flags. Unknown, duplicate or
+reordered field declarations, section reordering, naive cutoffs and non-binding
+objects fail closed. CLI/privacy coverage requires counts only and excludes
+field names, evidence identifiers and values. These tests prove structural
+accounting, not evidence permission, accuracy or completeness.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

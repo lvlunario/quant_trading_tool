@@ -70,6 +70,11 @@ schema never establishes permission, accuracy, completeness or release.
 The Weekly Review projects that manifest through counts only. Required field
 names, claim/evidence identifiers and evidence values are excluded from HTML;
 the projection is read-only and cannot complete a claim or alter eligibility.
+The synthetic claim-evidence receipt accepts only a fixed tuple of schema field
+labels—never evidence values, source bytes or caller-selected files. Its public
+summary exposes counts and controlled states only. A synthetic field-complete
+section remains non-sourced and cannot authorize retrieval, report publication,
+milestone acceptance or release.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

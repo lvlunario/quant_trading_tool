@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 10 afternoon: added a typed synthetic claim-evidence receipt that
+validates four fixed field-presence declarations against the source manifest and
+reports 23 required, 13 provided and 10 missing bindings. Public output contains
+counts only, accepts no evidence values and keeps actual report eligibility,
+acceptance and release false even when one synthetic section is structurally
+complete. Six tests raise the local suite to 309. Next: project the receipt's
+provided-versus-missing counts into Weekly Review without exposing field names
+or implying evidence validation.
+
 October 10 morning: projected the weekly source manifest into Weekly Review as
 four count-only claim rows with exact required-field counts, zero complete
 claims, absent evidence values and false report eligibility. Added a dated

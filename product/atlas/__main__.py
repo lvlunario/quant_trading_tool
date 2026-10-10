@@ -48,6 +48,8 @@ def main():
                         help="synthetic-ready versus sourced-blocked summary")
     source.add_argument("--weekly-source-manifest-demo", action="store_true",
                         help="weekly claim requirements; no source evidence")
+    source.add_argument("--weekly-claim-receipt-demo", action="store_true",
+                        help="synthetic field-presence counts; no evidence values")
     source.add_argument("--broker-demo", action="store_true",
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
@@ -202,6 +204,14 @@ def main():
             )
 
             report = build_weekly_source_completeness_manifest().public_summary()
+        elif args.weekly_claim_receipt_demo:
+            from .weekly_claim_receipt import (
+                build_synthetic_weekly_claim_evidence_receipt,
+            )
+
+            report = (
+                build_synthetic_weekly_claim_evidence_receipt().public_summary()
+            )
         elif args.weekly_report_readiness_demo:
             from .m2_acceptance_trace import build_m2_acceptance_trace
             from .rights_evidence import (

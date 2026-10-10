@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 10 receipt increment: `atlas.weekly_claim_receipt` composes the
+versioned source manifest with four fixed synthetic field-presence declarations.
+It validates section order and canonical field membership, then emits only
+provided/missing counts. The module has no evidence-value input, the public
+receipt excludes field names and identifiers, and structural completeness
+cannot set actual report eligibility, acceptance or release authority.
+
 October 10 projection increment: `atlas.web_preview` rebuilds the fixed weekly
 source manifest at the Weekly Review cutoff and allowlists only section labels,
 required-field counts, zero complete-claim counts and blocked eligibility. The
