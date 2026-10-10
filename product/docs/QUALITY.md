@@ -32,6 +32,12 @@ and required-field set for each claim type. They reject omitted or reordered
 rules, altered field contracts, naive timestamps and any permission for an
 unbound factual claim. The CLI check requires zero complete claims, statements
 and metrics, blocked eligibility and no issuer, evidence value or metric data.
+The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
+required-field counts, zero complete claims, missing evidence values and false
+report eligibility while excluding every underlying field name. The October 10
+research-packet tests require the full watchlist plus AVGO, an explicit CRBS
+identity block, separated observations/hypotheses/missing data and the
+point-in-time, holdout, benchmark, cost and premium-income boundaries.
 
 Source-capture authorization tests enforce the independent two-key rule,
 exact catalog-document binding, current approval time, safe size/content limits,

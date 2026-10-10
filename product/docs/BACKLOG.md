@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 10 morning: projected the weekly source manifest into Weekly Review as
+four count-only claim rows with exact required-field counts, zero complete
+claims, absent evidence values and false report eligibility. Added a dated
+Saturday public-evidence delta covering the required watchlist plus AVGO,
+retaining CRBS as identity-blocked and separating observations, hypotheses and
+missing data. Three tests raise the local suite to 303. Next: define a typed
+claim-evidence receipt that can count provided versus missing bindings without
+accepting real evidence in the public repository.
+
 October 9 evening: added the versioned weekly source-completeness manifest and
 blocked CLI demo. Its four exact rules require permitted evidence bindings for
 observations, explicit support and assumptions for hypotheses, challenges plus

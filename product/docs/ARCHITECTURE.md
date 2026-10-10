@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 10 projection increment: `atlas.web_preview` rebuilds the fixed weekly
+source manifest at the Weekly Review cutoff and allowlists only section labels,
+required-field counts, zero complete-claim counts and blocked eligibility. The
+page never renders required field names or evidence identifiers/values. A
+separate dated public-evidence delta remains documentation, not application
+state or a release input.
+
 October 9 source-completeness increment: `atlas.weekly_source_manifest` defines
 the exact versioned fields required for observations, hypotheses,
 counterarguments and missing-evidence claims. Observation facts require a

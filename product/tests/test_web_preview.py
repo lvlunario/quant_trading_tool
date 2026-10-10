@@ -352,3 +352,22 @@ class WebPreviewTests(unittest.TestCase):
         self.assertIn('data-sourced-metric-count="0"', page)
         self.assertIn('Synthetic shell: ready', page)
         self.assertIn('Sourced report: blocked', page)
+
+    def test_weekly_review_shows_count_only_source_manifest(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn('data-source-manifest-status="blocked"', page)
+        self.assertIn('data-source-manifest-rule-count="4"', page)
+        self.assertIn(
+            'data-source-manifest-evidence-values="not_provided"', page)
+        self.assertIn('data-source-manifest-complete-claims="0"', page)
+        self.assertIn('data-actual-report-eligible="false"', page)
+        self.assertEqual(page.count('data-manifest-section="'), 4)
+        self.assertEqual(page.count('data-complete-claims="0"'), 4)
+        self.assertIn('data-required-fields="8"', page)
+        self.assertEqual(page.count('data-required-fields="5"'), 3)
+        for excluded in ('claim_id', 'instrument_id', 'source_document_id',
+                         'observation_id', 'rights_decision',
+                         'assumption_label', 'supporting_claim_ids',
+                         'challenged_claim_ids', 'gap_code'):
+            self.assertNotIn(excluded, page)
