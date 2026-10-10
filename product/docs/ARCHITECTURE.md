@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 10 receipt-projection increment: `atlas.web_preview` rebuilds the fixed
+claim receipt at the Weekly Review cutoff and joins its count-only section state
+to the four manifest rows. The page allowlists required/provided/missing counts
+and synthetic binding status while preserving zero actual complete claims and
+false report eligibility. It renders no schema field names, evidence values or
+identifiers and adds no input or action endpoint.
+
 October 10 receipt increment: `atlas.weekly_claim_receipt` composes the
 versioned source manifest with four fixed synthetic field-presence declarations.
 It validates section order and canonical field membership, then emits only

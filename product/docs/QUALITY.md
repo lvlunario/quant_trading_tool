@@ -38,6 +38,10 @@ reordered field declarations, section reordering, naive cutoffs and non-binding
 objects fail closed. CLI/privacy coverage requires counts only and excludes
 field names, evidence identifiers and values. These tests prove structural
 accounting, not evidence permission, accuracy or completeness.
+The Weekly Review receipt-projection test requires the same aggregate and
+per-section counts, one synthetic field-complete section, three blocked
+sections, zero actual complete claims and false report eligibility. It rejects
+the underlying field names and evidence identifiers from rendered HTML.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

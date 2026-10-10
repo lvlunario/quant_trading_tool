@@ -26,6 +26,7 @@ from .source_capture_authorization import assess_source_capture_authorization
 from .source_catalog import load_public_source_catalog
 from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
+from .weekly_claim_receipt import build_synthetic_weekly_claim_evidence_receipt
 from .weekly_research_report import build_synthetic_weekly_research_report
 from .weekly_report_readiness import assess_weekly_report_readiness
 from .weekly_source_manifest import build_weekly_source_completeness_manifest
@@ -265,6 +266,8 @@ def render_weekly_review():
         report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF)).public_summary()
     manifest = build_weekly_source_completeness_manifest(
         as_of=WEEKLY_REVIEW_AS_OF).public_summary()
+    receipt = build_synthetic_weekly_claim_evidence_receipt(
+        assessed_at=WEEKLY_REVIEW_AS_OF).public_summary()
     report = report.public_summary()
     section_labels = {
         'observation': 'Observation',
@@ -289,12 +292,18 @@ def render_weekly_review():
         for item in report['sections'])
     manifest_rows = ''.join(
         '<tr data-manifest-section="{section}" data-required-fields="{required}" '
-        'data-complete-claims="0"><th scope="row">{label}</th>'
-        '<td>{required}</td><td>0</td></tr>'.format(
+        'data-provided-fields="{provided}" data-missing-fields="{missing}" '
+        'data-binding-status="{status}" data-complete-claims="0">'
+        '<th scope="row">{label}</th><td>{required}</td><td>{provided}</td>'
+        '<td>{missing}</td><td>{status_label}</td><td>0</td></tr>'.format(
             section=escape(rule['section'], quote=True),
             required=rule['required_field_count'],
+            provided=binding['provided_field_count'],
+            missing=binding['missing_field_count'],
+            status=escape(binding['status'], quote=True),
+            status_label=escape(binding['status'].replace('_', ' ').title()),
             label=escape(section_labels[rule['section']]))
-        for rule in manifest['rules'])
+        for rule, binding in zip(manifest['rules'], receipt['sections']))
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Weekly Review · Synthetic</title>
 <style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:900px;margin:auto;padding:24px}}.meta,section{{background:#fff;border:1px solid #c4d5dc;border-radius:10px;padding:18px;margin:18px 0}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
@@ -306,11 +315,11 @@ def render_weekly_review():
 <h2>Report readiness</h2><p><strong>Synthetic shell: ready.</strong> Four claim types are separated and dated.</p>
 <p><strong>Sourced report: blocked.</strong> Gate pass counts remain 8 / 8 / 0 / 0 / 0 / 0; there are zero sourced statements and zero sourced metrics.</p>
 <p>The visible shell does not satisfy source rights, capture, extraction or metric-release requirements.</p></section>
-<section data-source-manifest-status="{escape(manifest['status'], quote=True)}" data-source-manifest-rule-count="{manifest['rule_count']}" data-source-manifest-evidence-values="{escape(manifest['evidence_values_status'], quote=True)}" data-source-manifest-complete-claims="{manifest['complete_claim_count']}" data-actual-report-eligible="{str(manifest['actual_report_eligible']).lower()}">
+<section data-source-manifest-status="{escape(manifest['status'], quote=True)}" data-source-manifest-rule-count="{manifest['rule_count']}" data-source-manifest-evidence-values="{escape(manifest['evidence_values_status'], quote=True)}" data-source-manifest-complete-claims="{manifest['complete_claim_count']}" data-claim-receipt-status="{escape(receipt['status'], quote=True)}" data-claim-receipt-required-fields="{receipt['required_field_count']}" data-claim-receipt-provided-fields="{receipt['provided_field_count']}" data-claim-receipt-missing-fields="{receipt['missing_field_count']}" data-claim-receipt-synthetic-complete="{receipt['synthetic_field_complete_count']}" data-claim-receipt-blocked="{receipt['blocked_claim_count']}" data-claim-receipt-evidence-values="{escape(receipt['evidence_values_status'], quote=True)}" data-actual-report-eligible="{str(receipt['actual_report_eligible']).lower()}">
 <h2>Claim evidence checklist</h2>
-<p><strong>Blocked:</strong> the four claim contracts are defined, but no evidence values or complete claims have been provided.</p>
-<div style="overflow-x:auto"><table><thead><tr><th>Claim type</th><th>Required fields</th><th>Complete claims</th></tr></thead><tbody>{manifest_rows}</tbody></table></div>
-<p>Counts show contract coverage only. Evidence identifiers and values stay outside this public view.</p></section>
+<p><strong>Blocked:</strong> 13 of 23 synthetic field bindings are marked present and 10 remain missing. No evidence values or actual complete claims have been provided.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Claim type</th><th>Required fields</th><th>Present</th><th>Missing</th><th>Synthetic binding status</th><th>Complete claims</th></tr></thead><tbody>{manifest_rows}</tbody></table></div>
+<p>Presence counts show structure only—not permission, authenticity, accuracy or evidence validity. Field names, evidence identifiers and values stay outside this public view.</p></section>
 {sections}
 <p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
 

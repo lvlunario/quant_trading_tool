@@ -371,3 +371,26 @@ class WebPreviewTests(unittest.TestCase):
                          'assumption_label', 'supporting_claim_ids',
                          'challenged_claim_ids', 'gap_code'):
             self.assertNotIn(excluded, page)
+
+    def test_weekly_review_projects_count_only_claim_receipt(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn('data-claim-receipt-status="blocked"', page)
+        self.assertIn('data-claim-receipt-required-fields="23"', page)
+        self.assertIn('data-claim-receipt-provided-fields="13"', page)
+        self.assertIn('data-claim-receipt-missing-fields="10"', page)
+        self.assertIn('data-claim-receipt-synthetic-complete="1"', page)
+        self.assertIn('data-claim-receipt-blocked="3"', page)
+        self.assertIn(
+            'data-claim-receipt-evidence-values="not_accepted"', page)
+        self.assertEqual(page.count('data-provided-fields="'), 4)
+        self.assertEqual(page.count('data-missing-fields="'), 4)
+        self.assertIn('data-provided-fields="8" data-missing-fields="0" '
+                      'data-binding-status="synthetic_fields_complete"', page)
+        self.assertEqual(page.count('data-complete-claims="0"'), 4)
+        self.assertIn('Presence counts show structure only', page)
+        for excluded in ('claim_id', 'instrument_id', 'source_document_id',
+                         'observation_id', 'rights_decision',
+                         'assumption_label', 'supporting_claim_ids',
+                         'challenged_claim_ids', 'gap_code'):
+            self.assertNotIn(excluded, page)

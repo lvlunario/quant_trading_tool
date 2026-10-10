@@ -33,6 +33,15 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 10 evening: projected the typed claim receipt into Weekly Review. The
+four count-only rows now show required, synthetically present and missing
+bindings plus controlled structural status while retaining zero actual complete
+claims and false report eligibility. Underlying field names, identifiers and
+evidence values remain excluded. One HTTP/privacy test raises the local suite to
+310. Next: define a public-safe weekly publication decision that composes
+sourced readiness and claim-binding completeness without allowing synthetic
+presence to authorize publication.
+
 October 10 afternoon: added a typed synthetic claim-evidence receipt that
 validates four fixed field-presence declarations against the source manifest and
 reports 23 required, 13 provided and 10 missing bindings. Public output contains

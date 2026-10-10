@@ -75,6 +75,10 @@ labels—never evidence values, source bytes or caller-selected files. Its publi
 summary exposes counts and controlled states only. A synthetic field-complete
 section remains non-sourced and cannot authorize retrieval, report publication,
 milestone acceptance or release.
+Weekly Review projects only the receipt's numeric counts and controlled status
+labels. It does not render the field-name tuples held by the synthetic contract,
+accept caller-selected bindings or create a path for evidence upload, retrieval,
+persistence, approval or release.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 
