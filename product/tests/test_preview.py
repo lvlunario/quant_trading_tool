@@ -1,0 +1,133 @@
+"""Static preview structure and isolation checks; not browser or financial QA."""
+from html.parser import HTMLParser
+from pathlib import Path
+import unittest
+from atlas.preview import synthetic_preview_model
+
+
+class Page(HTMLParser):
+    def __init__(self, text):
+        super().__init__()
+        self.elements = []
+        self.feed(text)
+
+    def handle_starttag(self, tag, attrs):
+        self.elements.append((tag, dict(attrs)))
+
+
+class PreviewTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.text = (Path(__file__).resolve().parents[1] / 'preview/index.html').read_text()
+        cls.page = Page(cls.text)
+
+    def test_navigation_targets_exist_and_ids_are_unique(self):
+        ids = [attrs['id'] for _, attrs in self.page.elements if 'id' in attrs]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(set(ids), {'overview', 'portfolio', 'research', 'options', 'weekly'})
+        for tag, attrs in self.page.elements:
+            if tag == 'a' and attrs.get('href', '').startswith('#'):
+                self.assertIn(attrs['href'][1:], ids)
+
+    def test_no_scripts_forms_or_remote_assets(self):
+        for tag, attrs in self.page.elements:
+            self.assertNotIn(tag, {'script', 'form', 'input', 'iframe', 'object', 'embed'})
+            for key, value in attrs.items():
+                self.assertFalse(key.startswith('on'))
+                if key in {'src', 'href'}:
+                    self.assertFalse(value.startswith(('http:', 'https:', '//', 'javascript:')))
+        self.assertIn("default-src 'none'", self.text)
+        self.assertIn("form-action 'none'", self.text)
+
+    def test_limitations_and_milestone_disposition_are_visible(self):
+        for marker in ['Synthetic data only', 'Conditionally accepted for progression',
+                       'CRBS remains unresolved', 'Actionable option comparison blocked',
+                       'not connected to the calculation kernel']:
+            self.assertIn(marker, self.text)
+
+    def test_disclosures_have_labels(self):
+        tags = [tag for tag, _ in self.page.elements]
+        self.assertEqual(tags.count('details'), 10)
+        self.assertEqual(tags.count('summary'), tags.count('details'))
+
+    def test_displayed_financial_values_match_kernel_contract(self):
+        model = synthetic_preview_model()
+        actual = {attrs['data-kernel']: attrs['data-value']
+                  for _, attrs in self.page.elements if 'data-kernel' in attrs}
+        expected = {
+            'total_value': model['portfolio']['total_value'],
+            'cash': '5000',
+            'largest_equity_weight': model['portfolio']['largest_equity_weight'],
+            **{f'put_pnl_{terminal}': result['expiration_pnl']
+               for terminal, result in model['put_outcomes'].items()},
+        }
+        self.assertEqual(actual, expected)
+
+    def test_research_trace_matches_combined_metric_gate(self):
+        model = synthetic_preview_model()['research_trace']
+        actual = {attrs['data-research']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-research' in attrs}
+        expected = {key: model[key] for key in ('value', 'unit', 'currency',
+                    'period_start', 'period_end', 'available_at',
+                    'transform_version', 'status', 'blocked_example')}
+        self.assertEqual(actual, expected)
+
+    def test_source_trace_matches_exact_source_binding(self):
+        expected = synthetic_preview_model()['source_trace']
+        actual = {attrs['data-source']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-source' in attrs}
+        self.assertEqual(actual, expected)
+
+    def test_composed_workflow_trace_includes_extraction_quality(self):
+        expected = synthetic_preview_model()['workflow_trace']
+        actual = {attrs['data-workflow']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-workflow' in attrs}
+        self.assertEqual(actual, expected)
+
+    def test_macro_trace_preserves_revision_and_unavailable_state(self):
+        expected = synthetic_preview_model()['macro_trace']
+        actual = {attrs['data-macro']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-macro' in attrs}
+        self.assertEqual(actual, expected)
+
+    def test_provider_qualification_is_blocked_and_contract_backed(self):
+        expected = synthetic_preview_model()['qualification_trace']
+        actual = {attrs['data-qualification']: attrs.get('data-value')
+                  for _, attrs in self.page.elements
+                  if 'data-qualification' in attrs}
+        self.assertEqual(actual, expected)
+        self.assertEqual(actual['status'], 'blocked')
+        self.assertEqual(actual['release_authorized'], 'false')
+
+    def test_source_rights_queue_is_blocked_and_contract_backed(self):
+        expected = synthetic_preview_model()['rights_trace']
+        actual = {attrs['data-rights']: attrs.get('data-value')
+                  for _, attrs in self.page.elements if 'data-rights' in attrs}
+        self.assertEqual(actual, expected)
+        self.assertEqual(actual['rights_allowed_count'], '0')
+        self.assertEqual(actual['technical_retrieval_status'],
+                         'disabled_separate_gate')
+        self.assertEqual(actual['release_authorized'], 'false')
+
+    def test_import_receipts_match_redacted_backend_contract(self):
+        expected = synthetic_preview_model()['import_receipts']
+        actual = {}
+        for _, attrs in self.page.elements:
+            decision = attrs.get('data-import-receipt')
+            if decision:
+                actual[decision] = {
+                    'schema_version': int(attrs['data-schema-version']),
+                    'mode': attrs['data-mode'],
+                    'reconciliation': attrs['data-reconciliation'],
+                    'replay': attrs['data-replay'],
+                    'input_rows': int(attrs['data-input-rows']),
+                    'rejected_rows': int(attrs['data-rejected-rows']),
+                    'publishable_rows': int(attrs['data-publishable-rows']),
+                    'decision': decision,
+                }
+        self.assertEqual(actual, expected)
+
+    def test_preview_model_is_explicitly_fixed_and_synthetic(self):
+        model = synthetic_preview_model()
+        self.assertEqual(model['portfolio']['mode'], 'synthetic')
+        self.assertIn('fixed synthetic', model['model_status'])

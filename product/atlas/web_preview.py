@@ -1,0 +1,539 @@
+"""Local-only synthetic Options Lab preview.
+
+This server has no account, market-data, persistence, recommendation or order
+capability. It exists only to let the founder exercise the deterministic expiry
+payoff kernel through a browser form.
+"""
+from hmac import compare_digest
+from html import escape
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from secrets import token_urlsafe
+from urllib.parse import parse_qs
+from decimal import Decimal
+from datetime import datetime, timezone
+from pathlib import Path
+
+from .conformance import m1_import_conformance, recommend_m1_disposition
+from .import_workflow import synthetic_csv_report
+from .m2_acceptance_trace import build_m2_acceptance_trace
+from .m2_synthetic_conformance import assess_m2_synthetic_conformance
+from .research_work_items import compose_research_work_queue
+from .rights_evidence import (assess_reviewed_rights,
+                              load_reviewed_rights_evidence)
+from .rights_review_worksheet import build_rights_review_worksheet
+from .risk import standard_option_payoff
+from .source_capture_authorization import assess_source_capture_authorization
+from .source_catalog import load_public_source_catalog
+from .source_rights import load_source_rights_manifest
+from .watchlist_registry import load_public_watchlist_registry
+from .weekly_claim_receipt import build_synthetic_weekly_claim_evidence_receipt
+from .weekly_research_report import build_synthetic_weekly_research_report
+from .weekly_report_readiness import assess_weekly_report_readiness
+from .weekly_source_manifest import build_weekly_source_completeness_manifest
+
+
+MAX_BODY_BYTES = 2_048
+FIELDS = ("strike", "premium_per_share", "terminal_price", "fees", "available_cash")
+DEFAULTS = {"strike": "50", "premium_per_share": "2", "terminal_price": "48",
+            "fees": "0", "available_cash": "5000"}
+WORKBENCH_AS_OF = datetime(2026, 10, 5, tzinfo=timezone.utc)
+WEEKLY_REVIEW_AS_OF = datetime(2026, 10, 8, 11, 0, tzinfo=timezone.utc)
+RESEARCH_ROUTE_FILTERS = {
+    "/research-work-items": "all",
+    "/research-work-items/identity": "identity_unresolved",
+    "/research-work-items/source": "source_candidate_missing",
+    "/research-work-items/rights": "missing_review_evidence",
+}
+
+
+def render_overview():
+    """Serve only the fixed synthetic page, never a caller-selected file."""
+    page = (Path(__file__).resolve().parents[1] / "preview/index.html").read_text()
+    return page.replace("<!-- interactive-options-link -->",
+                        '<p><a href="/">Open interactive Options Lab →</a></p>').replace(
+        "<!-- interactive-import-link -->",
+        '<p><a href="/import-demo">Run fixed synthetic import demo →</a> · '
+        '<a href="/m1-status">View M1 conformance →</a></p>').replace(
+        "<!-- interactive-research-work-items-link -->",
+        '<p><a href="/research-work-items">Open Research workbench →</a> · '
+        '<a href="/weekly-review">Open synthetic Weekly Review →</a></p>').replace(
+        '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
+
+
+def public_research_work_queue():
+    """Build the checked-in public-safe queue at a fixed evidence cutoff."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    return compose_research_work_queue(registry, catalog, rights).public_summary()
+
+
+def public_rights_review_readiness():
+    """Build a count-only projection of the blank private review worksheet."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    manifest = load_source_rights_manifest(
+        (fixtures / "public-source-rights-review.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    return build_rights_review_worksheet(
+        catalog, manifest).public_readiness_summary()
+
+
+def public_source_capture_authorization():
+    """Build the checked-in two-key capture receipt with no private approvals."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    return assess_source_capture_authorization(
+        catalog, rights, at=WORKBENCH_AS_OF).public_summary()
+
+
+def _m2_acceptance_trace(at):
+    """Build the typed M2 trace from checked-in gate evidence at one cutoff."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=at)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=at)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=at)
+    rights = assess_reviewed_rights(catalog, evidence, at=at)
+    capture = assess_source_capture_authorization(
+        catalog, rights, at=at)
+    return build_m2_acceptance_trace(registry, catalog, rights, capture)
+
+
+def public_m2_acceptance_trace(at=WORKBENCH_AS_OF):
+    """Build the ordered aggregate M2 trace from checked-in gate evidence."""
+    return _m2_acceptance_trace(at).public_summary()
+
+
+def public_m2_synthetic_conformance():
+    """Build the fixed invented-vs-public conformance projection."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    registry = load_public_watchlist_registry(
+        (fixtures / "public-watchlist-identities.json").read_bytes(),
+        now=WORKBENCH_AS_OF)
+    catalog = load_public_source_catalog(
+        (fixtures / "public-research-sources.json").read_bytes(), registry,
+        now=WORKBENCH_AS_OF)
+    evidence = load_reviewed_rights_evidence(
+        (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
+        now=WORKBENCH_AS_OF)
+    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+    capture = assess_source_capture_authorization(
+        catalog, rights, at=WORKBENCH_AS_OF)
+    trace = build_m2_acceptance_trace(registry, catalog, rights, capture)
+    source_bytes = (fixtures / "synthetic-research-source.json").read_bytes()
+    return assess_m2_synthetic_conformance(
+        source_bytes, trace, now=WORKBENCH_AS_OF)
+
+
+def render_research_work_items(filter_code="all"):
+    """Render a redacted work queue selected only by a fixed route mapping."""
+    allowed = frozenset(RESEARCH_ROUTE_FILTERS.values())
+    if filter_code not in allowed:
+        raise ValueError("invalid_research_workbench_filter")
+    report = public_research_work_queue()
+    worksheet = public_rights_review_readiness()
+    capture = public_source_capture_authorization()
+    trace = public_m2_acceptance_trace()
+    conformance = public_m2_synthetic_conformance()
+    items = report["items"]
+    if filter_code != "all":
+        items = [item for item in items
+                 if item["primary_blocker"] == filter_code]
+    filter_labels = {
+        "all": "All blocked work",
+        "identity_unresolved": "Identity",
+        "source_candidate_missing": "Source candidate",
+        "missing_review_evidence": "Rights review",
+    }
+    route_for = {value: route for route, value in RESEARCH_ROUTE_FILTERS.items()}
+    nav = " · ".join(
+        f'<a href="{escape(route_for[code], quote=True)}"'
+        f'{" aria-current=\"page\"" if code == filter_code else ""}>'
+        f'{escape(label)}</a>'
+        for code, label in filter_labels.items())
+    rows = "".join(
+        '<tr data-work-item="true" data-primary-blocker="{blocker}" '
+        'data-status="{status}"><th scope="row">{symbol}</th>'
+        '<td>{identity}</td><td>{source}</td><td>{rights}</td>'
+        '<td>{blocker_label}</td><td>{action}</td></tr>'.format(
+            blocker=escape(item["primary_blocker"], quote=True),
+            status=escape(item["status"], quote=True),
+            symbol=escape(item["symbol"]),
+            identity=escape(item["identity_status"].replace("_", " ").title()),
+            source=escape(item["source_status"].replace("_", " ").title()),
+            rights=escape(item["rights_status"].replace("_", " ").title()),
+            blocker_label=escape(item["primary_blocker"].replace("_", " ").title()),
+            action=escape(item["next_action"].replace("_", " ").title()))
+        for item in items)
+    trace_rows = "".join(
+        '<tr data-m2-gate="{gate}" data-gate-status="{status}" '
+        'data-passed-count="{passed}" data-blocked-count="{blocked}">'
+        '<th scope="row">{label}</th><td>{passed} of {total}</td>'
+        '<td>{blocked} of {total}</td><td>{blocker}</td></tr>'.format(
+            gate=escape(stage["gate"], quote=True),
+            status=escape(stage["status"], quote=True),
+            passed=stage["passed_count"], blocked=stage["blocked_count"],
+            total=trace["universe_count"],
+            label=escape(stage["gate"].replace("_", " ").title()),
+            blocker=escape(stage["blocker"].replace("_", " ").title()))
+        for stage in trace["stages"])
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Research Workbench</title>
+<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1180px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span,section{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}section{{margin:18px 0}}nav{{margin:18px 0}}table{{border-collapse:collapse;width:100%;background:#fff}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body data-workbench-filter="{escape(filter_code, quote=True)}"><a href="/overview">Return to five-area overview</a> · <a href="/weekly-review">Open synthetic Weekly Review</a>
+<h1>Research workbench</h1><p class="warning"><strong>Workflow status only.</strong> No source bytes, metric values, recommendations, holdings or release authority.</p>
+<div class="summary"><span><strong>{report['work_item_count']}</strong> total work items</span><span><strong>{report['blocked_count']}</strong> blocked</span><span><strong>{report['catalogued_source_count']}</strong> source candidates</span><span><strong>{report['rights_allowed_count']}</strong> rights allowed</span><span><strong>{len(items)}</strong> shown</span></div>
+<section data-rights-worksheet-status="{escape(worksheet['status'], quote=True)}"
+ data-review-tasks="{worksheet['review_task_count']}"
+ data-pending-reviews="{worksheet['pending_review_count']}"
+ data-required-checks="{worksheet['required_check_count']}"
+ data-completed-checks="{worksheet['completed_check_count']}"
+ data-retrieval-status="{escape(worksheet['technical_retrieval_status'], quote=True)}"
+ data-release-authorized="{str(worksheet['release_authorized']).lower()}">
+<h2>Rights review worksheet readiness</h2>
+<p><strong>{worksheet['pending_review_count']} of {worksheet['review_task_count']} reviews pending</strong> · {worksheet['completed_check_count']} of {worksheet['required_check_count']} required checks complete.</p>
+<p>Evidence must be completed in approved private storage. Technical retrieval remains disabled and release remains unauthorized.</p></section>
+<section data-capture-gate-status="{escape(capture['status'], quote=True)}"
+ data-capture-candidates="{capture['candidate_count']}"
+ data-rights-ready="{capture['rights_ready_count']}"
+ data-capture-authorized="{capture['capture_authorized_count']}"
+ data-source-bytes-status="{escape(capture['source_bytes_status'], quote=True)}"
+ data-capture-release-authorized="{str(capture['release_authorized']).lower()}">
+<h2>Source capture authorization</h2>
+<p><strong>{capture['rights_ready_count']} of {capture['candidate_count']} rights-ready</strong> · {capture['capture_authorized_count']} of {capture['candidate_count']} capture-authorized.</p>
+<p>Two independent keys are required: reviewed rights and an exact-document technical approval. No source bytes are provided and release remains unauthorized.</p></section>
+<section data-m2-trace-status="{escape(trace['status'], quote=True)}"
+ data-m2-universe-count="{trace['universe_count']}"
+ data-milestone-acceptance-recorded="{str(trace['milestone_acceptance_recorded']).lower()}"
+ data-m2-release-authorized="{str(trace['release_authorized']).lower()}">
+<h2>M2 gate trace</h2>
+<p>Ordered engineering readiness across the full research universe. Later gates cannot advance beyond their prerequisites.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Gate</th><th>Passed</th><th>Blocked</th><th>Current blocker</th></tr></thead><tbody>{trace_rows}</tbody></table></div>
+<p>No milestone acceptance or release authority is recorded.</p></section>
+<section data-m2-conformance-status="{escape(conformance['status'], quote=True)}"
+ data-synthetic-stage-count="{len(conformance['synthetic_scenario']['stages'])}"
+ data-synthetic-stages-passed="{sum(stage['status'] == 'passed' for stage in conformance['synthetic_scenario']['stages'])}"
+ data-public-source-status="{escape(conformance['public_source_state']['status'], quote=True)}"
+ data-public-passed-counts="{','.join(str(count) for count in conformance['public_source_state']['passed_counts'])}"
+ data-public-extraction-passed="{conformance['public_source_state']['extraction_passed_count']}"
+ data-public-metric-release-passed="{conformance['public_source_state']['metric_release_passed_count']}"
+ data-conformance-acceptance-recorded="{str(conformance['milestone_acceptance_recorded']).lower()}"
+ data-conformance-release-authorized="{str(conformance['release_authorized']).lower()}">
+<h2>Synthetic versus public conformance</h2>
+<p><strong>Synthetic path: 6 of 6 technical gates passed.</strong> Invented fixture and independent exact-source approval only.</p>
+<p><strong>Public path: blocked.</strong> Gate pass counts remain 8 / 8 / 0 / 0 / 0 / 0; extraction and metric release remain zero.</p>
+<p>Technical reachability does not grant source permission, milestone acceptance or release authority.</p></section>
+<nav aria-label="Research work filters">{nav}</nav><h2>{escape(filter_labels[filter_code])}</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Symbol</th><th>Identity</th><th>Source</th><th>Rights</th><th>Earliest blocker</th><th>Controlled next action</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p>Extraction remains unattempted, every metric remains unavailable, technical retrieval is disabled and release is unauthorized.</p>
+<p>Filters are fixed server routes. This page has no query input, upload, network retrieval or persistence.</p></body></html>'''
+
+
+def render_weekly_review():
+    """Render only the fixed dated synthetic report through a field allowlist."""
+    report = build_synthetic_weekly_research_report(
+        period_end=WEEKLY_REVIEW_AS_OF.date(),
+        generated_at=WEEKLY_REVIEW_AS_OF)
+    readiness = assess_weekly_report_readiness(
+        report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF)).public_summary()
+    manifest = build_weekly_source_completeness_manifest(
+        as_of=WEEKLY_REVIEW_AS_OF).public_summary()
+    receipt = build_synthetic_weekly_claim_evidence_receipt(
+        assessed_at=WEEKLY_REVIEW_AS_OF).public_summary()
+    report = report.public_summary()
+    section_labels = {
+        'observation': 'Observation',
+        'hypothesis': 'Hypothesis',
+        'counterargument': 'Counterargument',
+        'missing_evidence': 'Missing evidence',
+    }
+    sections = ''.join(
+        '<section data-weekly-section="{section}" '
+        'data-evidence-status="{evidence}" data-source-status="{source}">'
+        '<h2>{label}</h2><p>{text}</p><dl><dt>As of</dt><dd>{as_of}</dd>'
+        '<dt>Evidence</dt><dd>{evidence_label}</dd>'
+        '<dt>Source state</dt><dd>{source_label}</dd></dl></section>'.format(
+            section=escape(item['section'], quote=True),
+            evidence=escape(item['evidence_status'], quote=True),
+            source=escape(item['source_status'], quote=True),
+            label=escape(section_labels[item['section']]),
+            text=escape(item['text']), as_of=escape(item['as_of']),
+            evidence_label=escape(
+                item['evidence_status'].replace('_', ' ').title()),
+            source_label=escape(item['source_status'].replace('_', ' ').title()))
+        for item in report['sections'])
+    manifest_rows = ''.join(
+        '<tr data-manifest-section="{section}" data-required-fields="{required}" '
+        'data-provided-fields="{provided}" data-missing-fields="{missing}" '
+        'data-binding-status="{status}" data-complete-claims="0">'
+        '<th scope="row">{label}</th><td>{required}</td><td>{provided}</td>'
+        '<td>{missing}</td><td>{status_label}</td><td>0</td></tr>'.format(
+            section=escape(rule['section'], quote=True),
+            required=rule['required_field_count'],
+            provided=binding['provided_field_count'],
+            missing=binding['missing_field_count'],
+            status=escape(binding['status'], quote=True),
+            status_label=escape(binding['status'].replace('_', ' ').title()),
+            label=escape(section_labels[rule['section']]))
+        for rule, binding in zip(manifest['rules'], receipt['sections']))
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Weekly Review · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:900px;margin:auto;padding:24px}}.meta,section{{background:#fff;border:1px solid #c4d5dc;border-radius:10px;padding:18px;margin:18px 0}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body data-weekly-review-mode="{escape(report['mode'], quote=True)}" data-weekly-review-status="{escape(report['status'], quote=True)}" data-investment-conclusion="{str(report['investment_conclusion']).lower()}" data-milestone-acceptance-recorded="{str(report['milestone_acceptance_recorded']).lower()}" data-release-authorized="{str(report['release_authorized']).lower()}">
+<a href="/overview">Return to five-area overview</a> · <a href="/research-work-items">Open Research workbench</a>
+<h1>Weekly Review</h1><p class="warning"><strong>Synthetic structure demonstration.</strong> Invented statements only—no current issuer research, portfolio conclusion, recommendation or release authority.</p>
+<div class="meta"><strong>Period ending {escape(report['period_end'])}</strong><br>Generated {escape(report['generated_at'])}</div>
+<section data-weekly-readiness-status="{escape(readiness['status'], quote=True)}" data-synthetic-shell-status="{escape(readiness['synthetic_shell']['status'], quote=True)}" data-synthetic-section-count="{readiness['synthetic_shell']['section_count']}" data-sourced-report-status="{escape(readiness['sourced_report']['status'], quote=True)}" data-sourced-universe-count="{readiness['sourced_report']['universe_count']}" data-sourced-passed-counts="{','.join(str(count) for count in readiness['sourced_report']['stage_passed_counts'])}" data-sourced-statement-count="{readiness['sourced_report']['sourced_statement_count']}" data-sourced-metric-count="{readiness['sourced_report']['sourced_metric_count']}">
+<h2>Report readiness</h2><p><strong>Synthetic shell: ready.</strong> Four claim types are separated and dated.</p>
+<p><strong>Sourced report: blocked.</strong> Gate pass counts remain 8 / 8 / 0 / 0 / 0 / 0; there are zero sourced statements and zero sourced metrics.</p>
+<p>The visible shell does not satisfy source rights, capture, extraction or metric-release requirements.</p></section>
+<section data-source-manifest-status="{escape(manifest['status'], quote=True)}" data-source-manifest-rule-count="{manifest['rule_count']}" data-source-manifest-evidence-values="{escape(manifest['evidence_values_status'], quote=True)}" data-source-manifest-complete-claims="{manifest['complete_claim_count']}" data-claim-receipt-status="{escape(receipt['status'], quote=True)}" data-claim-receipt-required-fields="{receipt['required_field_count']}" data-claim-receipt-provided-fields="{receipt['provided_field_count']}" data-claim-receipt-missing-fields="{receipt['missing_field_count']}" data-claim-receipt-synthetic-complete="{receipt['synthetic_field_complete_count']}" data-claim-receipt-blocked="{receipt['blocked_claim_count']}" data-claim-receipt-evidence-values="{escape(receipt['evidence_values_status'], quote=True)}" data-actual-report-eligible="{str(receipt['actual_report_eligible']).lower()}">
+<h2>Claim evidence checklist</h2>
+<p><strong>Blocked:</strong> 13 of 23 synthetic field bindings are marked present and 10 remain missing. No evidence values or actual complete claims have been provided.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Claim type</th><th>Required fields</th><th>Present</th><th>Missing</th><th>Synthetic binding status</th><th>Complete claims</th></tr></thead><tbody>{manifest_rows}</tbody></table></div>
+<p>Presence counts show structure only—not permission, authenticity, accuracy or evidence validity. Field names, evidence identifiers and values stay outside this public view.</p></section>
+{sections}
+<p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
+
+
+def render_import_demo():
+    """Run only the checked-in invented fixture and show its redacted receipt."""
+    fixture = (Path(__file__).resolve().parents[1] /
+               "fixtures/synthetic-broker.csv").read_bytes()
+    report = synthetic_csv_report(fixture)
+    receipt = report['receipt']
+    if receipt['mode'] != 'synthetic':
+        raise AssertionError('import_demo_must_be_synthetic')
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Import Demo · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:760px;margin:auto;padding:24px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:22px;margin:18px 0}}dt{{color:#526d79}}dd{{font-size:1.2rem;font-weight:700;margin:0 0 10px}}.banner{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><a href="/overview">Return to five-area overview</a> · <a href="/m1-status">View M1 conformance</a><h1>Synthetic import demo</h1>
+<p class="banner"><strong>Checked-in invented fixture only.</strong> No upload, account connection, file picker, saved portfolio or order capability.</p>
+<section data-import-decision="{escape(receipt['decision'], quote=True)}"
+ data-reconciliation="{escape(receipt['reconciliation'], quote=True)}"
+ data-replay="{escape(receipt['replay'], quote=True)}"
+ data-input-rows="{receipt['input_rows']}" data-rejected-rows="{receipt['rejected_rows']}"
+ data-publishable-rows="{receipt['publishable_rows']}"><h2>Import receipt</h2><dl>
+<dt>Decision</dt><dd>{escape(receipt['decision'].replace('_', ' ').title())}</dd>
+<dt>Reconciliation</dt><dd>{escape(receipt['reconciliation'].title())}</dd>
+<dt>Replay status</dt><dd>{escape(receipt['replay'].replace('_', ' ').title())}</dd>
+<dt>Rows</dt><dd>{receipt['input_rows']} input · {receipt['rejected_rows']} rejected · {receipt['publishable_rows']} provisionally publishable</dd>
+<dt>Parser</dt><dd>{escape(report['parser_contract'])}</dd></dl></section>
+<p><strong>Why publication is not yet eligible:</strong> this read-only demonstration uses no private replay ledger, so an identical retry cannot be durably suppressed. It calculates a receipt but persists nothing.</p>
+<p>No symbols, quantities, prices, account aliases, totals, source path or source hash are displayed.</p></body></html>'''
+
+
+def render_m1_status():
+    """Render the public-safe M1 evidence boundary; record no approval."""
+    report = m1_import_conformance()
+    disposition = recommend_m1_disposition(report)
+    rows = ''.join(
+        '<tr data-check-id="{check_id}" data-status="{status}">'
+        '<th scope="row">{capability}</th><td>{status_label}</td>'
+        '<td>{evidence}</td><td>{limitation}</td></tr>'.format(
+            check_id=escape(check['check_id'], quote=True),
+            status=escape(check['status'], quote=True),
+            capability=escape(check['capability']),
+            status_label=escape(check['status'].replace('_', ' ').title()),
+            evidence=escape(check['evidence']),
+            limitation=escape(check['limitation']))
+        for check in report['checks'])
+    counts = report['counts']
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas M1 Conformance</title>
+<style>:root{{font:15px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:1100px;margin:auto;padding:24px}}.summary{{display:flex;gap:12px;flex-wrap:wrap}}.summary span{{background:#fff;border:1px solid #c4d5dc;border-radius:9px;padding:12px}}table{{border-collapse:collapse;width:100%;background:#fff;margin-top:18px}}th,td{{text-align:left;vertical-align:top;padding:10px;border:1px solid #cad8de}}thead{{background:#dfecee}}.warning{{background:#fff0c4;padding:12px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><a href="/overview">Return to five-area overview</a> · <a href="/import-demo">Run synthetic import demo</a>
+<h1>M1 Portfolio Truth conformance</h1><p>Milestone: {escape(report['milestone_date'])}. Overall status: <strong>{escape(report['overall_status'].replace('_', ' ').title())}</strong>.</p>
+<div class="summary"><span><strong>{counts['verified_synthetic']}</strong> verified with synthetic evidence</span><span><strong>{counts['blocked_external_evidence']}</strong> blocked on external evidence</span><span><strong>{counts['not_implemented']}</strong> not implemented</span></div>
+<p class="warning"><strong>Scope boundary:</strong> this is an engineering conformance statement, not founder approval, Fidelity compatibility, browser acceptance or release authorization.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Capability</th><th>Status</th><th>Evidence</th><th>Limitation</th></tr></thead><tbody>{rows}</tbody></table></div>
+<section data-synthetic-disposition="{escape(disposition['synthetic_scope'], quote=True)}" data-fidelity-disposition="{escape(disposition['fidelity_scope'], quote=True)}" data-phase-progression="{escape(disposition['phase_progression'], quote=True)}"><h2>Engineering recommendation for October 3</h2><ul><li>Accept the documented synthetic engineering evidence only.</li><li>Defer Fidelity-specific validation until the private boundary, authorized export and source-specific reconciliation evidence exist.</li><li>Continue the synthetic/manual-redacted fallback without moving the conditional December target.</li></ul><p><strong>No founder approval or release authorization is recorded.</strong></p></section>
+<p>No personal portfolio or broker-export content is used or displayed.</p></body></html>'''
+
+
+def render_checklist():
+    manual = (Path(__file__).resolve().parents[1] / "docs/PROGRAM.md").read_text()
+    checklist = manual.split("## Founder phase acceptance checklist", 1)[1]
+    return ('<!doctype html><html lang="en"><meta charset="utf-8">'
+            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+            '<title>Atlas founder checklist</title><style>body{font:16px/1.5 system-ui;'
+            'max-width:900px;margin:auto;padding:24px}pre{white-space:pre-wrap}</style>'
+            '<a href="/overview">Return to synthetic overview</a>'
+            '<h1>Founder phase acceptance checklist</h1><p>Read-only manual; '
+            'no decisions are saved or approved here.</p><pre>' + escape(checklist) + '</pre></html>')
+
+
+def _money(value):
+    number = Decimal(value)
+    sign = "-" if number < 0 else ""
+    return f"{sign}${abs(number)}"
+
+
+def calculate_put(values):
+    """Calculate one standard synthetic CSP after strict single-value parsing."""
+    if set(values) != set(FIELDS):
+        raise ValueError("Scenario field set is invalid")
+    parsed = {}
+    for name in FIELDS:
+        candidates = values.get(name)
+        if not isinstance(candidates, list) or len(candidates) != 1:
+            raise ValueError("Every scenario field must occur exactly once")
+        value = candidates[0]
+        if not isinstance(value, str) or not value or len(value) > 32:
+            raise ValueError("Scenario values must be short decimal strings")
+        parsed[name] = value
+    return parsed, standard_option_payoff(
+        strategy="cash_secured_put", contracts=1, **parsed)
+
+
+def render_page(*, token, values=None, result=None, error=None):
+    values = values or DEFAULTS
+    safe = {key: escape(str(values.get(key, DEFAULTS[key])), quote=True) for key in FIELDS}
+    if result:
+        panel = f"""<section class="result" aria-live="polite"><h2>Expiration result</h2>
+<dl><dt>Modeled P&amp;L</dt><dd>{escape(_money(result['expiration_pnl']))}</dd>
+<dt>Maximum modeled loss</dt><dd>{escape(_money(result['maximum_loss']))}</dd>
+<dt>Maximum modeled gain</dt><dd>{escape(_money(result['maximum_pnl']))}</dd>
+<dt>Breakeven</dt><dd>{escape(_money(result['breakeven']))}</dd>
+<dt>Gross cash required</dt><dd>{escape(_money(result['required_cash']))}</dd></dl></section>"""
+    elif error:
+        panel = f'<p class="error" role="alert">Scenario blocked: {escape(error)}</p>'
+    else:
+        panel = '<p class="notice">Change the synthetic inputs, then calculate.</p>'
+    return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Options Lab · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}*{{box-sizing:border-box}}body{{margin:0}}header{{background:#112e40;color:#fff;padding:24px}}main{{max-width:760px;margin:auto;padding:24px}}form,.result,.notice,.error{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:22px;margin:18px 0}}label{{display:block;font-weight:650;margin-top:12px}}input{{width:100%;font:inherit;padding:10px;border:1px solid #708b98;border-radius:6px}}button{{margin-top:20px;background:#076278;color:#fff;border:0;border-radius:7px;padding:12px 18px;font:inherit;font-weight:700}}dt{{color:#526d79}}dd{{font-size:1.3rem;font-weight:700;margin:0 0 10px}}.banner{{background:#fff0c4;color:#513800;padding:10px 24px}}.error{{border-left:5px solid #a34400}}small{{display:block;color:#526d79;margin-top:16px}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><header><strong>ATLAS</strong><h1>Options Lab</h1><p>Interactive expiration scenario</p><a href="/overview" style="color:white">Return to five-area overview</a></header>
+<div class="banner"><strong>Synthetic inputs only.</strong> Local calculation—not a quote, forecast, recommendation or order.</div>
+<main>{panel}<form method="post" action="/calculate"><input type="hidden" name="token" value="{escape(token, quote=True)}">
+<label for="strike">Put strike per share ($)</label><input id="strike" name="strike" inputmode="decimal" value="{safe['strike']}" required>
+<label for="premium">Premium received per share ($)</label><input id="premium" name="premium_per_share" inputmode="decimal" value="{safe['premium_per_share']}" required>
+<label for="terminal">Underlying price at expiration ($)</label><input id="terminal" name="terminal_price" inputmode="decimal" value="{safe['terminal_price']}" required>
+<label for="fees">Total fees ($)</label><input id="fees" name="fees" inputmode="decimal" value="{safe['fees']}" required>
+<label for="cash">Available cash ($)</label><input id="cash" name="available_cash" inputmode="decimal" value="{safe['available_cash']}" required>
+<button type="submit">Calculate one-contract scenario</button><small>One standard 100-share cash-secured put. Required cash is strike × 100 + fees; premium is not counted as available collateral.</small></form>
+<p><strong>Important:</strong> expiration-only math omits early assignment, dividends, taxes, interest, bid/ask spread, liquidity and changing volatility. Nothing is saved.</p></main></body></html>"""
+
+
+def make_handler(token):
+    class PreviewHandler(BaseHTTPRequestHandler):
+        def log_message(self, *_):
+            return
+
+        def _send(self, status, page):
+            encoded = page.encode("utf-8")
+            self.send_response(status)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(encoded)))
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Security-Policy", "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Referrer-Policy", "no-referrer")
+            self.end_headers()
+            self.wfile.write(encoded)
+
+        def _valid_host(self):
+            host = self.headers.get("Host", "").split(":", 1)[0]
+            return host in {"127.0.0.1", "localhost"}
+
+        def do_GET(self):
+            if not self._valid_host() or self.path not in {
+                    "/", "/overview", "/checklist", "/import-demo", "/m1-status",
+                    "/weekly-review",
+                    *RESEARCH_ROUTE_FILTERS}:
+                self._send(404, render_page(token=token, error="Page not found"))
+                return
+            if self.path == "/overview":
+                self._send(200, render_overview())
+            elif self.path == "/checklist":
+                self._send(200, render_checklist())
+            elif self.path == "/import-demo":
+                self._send(200, render_import_demo())
+            elif self.path == "/m1-status":
+                self._send(200, render_m1_status())
+            elif self.path == "/weekly-review":
+                self._send(200, render_weekly_review())
+            elif self.path in RESEARCH_ROUTE_FILTERS:
+                self._send(200, render_research_work_items(
+                    RESEARCH_ROUTE_FILTERS[self.path]))
+            else:
+                self._send(200, render_page(token=token))
+
+        def do_POST(self):
+            if not self._valid_host() or self.path != "/calculate":
+                self._send(404, render_page(token=token, error="Page not found"))
+                return
+            if self.headers.get_content_type() != "application/x-www-form-urlencoded":
+                self._send(415, render_page(token=token, error="Unsupported request type"))
+                return
+            try:
+                length = int(self.headers.get("Content-Length", ""))
+            except ValueError:
+                length = -1
+            if length < 0 or length > MAX_BODY_BYTES:
+                self._send(413, render_page(token=token, error="Request is too large"))
+                return
+            try:
+                form = parse_qs(self.rfile.read(length).decode("utf-8", "strict"),
+                                keep_blank_values=True, max_num_fields=12)
+            except (UnicodeError, ValueError):
+                self._send(400, render_page(token=token, error="Request could not be read"))
+                return
+            submitted = form.pop("token", [])
+            display = {key: (items[0] if len(items) == 1 else "")
+                       for key, items in form.items() if key in FIELDS}
+            if len(submitted) != 1 or not compare_digest(submitted[0], token):
+                self._send(403, render_page(token=token, values=display,
+                                             error="Session token is invalid; reload the page"))
+                return
+            try:
+                values, result = calculate_put(form)
+            except (ValueError, KeyError, TypeError, UnicodeError):
+                self._send(400, render_page(token=token, values=display,
+                                             error="Check the decimal inputs and cash collateral"))
+                return
+            self._send(200, render_page(token=token, values=values, result=result))
+
+    return PreviewHandler
+
+
+def serve_preview(port=8765):
+    if type(port) is not int or not 1024 <= port <= 65535:
+        raise ValueError("Preview port must be between 1024 and 65535")
+    server = HTTPServer(("127.0.0.1", port), make_handler(token_urlsafe(32)))
+    print(f"Atlas synthetic preview: http://127.0.0.1:{server.server_port}/overview")
+    print("Press Ctrl+C to stop. No data is saved.")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()

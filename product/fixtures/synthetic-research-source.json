@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "mode": "synthetic",
+  "revision": 0,
+  "metric": {
+    "metric_id": "MET_REVENUE",
+    "definition_version": "1.0.0",
+    "formula": "Reported revenue",
+    "unit": "money",
+    "currency": "USD",
+    "period": "quarter",
+    "null_policy": "missing",
+    "transform_version": "reported@1.0.0",
+    "value": "123.40",
+    "missing_reason": null,
+    "period_start": "2026-04-01",
+    "period_end": "2026-06-30"
+  }
+}

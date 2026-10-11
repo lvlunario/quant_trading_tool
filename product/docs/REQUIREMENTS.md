@@ -1,0 +1,48 @@
+# Requirements and analytics inventory
+
+Statuses as of foundation: IMPLEMENTED means local kernel only; PLANNED is not available.
+
+| ID | Requirement | Acceptance | Status |
+|---|---|---|---|
+| R01 | Explicit input mode, schema, USD, timezone and freshness | Reject stale/future/naive snapshots, unsupported currencies and assets | IMPLEMENTED |
+| R02 | Long-equity snapshot value/concentration with Decimal | Hand-calculated fixtures and invalid-data rejection pass | IMPLEMENTED |
+| R03 | Standard covered-call/CSP expiry scenario arithmetic | Bankruptcy, upside cap, breakeven, coverage and reserve cases pass | IMPLEMENTED |
+| R04 | Fidelity export importer | Reconcile balances and positions; report all rejected rows; no silent omission | PARTIAL: bounded synthetic CSV/profile mapping, normalized reconciliation and public-safe conformance view; Fidelity adapter/export validation pending |
+| R05 | Customer mandate | Capture goals, horizon, liquidity, account types, tax context, loss tolerance, experience and restrictions | PLANNED |
+| R06 | Security master and provenance | Issuer, exchange, currency, class, stable ID, symbol effective dates, source time | PARTIAL: typed identity/data-rights/source contracts plus a strict dated public watchlist snapshot resolving eight Nasdaq securities and blocking CRBS; historical intervals, provider retrieval, license review and persistence pending |
+| R07 | Fundamentals and qualitative thesis | Point-in-time metrics plus citations, counter-thesis and missing-data markers | PARTIAL: fixed synthetic end-to-end source workflow, six-gate synthetic M2 conformance with an independently blocked public-source trace and visible aggregate workbench boundary, extraction-quality evidence, synthetic extractor suite, private-provider qualification gate, bounded intake/readiness contracts, a dated eight-name official-issuer source-candidate catalog covering every resolved identity, blocked review/retrieval plan, deterministic blank manual-review worksheet, reviewed-terms evidence schema/checklist, two-key source-capture authorization receipt, public-safe Research queue projection, ordered six-gate M2 trace and read-only nine-name workbench with controlled filters plus count-only worksheet/capture/gate-trace readiness; actual terms evidence, technical approvals, retrieval, private evidence execution, populated metrics and thesis/counter-thesis pending |
+| R08 | Macro and market regime | Release/vintage dates and causal exposure mapping; no certainty from regimes | PARTIAL: typed point-in-time macro-vintage and rights gate; populated series, exposure mapping and UI pending |
+| R09 | Equity strategy testing | Chronological walk-forward, costs, benchmark alignment and holdout | PLANNED |
+| R10 | Options research | Executable chain freshness, liquidity, IV/Greeks, expiry, earnings/dividend and assignment risks | PLANNED |
+| R11 | Portfolio risk | Total exposures incl. options, correlation, stress, drawdown, factor and concentration limits | PLANNED |
+| R12 | Weekly research report | Data as-of, changes, ranked candidates, thesis risks, blocked items, next checks | PARTIAL: dated typed synthetic shell, read-only Weekly Review, explicit synthetic-ready/sourced-blocked summary, versioned source-completeness field contract, visible count-only synthetic field-presence receipt and fail-closed publication decision separate observations, hypotheses, counterarguments and missing evidence; actual report eligibility remains false and sourced changes, candidates and next checks remain pending permitted data |
+| R13 | Private customer application | Authentication, consent, access isolation, deletion/export and audit logs | PLANNED |
+| R14 | Operations | Idempotent jobs, retries, monitoring, backup/restore and rollback | PLANNED |
+| R15 | Reproducible evidence | Versioned data references, config, code SHA, result checksums and experiment registry | PARTIAL: point-in-time observation/source-document/payload/transform binding; storage and registry pending |
+| R16 | Commercial gate | Counsel, independent security review, licensing and founder acceptance | PLANNED |
+
+## Research universe
+
+Requested symbols: NVDA, MU, QCOM, PLTR, SPCX, CRBS, QBTS, RGTI. Treat this as a watchlist request, not current holdings or endorsed candidates. The October 3 public snapshot resolves the eight authoritative current identities plus AVGO from Nasdaq evidence and keeps CRBS blocked after Nasdaq/SEC search. It intentionally begins each current interval at the evidence cutoff rather than inventing historical listing dates. Do not silently substitute CRSP or another symbol. New listings and symbol reuse require effective-dated identifiers and explicit insufficient-history flags; see [the R06 contract](SECURITY_MASTER.md).
+
+## Metric dictionary scope
+
+| Domain | Candidate metrics/content | Controls |
+|---|---|---|
+| Growth | Revenue/EPS/FCF growth, organic vs acquired, segment growth, revisions | Period alignment; negative-base growth marked NM |
+| Quality | Gross/operating/net margin, ROIC, ROE, accruals, cash conversion, SBC/dilution | Reported vs adjusted separated; reconcile non-GAAP |
+| Value | P/E, EV/EBITDA, EV/sales, FCF yield, DCF ranges and peer comps | Negative earnings/FCF marked NM; enterprise/equity consistency |
+| Balance sheet | Net debt, leverage, coverage, maturities, liquidity, runway | Sector-specific interpretation and dated sources |
+| Technical | Total-return momentum, moving averages, breakout levels/volume, relative strength, realized volatility | Corporate actions, lagged signals and no same-bar fills |
+| Options | Bid/ask, spread, volume/OI, IV surface/rank/percentile, Greeks, skew, term structure | Timestamp and method; delta is not a guaranteed probability |
+| Portfolio | Weights, sector/factor/beta, correlation, cash, drawdown, VaR/CVaR, stress | Coverage completeness; tail-model limitations |
+| Macro | Inflation, labor, rates/curve, growth, credit spreads, USD, liquidity | Release calendar and original data vintage |
+| Qualitative | Moat, management, governance, customer concentration, competition, regulation, catalysts | Cited evidence vs judgment, counterarguments, prove/kill triggers |
+
+Prioritize a validated subset over an unbounded promise to analyze every metric. Every metric definition needs formula, units, period, source, as-of/available-at times, null handling and QA. Sector adapters matter: semiconductor cycles/inventory/capex differ from unprofitable quantum companies' runway and dilution risks.
+
+## Customer intake and suitability boundary
+
+Capture investment objective and benchmark; investment horizon; near-term cash needs; loss capacity versus emotional tolerance; current allocation and outside exposures; account types; tax jurisdiction and cost-basis availability; options approval/experience; liquidity and position restrictions. Unknown values remain unknown. Before proposing limits, ask the founder to approve a policy. Never infer current assets, buying power or holdings from prior conversation estimates.
+
+Income is not equivalent to total return. A high premium does not make an option safe. Display assignment obligations, capped upside, downside to zero, concentration after assignment and fees before ranking premium yield. The Options Industry Council describes CSP downside as substantial if the underlying falls: https://www.optionseducation.org/strategies/all-strategies/cash-secured-put (reviewed September 12, 2026).

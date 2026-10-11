@@ -1,0 +1,100 @@
+# Security, privacy and real-money gates
+
+## Immediate repository finding
+
+The inherited public repository tracks a `.env` file. Its contents were not inspected or copied during foundation work, and no secret exposure is asserted without review. The owner should review it privately; if it contains real credentials, revoke/rotate them immediately and plan repository-history remediation. Removing a file from a new commit alone does not remove historical exposure. Atlas does not read that file. Track this as SEC-01; do not publish real account records or keys.
+
+## Threat/control plan
+
+| Threat | Required control before customer use | Verification |
+|---|---|---|
+| Account takeover | Managed authentication, MFA, short sessions, rate limits | Session/recovery abuse tests |
+| Tenant data leakage | Server-side object authorization and tenant-scoped data | Cross-tenant negative tests |
+| Credential leakage | Managed secrets, least privilege, log redaction, scanning | Scan and rotation drill |
+| Bad/stale/poisoned data | Schema checks, source provenance, reconciliation, extraction conformance, private provider qualification and freshness gates | Corrupt/stale/provider-conflict, false-accept/reject and qualification-threshold fixtures |
+| LLM fabrication or injection | Evidence-bound summaries, isolated tools, deterministic math | Adversarial-source test set |
+| Duplicate jobs or actions | Idempotency keys, atomic state and audit history | Retry/crash/replay tests |
+| Data loss/outage | Encrypted backups, restore rehearsal, incident runbooks | Measured restore and rollback |
+| Unauthorized strategy change | Versioned policies, review, explicit approval | Audit trace and rejection tests |
+| Malicious uploads | Size/type limits, parser isolation, no executable content | Fuzz/malformed-file cases |
+
+Production controls above are planned, not implemented by the CLI. Collect only necessary data, use account aliases, encrypt in transit/at rest, define retention and deletion/export, avoid raw portfolio data in telemetry or general AI training, and disclose subprocessors. Obtain appropriate consent before ingestion.
+
+The checked-in source-rights worksheet is a blank template containing public
+source metadata and required field names only. Completed terms captures,
+reviewer references and legal conclusions belong in the approved private
+boundary and must not enter this repository, issues, PRs or CI output.
+The localhost workbench may expose only aggregate task/check counts and blocked
+gate states from that worksheet; it must not expose source addresses, document
+or review identifiers, evidence-field names or completed evidence.
+The source-capture receipt applies two-key control: a reviewed rights decision
+and a separate exact-document technical approval. Approvals must be current,
+bounded to one retrieval, capped at 5 MiB, restricted to HTML/PDF/JSON, and
+forbid redirects and byte retention. Public receipts omit approval identifiers
+and source/evidence details. The contract does not fetch or release data.
+The workbench projection is an explicit allowlist of aggregate capture counts,
+source-byte absence and the false release flag. Approval/document identifiers,
+source/terms addresses, hashes and reviewer references are excluded.
+The M2 acceptance trace narrows this further to aggregate gate counts. It emits
+no symbols, source/review/approval identifiers, URLs, hashes, financial values
+or recommendations, and it cannot accept source bytes or mark acceptance.
+Its workbench projection uses only gate names, aggregate counts and controlled
+blocker codes; it is read-only, fixed-cutoff and identical across filter routes.
+The synthetic M2 conformance report preserves the same public boundary while
+exercising a separate invented source behind an exact, current technical
+capture approval. It may expose only synthetic stage
+states and aggregate public counts—not source/document/observation IDs, hashes,
+addresses or metric values. A technical conformance pass does not grant rights,
+capture authority, release authority or milestone acceptance.
+Its workbench projection is read-only and contains only those allowlisted
+aggregate fields on existing fixed routes; it introduces no upload, fetch,
+caller-selected fixture, persistence or action endpoint.
+The synthetic weekly-report command accepts no caller-provided statements or
+source bytes. Its fixed invented claims carry explicit evidence states, expose
+no real issuer or portfolio data and hard-code investment conclusion, milestone
+acceptance and release authority to false. It is a structure demonstration,
+not research advice or permission to publish.
+Its Weekly Review projection uses a fixed timestamp and explicit field
+allowlist. It excludes statement/source/document/review identifiers, real
+symbols and financial values, accepts no query parameters, and offers no form,
+upload, fetch, persistence, approval or release action.
+The adjacent readiness summary carries only aggregate gate counts and controlled
+blocker codes. It cannot receive source content, statements or metrics and
+rejects any nonzero sourced extraction/release state rather than publishing an
+unsupported readiness claim.
+The weekly source-completeness manifest contains only required field names and
+controlled claim semantics. It contains no claim, instrument, document,
+observation, reviewer, source, hash or metric value. Actual evidence and
+completed claim records belong in the approved private boundary; publishing a
+schema never establishes permission, accuracy, completeness or release.
+The Weekly Review projects that manifest through counts only. Required field
+names, claim/evidence identifiers and evidence values are excluded from HTML;
+the projection is read-only and cannot complete a claim or alter eligibility.
+The synthetic claim-evidence receipt accepts only a fixed tuple of schema field
+labels—never evidence values, source bytes or caller-selected files. Its public
+summary exposes counts and controlled states only. A synthetic field-complete
+section remains non-sourced and cannot authorize retrieval, report publication,
+milestone acceptance or release.
+Weekly Review projects only the receipt's numeric counts and controlled status
+labels. It does not render the field-name tuples held by the synthetic contract,
+accept caller-selected bindings or create a path for evidence upload, retrieval,
+persistence, approval or release.
+The publication-decision contract accepts typed readiness and field-presence
+objects only; it accepts no source bytes, evidence values, files or network
+input. Its only public decision is `withhold_publication`. This receipt is an
+engineering control demonstration, not a substitute for private evidence
+review, authorization, release approval or production access control.
+
+The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
+
+The normalized and synthetic-CSV import commands offer a narrow replay control: SHA-256 of exact source bytes plus an atomic SQLite uniqueness ledger containing no holdings. New ledger files are owner-only and permissive existing files are rejected. This helps prevent identical imports from being published twice; it does not encrypt data, authenticate users, provide tenant isolation, prove file authenticity, or make a hash anonymous. Store the ledger and its output only in a private location. Production requires a managed transactional audit store, key/access management, retention rules, backups and concurrency qualification.
+
+## Release levels
+
+- G0 Local synthetic research: allowed now; no customers, accounts or trades.
+- G1 Private read-only prototype: requires verified import, consent, secure storage, authentication if hosted, founder acceptance and data rights.
+- G2 Paying customers: requires independent security review, documented operations, support and privacy terms, jurisdiction/business-model legal review and validated marketing claims. Calling the product “research” does not itself settle legal classification.
+- G3 Broker-assisted real-money actions: separate program requiring counsel, licensed/authorized counterparties as applicable, broker agreements, customer permissions, pre-trade checks, aggregate cash/share reservations, limits, kill switch, idempotent order IDs, execution reconciliation, incident response and controlled rollout.
+- Custody/pooling customer funds: excluded from the three-month plan. Never commingle customer funds or represent this repository as authorized to custody assets.
+
+U.S. SEC staff guidance highlights disclosure, suitable advice and compliance-program considerations for automated advisers: https://www.sec.gov/investment/im-guidance-2017-02.pdf (2017 guidance, reviewed September 12, 2026). This is a planning source, not a current legal clearance or a determination of registration obligations. Qualified counsel must review current U.S., Philippine and any other relevant rules based on entity, customer location, advice, compensation, discretion, custody, privacy and marketing model. No investor outreach or public performance claim is cleared by this document.
