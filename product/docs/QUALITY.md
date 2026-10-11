@@ -42,6 +42,11 @@ The Weekly Review receipt-projection test requires the same aggregate and
 per-section counts, one synthetic field-complete section, three blocked
 sections, zero actual complete claims and false report eligibility. It rejects
 the underlying field names and evidence identifiers from rendered HTML.
+Weekly-publication tests require aligned assessment times, monotonic six-stage
+counts, exact claim arithmetic, zero sourced statements/metrics and a blocked
+decision. They separately prove that marking all 23 synthetic fields present
+still cannot create actual eligibility or release authority. CLI/privacy checks
+exclude field names, evidence identifiers, source addresses, hashes and values.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

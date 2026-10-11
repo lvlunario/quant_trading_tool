@@ -426,3 +426,24 @@ class CliTests(unittest.TestCase):
         for excluded in ('claim_id', 'source_document_id', 'observation_id',
                          'rights_decision', 'instrument_id', '"value"'):
             self.assertNotIn(excluded, run.stdout)
+
+    def test_weekly_publication_decision_demo_withholds_release(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--weekly-publication-decision-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['decision'], 'withhold_publication')
+        self.assertEqual(
+            report['sourced_report']['stage_passed_counts'],
+            [8, 8, 0, 0, 0, 0])
+        self.assertEqual(
+            (report['claim_bindings']['provided_field_count'],
+             report['claim_bindings']['missing_field_count']),
+            (13, 10))
+        self.assertFalse(report['actual_report_eligible'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('claim_id', 'source_document_id', 'instrument_id',
+                         'rights_decision', 'source_uri', 'sha256', '"value"'):
+            self.assertNotIn(excluded, run.stdout)

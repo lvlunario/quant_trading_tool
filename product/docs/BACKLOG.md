@@ -33,6 +33,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 11 morning: added a fail-closed weekly publication decision composing
+the sourced 8/8/0/0/0/0 gate state with 23/13/10 claim-binding counts. It emits
+`withhold_publication`, accepts no evidence values and remains blocked when a
+test supplies all 23 synthetic fields. Six tests raise the local suite to 316.
+Next: project the publication decision into Weekly Review as a count-only status
+without adding an approval or release control.
+
 October 10 evening: projected the typed claim receipt into Weekly Review. The
 four count-only rows now show required, synthetically present and missing
 bindings plus controlled structural status while retaining zero actual complete

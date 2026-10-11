@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 11 publication-decision increment:
+`atlas.weekly_publication_decision` composes the typed sourced-readiness state
+with the synthetic claim receipt at one cutoff. It validates monotonic six-gate
+progress and count arithmetic, then deterministically withholds publication.
+Synthetic field completeness is modeled as insufficient evidence, so the
+contract has no transition that can grant release or milestone acceptance.
+
 October 10 receipt-projection increment: `atlas.web_preview` rebuilds the fixed
 claim receipt at the Weekly Review cutoff and joins its count-only section state
 to the four manifest rows. The page allowlists required/provided/missing counts
