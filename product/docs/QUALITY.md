@@ -47,6 +47,10 @@ counts, exact claim arithmetic, zero sourced statements/metrics and a blocked
 decision. They separately prove that marking all 23 synthetic fields present
 still cannot create actual eligibility or release authority. CLI/privacy checks
 exclude field names, evidence identifiers, source addresses, hashes and values.
+The Weekly Review decision-projection test requires `withhold_publication`, the
+23/13/10 binding counts, zero sourced statements/metrics and false eligibility
+and release flags while excluding evidence identifiers, addresses, hashes and
+metric values from HTML.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

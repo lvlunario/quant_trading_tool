@@ -33,6 +33,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 11 afternoon: projected the typed fail-closed publication decision into
+Weekly Review. The new read-only panel visibly withholds publication using the
+same 8/8/0/0/0/0 sourced state and 23/13/10 binding counts, keeps sourced
+statements/metrics at zero and exposes no approval or release action. One
+HTTP/privacy test raises the local suite to 317. Next: add a dated M2 milestone
+readiness packet that distinguishes delivered synthetic controls from external
+sourced-report dependencies ahead of October 17.
+
 October 11 morning: added a fail-closed weekly publication decision composing
 the sourced 8/8/0/0/0/0 gate state with 23/13/10 claim-binding counts. It emits
 `withhold_publication`, accepts no evidence values and remains blocked when a

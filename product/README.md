@@ -171,6 +171,10 @@ claim receipt and returns `withhold_publication`. Its output contains counts and
 controlled states only. Even a separately tested all-fields-present synthetic
 receipt cannot make the actual report eligible or authorize release.
 
+The read-only Weekly Review projects the same typed decision as a visible
+`Withhold publication` panel. It exposes only controlled status and aggregate
+counts and provides no approval, publication or release action.
+
 The source demo also records whether extraction was deterministic, manual or
 AI-assisted and binds that claim to the exact source and metric payload hashes.
 Manual or AI-assisted values remain blocked without verified review evidence.

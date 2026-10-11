@@ -27,6 +27,7 @@ from .source_catalog import load_public_source_catalog
 from .source_rights import load_source_rights_manifest
 from .watchlist_registry import load_public_watchlist_registry
 from .weekly_claim_receipt import build_synthetic_weekly_claim_evidence_receipt
+from .weekly_publication_decision import assess_weekly_publication_decision
 from .weekly_research_report import build_synthetic_weekly_research_report
 from .weekly_report_readiness import assess_weekly_report_readiness
 from .weekly_source_manifest import build_weekly_source_completeness_manifest
@@ -262,12 +263,16 @@ def render_weekly_review():
     report = build_synthetic_weekly_research_report(
         period_end=WEEKLY_REVIEW_AS_OF.date(),
         generated_at=WEEKLY_REVIEW_AS_OF)
-    readiness = assess_weekly_report_readiness(
-        report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF)).public_summary()
+    readiness_contract = assess_weekly_report_readiness(
+        report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF))
+    readiness = readiness_contract.public_summary()
     manifest = build_weekly_source_completeness_manifest(
         as_of=WEEKLY_REVIEW_AS_OF).public_summary()
-    receipt = build_synthetic_weekly_claim_evidence_receipt(
-        assessed_at=WEEKLY_REVIEW_AS_OF).public_summary()
+    receipt_contract = build_synthetic_weekly_claim_evidence_receipt(
+        assessed_at=WEEKLY_REVIEW_AS_OF)
+    receipt = receipt_contract.public_summary()
+    publication = assess_weekly_publication_decision(
+        readiness_contract, receipt_contract).public_summary()
     report = report.public_summary()
     section_labels = {
         'observation': 'Observation',
@@ -320,6 +325,10 @@ def render_weekly_review():
 <p><strong>Blocked:</strong> 13 of 23 synthetic field bindings are marked present and 10 remain missing. No evidence values or actual complete claims have been provided.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Claim type</th><th>Required fields</th><th>Present</th><th>Missing</th><th>Synthetic binding status</th><th>Complete claims</th></tr></thead><tbody>{manifest_rows}</tbody></table></div>
 <p>Presence counts show structure only—not permission, authenticity, accuracy or evidence validity. Field names, evidence identifiers and values stay outside this public view.</p></section>
+<section data-publication-decision="{escape(publication['decision'], quote=True)}" data-publication-status="{escape(publication['status'], quote=True)}" data-publication-primary-blocker="{escape(publication['publication_gate']['primary_blocker'], quote=True)}" data-publication-synthetic-can-authorize="{str(publication['publication_gate']['synthetic_presence_can_authorize']).lower()}" data-publication-required-fields="{publication['claim_bindings']['required_field_count']}" data-publication-provided-fields="{publication['claim_bindings']['provided_field_count']}" data-publication-missing-fields="{publication['claim_bindings']['missing_field_count']}" data-publication-sourced-statements="{publication['sourced_report']['sourced_statement_count']}" data-publication-sourced-metrics="{publication['sourced_report']['sourced_metric_count']}" data-publication-report-eligible="{str(publication['actual_report_eligible']).lower()}" data-publication-release-authorized="{str(publication['release_authorized']).lower()}">
+<h2>Publication decision</h2>
+<p><strong>Withhold publication.</strong> The sourced report has zero sourced statements and metrics; 13 of 23 synthetic bindings are present and 10 are missing.</p>
+<p>Synthetic field presence cannot authorize publication. Permitted sourced evidence needs to independently pass every gate before eligibility or release can change.</p></section>
 {sections}
 <p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
 

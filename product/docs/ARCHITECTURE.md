@@ -1,5 +1,11 @@
 # Architecture and decisions
 
+October 11 decision-projection increment: `atlas.web_preview` composes the
+typed readiness and claim-receipt objects once, derives the publication
+decision from those objects and projects only allowlisted status/count fields.
+The page does not reimplement the gate, accept evidence or expose an action
+that could change eligibility, acceptance or release state.
+
 October 11 publication-decision increment:
 `atlas.weekly_publication_decision` composes the typed sourced-readiness state
 with the synthetic claim receipt at one cutoff. It validates monotonic six-gate

@@ -394,3 +394,25 @@ class WebPreviewTests(unittest.TestCase):
                          'assumption_label', 'supporting_claim_ids',
                          'challenged_claim_ids', 'gap_code'):
             self.assertNotIn(excluded, page)
+
+    def test_weekly_review_projects_fail_closed_publication_decision(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn('data-publication-decision="withhold_publication"', page)
+        self.assertIn('data-publication-status="blocked"', page)
+        self.assertIn(
+            'data-publication-primary-blocker="sourced_evidence_not_available"',
+            page)
+        self.assertIn('data-publication-synthetic-can-authorize="false"', page)
+        self.assertIn('data-publication-required-fields="23"', page)
+        self.assertIn('data-publication-provided-fields="13"', page)
+        self.assertIn('data-publication-missing-fields="10"', page)
+        self.assertIn('data-publication-sourced-statements="0"', page)
+        self.assertIn('data-publication-sourced-metrics="0"', page)
+        self.assertIn('data-publication-report-eligible="false"', page)
+        self.assertIn('data-publication-release-authorized="false"', page)
+        self.assertIn('Withhold publication', page)
+        for excluded in ('claim_id', 'source_document_id', 'instrument_id',
+                         'rights_decision', 'source_uri', 'sha256',
+                         'metric_value'):
+            self.assertNotIn(excluded, page)
