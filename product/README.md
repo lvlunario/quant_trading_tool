@@ -96,6 +96,7 @@ python -m atlas --rights-evidence-demo
 python -m atlas --research-work-items-demo
 python -m atlas --m2-acceptance-trace
 python -m atlas --m2-synthetic-conformance
+python -m atlas --m2-milestone-readiness-demo
 python -m atlas --weekly-report-demo
 python -m atlas --weekly-report-readiness-demo
 python -m atlas --weekly-source-manifest-demo
@@ -174,6 +175,11 @@ receipt cannot make the actual report eligible or authorize release.
 The read-only Weekly Review projects the same typed decision as a visible
 `Withhold publication` panel. It exposes only controlled status and aggregate
 counts and provides no approval, publication or release action.
+
+`--m2-milestone-readiness-demo` composes the six-gate synthetic proof, blocked
+public trace and weekly publication decision against the October 17 exit date.
+It marks only the invented technical controls ready for review; the milestone,
+acceptance and release remain blocked pending the listed external dependencies.
 
 The source demo also records whether extraction was deterministic, manual or
 AI-assisted and binds that claim to the exact source and metric payload hashes.

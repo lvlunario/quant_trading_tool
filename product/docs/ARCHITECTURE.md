@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 11 milestone-readiness increment:
+`atlas.m2_milestone_readiness` composes the typed public trace, weekly
+publication decision and exact synthetic conformance receipt at one assessment
+time. It reports each sourced exit criterion independently, treats synthetic
+technical proof as review evidence rather than sourced completion, and has no
+state transition for milestone acceptance or release.
+
 October 11 decision-projection increment: `atlas.web_preview` composes the
 typed readiness and claim-receipt objects once, derives the publication
 decision from those objects and projects only allowlisted status/count fields.

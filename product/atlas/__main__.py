@@ -42,6 +42,8 @@ def main():
                         help="ordered M2 gate counts; no acceptance authority")
     source.add_argument("--m2-synthetic-conformance", action="store_true",
                         help="invented six-gate proof; public sources stay blocked")
+    source.add_argument("--m2-milestone-readiness-demo", action="store_true",
+                        help="October 17 exit status; no acceptance authority")
     source.add_argument("--weekly-report-demo", action="store_true",
                         help="dated invented research shell; no recommendation")
     source.add_argument("--weekly-report-readiness-demo", action="store_true",
@@ -299,6 +301,57 @@ def main():
             )
 
             report = build_synthetic_weekly_research_report().public_summary()
+        elif args.m2_milestone_readiness_demo:
+            from .m2_acceptance_trace import build_m2_acceptance_trace
+            from .m2_milestone_readiness import assess_m2_milestone_readiness
+            from .m2_synthetic_conformance import assess_m2_synthetic_conformance
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+            from .weekly_claim_receipt import (
+                build_synthetic_weekly_claim_evidence_receipt,
+            )
+            from .weekly_publication_decision import (
+                assess_weekly_publication_decision,
+            )
+            from .weekly_report_readiness import assess_weekly_report_readiness
+            from .weekly_research_report import (
+                build_synthetic_weekly_research_report,
+            )
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes(),
+                now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(), registry,
+                now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            capture = assess_source_capture_authorization(
+                catalog, rights, at=now)
+            trace = build_m2_acceptance_trace(
+                registry, catalog, rights, capture)
+            conformance = assess_m2_synthetic_conformance(
+                (fixtures / 'synthetic-research-source.json').read_bytes(),
+                trace, now=now)
+            weekly = build_synthetic_weekly_research_report(
+                period_end=now.date(), generated_at=now)
+            weekly_readiness = assess_weekly_report_readiness(weekly, trace)
+            receipt = build_synthetic_weekly_claim_evidence_receipt(
+                assessed_at=now)
+            publication = assess_weekly_publication_decision(
+                weekly_readiness, receipt)
+            report = assess_m2_milestone_readiness(
+                trace, publication, conformance).public_summary()
         elif args.m2_synthetic_conformance:
             from .m2_acceptance_trace import build_m2_acceptance_trace
             from .m2_synthetic_conformance import assess_m2_synthetic_conformance

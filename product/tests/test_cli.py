@@ -427,6 +427,29 @@ class CliTests(unittest.TestCase):
                          'rights_decision', 'instrument_id', '"value"'):
             self.assertNotIn(excluded, run.stdout)
 
+    def test_m2_milestone_readiness_demo_reports_external_gaps(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--m2-milestone-readiness-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['status'], report['target_date']),
+                         ('blocked', '2026-10-17'))
+        self.assertEqual(
+            report['synthetic_controls']['technical_gates_passed'], 6)
+        self.assertEqual(
+            [item['passed_count'] for item in report['sourced_exit_criteria']],
+            [8, 8, 0, 0, 0, 0])
+        self.assertEqual(report['weekly_publication']['decision'],
+                         'withhold_publication')
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('source_uri', 'document_id', 'review_id',
+                         'evidence_sha256', 'metric_value',
+                         'reviewer_reference'):
+            self.assertNotIn(excluded, run.stdout)
+
     def test_weekly_publication_decision_demo_withholds_release(self):
         run = subprocess.run(
             [sys.executable, '-m', 'atlas',

@@ -51,6 +51,11 @@ The Weekly Review decision-projection test requires `withhold_publication`, the
 23/13/10 binding counts, zero sourced statements/metrics and false eligibility
 and release flags while excluding evidence identifiers, addresses, hashes and
 metric values from HTML.
+M2 milestone-readiness tests require aligned assessment times, a passing 6/6
+invented conformance path, unchanged public 8/8/0/0/0/0 counts, the blocked
+weekly publication decision and false acceptance/release flags. Time drift,
+weakened synthetic proof, changed public counts and invalid target/count
+arithmetic fail closed; CLI output excludes private evidence fields.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

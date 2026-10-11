@@ -33,6 +33,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
+October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
+It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and
+`withhold_publication` decision, then marks the milestone blocked on five
+controlled external dependencies without recording acceptance. Five tests raise
+the local suite to 322. Next: use this receipt in the October 12 asynchronous M2
+review packet; record no founder response unless one is actually received.
+
 October 11 afternoon: projected the typed fail-closed publication decision into
 Weekly Review. The new read-only panel visibly withholds publication using the
 same 8/8/0/0/0/0 sourced state and 23/13/10 binding counts, keeps sourced
