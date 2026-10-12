@@ -1,5 +1,13 @@
 # Backlog and decision register
 
+October 12 morning: projected the typed M2 milestone-readiness snapshot into
+Weekly Review and prepared the asynchronous iteration packet. The panel shows
+6/6 invented technical gates ready for review, 0/6 sourced exit criteria ready
+and five external dependencies while keeping acceptance/release false and
+dependency codes out of HTML. One HTTP/privacy test raises the local suite to
+323. Next: prepare the October 17 M2 disposition from verified evidence without
+converting synthetic conformance into sourced acceptance.
+
 Priority order is dependency-driven. GitHub issue links will accompany the launch PR.
 
 | ID | Work item | Priority | Due | Owner role | Exit |

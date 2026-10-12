@@ -32,7 +32,10 @@ stages. The adjacent conformance panel contrasts 6/6 invented technical gates
 with the still-blocked 8/8/0/0/0/0 public path. Neither panel can record
 milestone acceptance or authorize release.
 
-The Weekly Review also shows a count-only claim-evidence checklist: four
+The Weekly Review also shows a count-only M2 milestone panel: the invented path
+is ready for review at 6/6 technical gates while all six sourced exit criteria
+remain blocked behind five external dependencies. It records neither milestone
+acceptance nor release authority. The page also shows a count-only claim-evidence checklist: four
 contract rules, 23 required fields, 13 synthetic presence declarations, 10
 missing bindings and zero actual complete claims. Required field names,
 evidence identifiers and evidence values do not enter the page.
@@ -172,7 +175,8 @@ claim receipt and returns `withhold_publication`. Its output contains counts and
 controlled states only. Even a separately tested all-fields-present synthetic
 receipt cannot make the actual report eligible or authorize release.
 
-The read-only Weekly Review projects the same typed decision as a visible
+The read-only Weekly Review projects the same typed decision and M2 readiness
+snapshot as visible
 `Withhold publication` panel. It exposes only controlled status and aggregate
 counts and provides no approval, publication or release action.
 

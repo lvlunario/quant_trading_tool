@@ -16,6 +16,7 @@ from pathlib import Path
 from .conformance import m1_import_conformance, recommend_m1_disposition
 from .import_workflow import synthetic_csv_report
 from .m2_acceptance_trace import build_m2_acceptance_trace
+from .m2_milestone_readiness import assess_m2_milestone_readiness
 from .m2_synthetic_conformance import assess_m2_synthetic_conformance
 from .research_work_items import compose_research_work_queue
 from .rights_evidence import (assess_reviewed_rights,
@@ -133,25 +134,25 @@ def public_m2_acceptance_trace(at=WORKBENCH_AS_OF):
     return _m2_acceptance_trace(at).public_summary()
 
 
-def public_m2_synthetic_conformance():
+def public_m2_synthetic_conformance(at=WORKBENCH_AS_OF):
     """Build the fixed invented-vs-public conformance projection."""
     fixtures = Path(__file__).resolve().parents[1] / "fixtures"
     registry = load_public_watchlist_registry(
         (fixtures / "public-watchlist-identities.json").read_bytes(),
-        now=WORKBENCH_AS_OF)
+        now=at)
     catalog = load_public_source_catalog(
         (fixtures / "public-research-sources.json").read_bytes(), registry,
-        now=WORKBENCH_AS_OF)
+        now=at)
     evidence = load_reviewed_rights_evidence(
         (fixtures / "public-source-rights-evidence.json").read_bytes(), catalog,
-        now=WORKBENCH_AS_OF)
-    rights = assess_reviewed_rights(catalog, evidence, at=WORKBENCH_AS_OF)
+        now=at)
+    rights = assess_reviewed_rights(catalog, evidence, at=at)
     capture = assess_source_capture_authorization(
-        catalog, rights, at=WORKBENCH_AS_OF)
+        catalog, rights, at=at)
     trace = build_m2_acceptance_trace(registry, catalog, rights, capture)
     source_bytes = (fixtures / "synthetic-research-source.json").read_bytes()
     return assess_m2_synthetic_conformance(
-        source_bytes, trace, now=WORKBENCH_AS_OF)
+        source_bytes, trace, now=at)
 
 
 def render_research_work_items(filter_code="all"):
@@ -263,16 +264,20 @@ def render_weekly_review():
     report = build_synthetic_weekly_research_report(
         period_end=WEEKLY_REVIEW_AS_OF.date(),
         generated_at=WEEKLY_REVIEW_AS_OF)
-    readiness_contract = assess_weekly_report_readiness(
-        report, _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF))
+    trace_contract = _m2_acceptance_trace(WEEKLY_REVIEW_AS_OF)
+    readiness_contract = assess_weekly_report_readiness(report, trace_contract)
     readiness = readiness_contract.public_summary()
     manifest = build_weekly_source_completeness_manifest(
         as_of=WEEKLY_REVIEW_AS_OF).public_summary()
     receipt_contract = build_synthetic_weekly_claim_evidence_receipt(
         assessed_at=WEEKLY_REVIEW_AS_OF)
     receipt = receipt_contract.public_summary()
-    publication = assess_weekly_publication_decision(
-        readiness_contract, receipt_contract).public_summary()
+    publication_contract = assess_weekly_publication_decision(
+        readiness_contract, receipt_contract)
+    publication = publication_contract.public_summary()
+    conformance = public_m2_synthetic_conformance(WEEKLY_REVIEW_AS_OF)
+    milestone = assess_m2_milestone_readiness(
+        trace_contract, publication_contract, conformance).public_summary()
     report = report.public_summary()
     section_labels = {
         'observation': 'Observation',
@@ -329,6 +334,11 @@ def render_weekly_review():
 <h2>Publication decision</h2>
 <p><strong>Withhold publication.</strong> The sourced report has zero sourced statements and metrics; 13 of 23 synthetic bindings are present and 10 are missing.</p>
 <p>Synthetic field presence cannot authorize publication. Permitted sourced evidence needs to independently pass every gate before eligibility or release can change.</p></section>
+<section data-m2-milestone-status="{escape(milestone['status'], quote=True)}" data-m2-target-date="{escape(milestone['target_date'], quote=True)}" data-m2-target-status="{escape(milestone['target_status'], quote=True)}" data-m2-synthetic-controls-status="{escape(milestone['synthetic_controls']['status'], quote=True)}" data-m2-synthetic-gates-passed="{milestone['synthetic_controls']['technical_gates_passed']}" data-m2-sourced-criteria-ready="{sum(item['status'] == 'ready' for item in milestone['sourced_exit_criteria'])}" data-m2-sourced-criteria-blocked="{sum(item['status'] == 'blocked' for item in milestone['sourced_exit_criteria'])}" data-m2-external-dependency-count="{len(milestone['external_dependencies'])}" data-m2-acceptance-recorded="{str(milestone['milestone_acceptance_recorded']).lower()}" data-m2-release-authorized="{str(milestone['release_authorized']).lower()}">
+<h2>M2 milestone readiness</h2>
+<p><strong>Synthetic controls: ready for review.</strong> All 6 technical gates pass using invented inputs only.</p>
+<p><strong>Sourced exit criteria: blocked.</strong> Zero of 6 criteria are ready and 5 external dependencies remain.</p>
+<p>Target: October 17. No milestone acceptance or release authority is recorded.</p></section>
 {sections}
 <p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''
 

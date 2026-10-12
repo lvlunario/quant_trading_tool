@@ -1,5 +1,11 @@
 # Architecture and decisions
 
+October 12 milestone projection: Weekly Review composes the same typed trace,
+synthetic conformance and publication decision into the M2 readiness snapshot.
+Only target/status and aggregate gate, criterion and dependency counts cross the
+view boundary. Dependency codes, source/review evidence and transition controls
+remain outside the page.
+
 October 11 milestone-readiness increment:
 `atlas.m2_milestone_readiness` composes the typed public trace, weekly
 publication decision and exact synthetic conformance receipt at one assessment

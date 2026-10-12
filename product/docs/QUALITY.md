@@ -56,6 +56,10 @@ invented conformance path, unchanged public 8/8/0/0/0/0 counts, the blocked
 weekly publication decision and false acceptance/release flags. Time drift,
 weakened synthetic proof, changed public counts and invalid target/count
 arithmetic fail closed; CLI output excludes private evidence fields.
+The Weekly Review milestone-projection test locks the blocked October 17 state,
+6/6 invented technical gates, 0/6 sourced exit criteria, five external
+dependencies and false acceptance/release flags. It also rejects dependency
+codes and evidence-bearing identifiers from rendered HTML.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

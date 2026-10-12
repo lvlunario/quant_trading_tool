@@ -416,3 +416,26 @@ class WebPreviewTests(unittest.TestCase):
                          'rights_decision', 'source_uri', 'sha256',
                          'metric_value'):
             self.assertNotIn(excluded, page)
+
+    def test_weekly_review_projects_count_only_m2_milestone_readiness(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        self.assertIn('data-m2-milestone-status="blocked"', page)
+        self.assertIn('data-m2-target-date="2026-10-17"', page)
+        self.assertIn('data-m2-target-status="active"', page)
+        self.assertIn(
+            'data-m2-synthetic-controls-status="ready_for_review"', page)
+        self.assertIn('data-m2-synthetic-gates-passed="6"', page)
+        self.assertIn('data-m2-sourced-criteria-ready="0"', page)
+        self.assertIn('data-m2-sourced-criteria-blocked="6"', page)
+        self.assertIn('data-m2-external-dependency-count="5"', page)
+        self.assertIn('data-m2-acceptance-recorded="false"', page)
+        self.assertIn('data-m2-release-authorized="false"', page)
+        self.assertIn('M2 milestone readiness', page)
+        for excluded in ('crbs_identity_resolution',
+                         'completed_rights_review',
+                         'technical_capture_approval',
+                         'permitted_exact_source_evidence',
+                         'licensed_metric_data', 'source_document_id',
+                         'review_id', 'evidence_id', 'metric_value'):
+            self.assertNotIn(excluded, page.lower())
