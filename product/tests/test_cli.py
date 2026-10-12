@@ -450,6 +450,26 @@ class CliTests(unittest.TestCase):
                          'reviewer_reference'):
             self.assertNotIn(excluded, run.stdout)
 
+    def test_m2_disposition_demo_defers_every_unresolved_criterion(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m2-disposition-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual((report['receipt_state'], report['status']),
+                         ('candidate', 'blocked'))
+        self.assertEqual((report['review_recommended_count'],
+                          report['deferred_count']), (0, 6))
+        self.assertTrue(all(item['recommendation'] == 'recommend_defer'
+                            for item in report['criteria']))
+        self.assertFalse(report['founder_response_recorded'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('source_uri', 'document_id', 'review_id',
+                         'evidence_sha256', 'metric_value',
+                         'reviewer_reference', 'approval_id'):
+            self.assertNotIn(excluded, run.stdout)
+
     def test_weekly_publication_decision_demo_withholds_release(self):
         run = subprocess.run(
             [sys.executable, '-m', 'atlas',

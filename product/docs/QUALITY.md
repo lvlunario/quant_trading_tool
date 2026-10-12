@@ -63,6 +63,12 @@ codes and evidence-bearing identifiers from rendered HTML.
 The criterion-detail projection test requires the exact identity, discovery,
 rights, capture, extraction and metric-release order; exact 8/9, 8/9, 0/8,
 0/8, 0/9 and 0/9 counts; blocked status; and controlled blocker labels.
+M2 disposition tests require every unresolved criterion to become an explicit
+deferral, completed criteria to become review recommendations rather than
+acceptance, the checkpoint state to derive from the assessment date and all
+founder-response/acceptance/release flags to remain false. Invalid inputs and a
+weakened publication decision fail closed; CLI output excludes evidence and
+approval identifiers.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

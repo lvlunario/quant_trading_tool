@@ -1,5 +1,12 @@
 # Backlog and decision register
 
+October 12 evening: added a fail-closed October 17 M2 disposition candidate.
+It maps each of the six sourced exit criteria to review only when complete and
+to an explicit deferral otherwise. The current receipt defers all six, keeps
+publication withheld and cannot record founder response, acceptance or release.
+Six tests raise the local suite to 330. Next: add the count-only disposition to
+the October 17 checkpoint packet, then reassess only from verified evidence.
+
 October 12 afternoon: expanded the count-only M2 panel into an ordered six-row
 exit-criteria table. It shows exact passed/required counts and controlled
 blockers for identity, discovery, rights, capture, extraction and metric release

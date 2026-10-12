@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 12 disposition increment: `atlas.m2_milestone_disposition` consumes the
+typed milestone-readiness snapshot and maps each sourced exit criterion to
+exactly one recommendation: review when complete, otherwise defer. Its public
+candidate receipt retains aggregate counts and controlled blockers only. It has
+no transition for founder response, milestone acceptance, publication or
+release, and the current 0/6-ready state therefore produces six explicit
+deferrals.
+
 October 12 milestone projection: Weekly Review composes the same typed trace,
 synthetic conformance and publication decision into the M2 readiness snapshot.
 Only target/status and aggregate gate, criterion and dependency counts cross the
