@@ -34,7 +34,8 @@ milestone acceptance or authorize release.
 
 The Weekly Review also shows a count-only M2 milestone panel: the invented path
 is ready for review at 6/6 technical gates while all six sourced exit criteria
-remain blocked behind five external dependencies. It records neither milestone
+remain blocked behind five external dependencies. Its ordered table shows each
+criterion's passed/required count and controlled blocker. It records neither milestone
 acceptance nor release authority. The page also shows a count-only claim-evidence checklist: four
 contract rules, 23 required fields, 13 synthetic presence declarations, 10
 missing bindings and zero actual complete claims. Required field names,

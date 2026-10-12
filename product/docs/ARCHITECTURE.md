@@ -6,6 +6,11 @@ Only target/status and aggregate gate, criterion and dependency counts cross the
 view boundary. Dependency codes, source/review evidence and transition controls
 remain outside the page.
 
+October 12 criterion-detail increment: the milestone projection iterates the
+typed `sourced_exit_criteria` tuple in contract order. It renders only criterion,
+status, passed/required counts and controlled blocker codes; it does not infer
+progress, reconstruct evidence or introduce a state transition.
+
 October 11 milestone-readiness increment:
 `atlas.m2_milestone_readiness` composes the typed public trace, weekly
 publication decision and exact synthetic conformance receipt at one assessment

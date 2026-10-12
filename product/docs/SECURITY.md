@@ -94,6 +94,9 @@ record milestone acceptance or authorize release. Weekly Review narrows that
 snapshot further to aggregate counts and controlled status labels. It excludes
 the dependency codes themselves and adds no input, approval, acceptance or
 release transition.
+The adjacent criterion table is an allowlist of criterion names, aggregate
+counts and controlled blocker codes. It contains no symbols, source locations,
+evidence identifiers, values or private review details.
 
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 

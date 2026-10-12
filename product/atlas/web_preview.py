@@ -314,6 +314,20 @@ def render_weekly_review():
             status_label=escape(binding['status'].replace('_', ' ').title()),
             label=escape(section_labels[rule['section']]))
         for rule, binding in zip(manifest['rules'], receipt['sections']))
+    milestone_rows = ''.join(
+        '<tr data-m2-criterion="{criterion}" data-criterion-status="{status}" '
+        'data-passed-count="{passed}" data-required-count="{required}" '
+        'data-criterion-blocker="{blocker}"><th scope="row">{label}</th>'
+        '<td>{passed} of {required}</td><td>{status_label}</td>'
+        '<td>{blocker_label}</td></tr>'.format(
+            criterion=escape(item['criterion'], quote=True),
+            status=escape(item['status'], quote=True),
+            passed=item['passed_count'], required=item['required_count'],
+            blocker=escape(item['blocker'], quote=True),
+            label=escape(item['criterion'].replace('_', ' ').title()),
+            status_label=escape(item['status'].title()),
+            blocker_label=escape(item['blocker'].replace('_', ' ').title()))
+        for item in milestone['sourced_exit_criteria'])
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>Atlas Weekly Review · Synthetic</title>
 <style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:900px;margin:auto;padding:24px}}.meta,section{{background:#fff;border:1px solid #c4d5dc;border-radius:10px;padding:18px;margin:18px 0}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:max-content 1fr;gap:4px 14px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
@@ -338,6 +352,7 @@ def render_weekly_review():
 <h2>M2 milestone readiness</h2>
 <p><strong>Synthetic controls: ready for review.</strong> All 6 technical gates pass using invented inputs only.</p>
 <p><strong>Sourced exit criteria: blocked.</strong> Zero of 6 criteria are ready and 5 external dependencies remain.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Exit criterion</th><th>Passed</th><th>Status</th><th>Current blocker</th></tr></thead><tbody>{milestone_rows}</tbody></table></div>
 <p>Target: October 17. No milestone acceptance or release authority is recorded.</p></section>
 {sections}
 <p>The four claim types remain separate by contract. This page has no query input, upload, network retrieval, persistence, approval or release action.</p></body></html>'''

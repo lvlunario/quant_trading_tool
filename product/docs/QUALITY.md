@@ -60,6 +60,9 @@ The Weekly Review milestone-projection test locks the blocked October 17 state,
 6/6 invented technical gates, 0/6 sourced exit criteria, five external
 dependencies and false acceptance/release flags. It also rejects dependency
 codes and evidence-bearing identifiers from rendered HTML.
+The criterion-detail projection test requires the exact identity, discovery,
+rights, capture, extraction and metric-release order; exact 8/9, 8/9, 0/8,
+0/8, 0/9 and 0/9 counts; blocked status; and controlled blocker labels.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

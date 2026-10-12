@@ -439,3 +439,28 @@ class WebPreviewTests(unittest.TestCase):
                          'licensed_metric_data', 'source_document_id',
                          'review_id', 'evidence_id', 'metric_value'):
             self.assertNotIn(excluded, page.lower())
+
+    def test_weekly_review_orders_all_sourced_exit_criteria(self):
+        status, _, page = self.request("GET", "/weekly-review")
+        self.assertEqual(status, 200)
+        expected = (
+            ('identity', 8, 9, 'identity_unresolved'),
+            ('source_discovery', 8, 9, 'source_candidate_missing'),
+            ('rights_review', 0, 8, 'rights_review_incomplete'),
+            ('capture_authorization', 0, 8,
+             'capture_authorization_incomplete'),
+            ('extraction', 0, 9, 'no_authorized_source_bytes'),
+            ('metric_release', 0, 9, 'no_verified_metric_evidence'),
+        )
+        markers = []
+        for criterion, passed, required, blocker in expected:
+            marker = (
+                f'data-m2-criterion="{criterion}" '
+                f'data-criterion-status="blocked" '
+                f'data-passed-count="{passed}" '
+                f'data-required-count="{required}" '
+                f'data-criterion-blocker="{blocker}"')
+            self.assertIn(marker, page)
+            markers.append(page.index(marker))
+        self.assertEqual(markers, sorted(markers))
+        self.assertEqual(page.count('data-m2-criterion="'), 6)

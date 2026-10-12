@@ -1,5 +1,12 @@
 # Backlog and decision register
 
+October 12 afternoon: expanded the count-only M2 panel into an ordered six-row
+exit-criteria table. It shows exact passed/required counts and controlled
+blockers for identity, discovery, rights, capture, extraction and metric release
+without exposing evidence or adding acceptance controls. One ordering/contract
+test raises the local suite to 324. Next: define the fail-closed October 17
+disposition receipt that preserves unresolved criteria as explicit deferrals.
+
 October 12 morning: projected the typed M2 milestone-readiness snapshot into
 Weekly Review and prepared the asynchronous iteration packet. The panel shows
 6/6 invented technical gates ready for review, 0/6 sourced exit criteria ready
