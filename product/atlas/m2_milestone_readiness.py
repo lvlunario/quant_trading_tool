@@ -1,6 +1,7 @@
 """Public-safe M2 milestone readiness; never records acceptance."""
 from dataclasses import dataclass
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 
 from .m2_acceptance_trace import M2AcceptanceTrace
 from .weekly_publication_decision import WeeklyPublicationDecision
@@ -42,7 +43,7 @@ class M2MilestoneReadiness:
             raise ValueError('invalid_m2_milestone_readiness')
 
     def public_summary(self):
-        days_to_target = (self.target_date - self.assessed_at.date()).days
+        days_to_target = (self.target_date - self.assessed_at.astimezone(ZoneInfo('Asia/Manila')).date()).days
         criteria = (
             ('identity', self.public_passed_counts[0], 9,
              'identity_unresolved'),

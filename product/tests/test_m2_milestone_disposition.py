@@ -72,6 +72,27 @@ class M2MilestoneDispositionTests(unittest.TestCase):
                           summary['checkpoint_status']),
                          ('2026-10-17', 'scheduled'))
 
+    def test_manila_midnight_controls_checkpoint_and_readiness(self):
+        cases = (
+            ('2026-10-16T15:59:59+00:00', 'scheduled', 1, 'active'),
+            ('2026-10-16T16:00:00+00:00', 'due', 0, 'active'),
+            ('2026-10-17T15:59:59+00:00', 'due', 0, 'active'),
+            ('2026-10-17T16:00:00+00:00', 'elapsed', -1, 'elapsed'),
+            ('2026-10-17T00:00:00+08:00', 'due', 0, 'active'),
+        )
+        for timestamp, status, days, target_status in cases:
+            with self.subTest(timestamp=timestamp):
+                readiness = replace(self.readiness,
+                                    assessed_at=datetime.fromisoformat(timestamp))
+                summary = recommend_m2_milestone_disposition(
+                    readiness).public_summary()
+                self.assertEqual(summary['checkpoint_status'], status)
+                self.assertEqual(readiness.public_summary()['days_to_target'], days)
+                self.assertEqual(readiness.public_summary()['target_status'],
+                                 target_status)
+                self.assertEqual(summary['deferred_count'], 6)
+                self.assertFalse(summary['milestone_acceptance_recorded'])
+
     def test_invalid_readiness_input_fails_closed(self):
         with self.assertRaisesRegex(
                 ValueError, 'invalid_m2_milestone_disposition_input'):

@@ -1,5 +1,11 @@
 # Backlog and decision register
 
+October 14 catch-up: prepared the October 17 checkpoint candidate with six
+explicit deferrals and reopening evidence. Corrected readiness and disposition
+dates to use Asia/Manila; regression cases cover both midnight boundaries and
+equivalent UTC/local timestamps. Next: register the bounded synthetic M3
+experiment specification before implementing or reporting performance.
+
 October 12 evening: added a fail-closed October 17 M2 disposition candidate.
 It maps each of the six sourced exit criteria to review only when complete and
 to an explicit deferral otherwise. The current receipt defers all six, keeps

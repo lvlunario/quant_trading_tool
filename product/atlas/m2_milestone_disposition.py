@@ -1,6 +1,7 @@
 """Fail-closed M2 checkpoint disposition; never records acceptance."""
 from dataclasses import dataclass
 from datetime import date, datetime
+from zoneinfo import ZoneInfo
 
 from .m2_milestone_readiness import M2MilestoneReadiness, M2_TARGET_DATE
 
@@ -73,7 +74,7 @@ class M2MilestoneDisposition:
         deferred = sum(item.recommendation == 'recommend_defer'
                        for item in self.criteria)
         days_to_checkpoint = (self.checkpoint_date -
-                              self.assessed_at.date()).days
+                              self.assessed_at.astimezone(ZoneInfo('Asia/Manila')).date()).days
         if days_to_checkpoint > 0:
             checkpoint_status = 'scheduled'
         elif days_to_checkpoint == 0:
