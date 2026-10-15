@@ -56,11 +56,11 @@ If M1 slips: use manual redacted exports. If historical options access slips: de
 
 ## Delivery cadence
 
-Request three flexible sessions each day: morning, afternoon and evening in Asia/Manila. Scheduler configuration and successful creation are recorded separately; a plan alone is not an active task. Timing may vary within supported windows; this is not guaranteed random timing or a continuously running agent. Each run should complete one bounded useful change when access and runtime allow. No empty commits or invented activity.
+Following the October 14 founder request, use one daily evening update around 19:00 Asia/Manila until verified completion and actual founder acceptance. Scheduler configuration and successful creation are recorded separately; a plan alone is not an active task. Timing may vary within supported windows; this is not guaranteed random timing or a continuously running agent. Each run should complete one bounded useful change when access and runtime allow. No empty commits or invented activity.
 
-Each report: phase and next deadline; shipped change; test evidence; commit/PR links; forecast; risk/blocker; next action; decisions requested. Evening sessions summarize the day. Monday morning replaces the regular briefing with a concept/iteration review packet: demo, research/engineering concept, planned vs actual, risks, up to three decisions. A packet is not a meeting or approval.
+Each report: phase and next deadline; shipped change; test evidence; commit/PR links; forecast; risk/blocker; next action; decisions requested. Evening sessions summarize the day. Monday replaces the regular briefing with a concept/iteration review packet: demo, research/engineering concept, planned vs actual, risks, up to three decisions. A packet is not a meeting or approval.
 
-Saturday morning adds weekly equity/macro research for the named universe, using fresh available evidence. Portfolio-specific conclusions require actual current holdings. Only synthetic research artifacts belong in this public repository; deliver personal results privately. After December 12, review acceptance and maintenance needs before expanding development scope.
+Saturday adds weekly equity/macro research for the named universe, using fresh available evidence. Portfolio-specific conclusions require actual current holdings. Only synthetic research artifacts belong in this public repository; deliver personal results privately. After December 12, review acceptance and maintenance needs before expanding development scope.
 
 ## Change and approval control
 

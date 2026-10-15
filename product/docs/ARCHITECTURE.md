@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 15 M3 increment: `atlas.evaluation` partitions immutable ordered session
+metadata into training, validation, purged and excluded samples. Inclusive label
+ends must mature before the next boundary, including a configurable training
+safety gap. Validation cannot extend into the reserved holdout. The module has
+no values, fitting, execution, persistence or network access. See
+[M3 synthetic specification](M3_SYNTHETIC_EXPERIMENT.md) for the fixed protocol
+and the remaining calendar, provenance and execution responsibilities.
+
 October 12 disposition increment: `atlas.m2_milestone_disposition` consumes the
 typed milestone-readiness snapshot and maps each sourced exit criterion to
 exactly one recommendation: review when complete, otherwise defer. Its public

@@ -1,5 +1,12 @@
 # Backlog and decision register
 
+October 15 evening: registered the synthetic M3 evaluation specification and
+implemented chronological split planning with label-overlap purging, a safety
+gap and final-holdout exclusion. Seven focused tests pass; no returns, fitting
+or backtest runner are implemented. Next: deterministic synthetic prices and a
+next-event execution/cost ledger with independent arithmetic checks. M2 remains
+blocked for its October 17 checkpoint; M3 remains due October 31.
+
 October 14 catch-up: prepared the October 17 checkpoint candidate with six
 explicit deferrals and reopening evidence. Corrected readiness and disposition
 dates to use Asia/Manila; regression cases cover both midnight boundaries and

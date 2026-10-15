@@ -119,6 +119,13 @@ The synthetic broker demo has a subprocess-level check that its JSON result reco
 
 ## Backtesting protocol
 
+The M3 split tests verify exact hand-calculated partitions, inclusive boundary
+purging, label-maturity safety gaps, future-feature rejection, invalid windows,
+unique chronological sessions, empty-partition failure and two expanding folds
+that exclude every final-holdout sample. These checks do not establish feature
+provenance, preprocessing discipline, market returns or a working backtester.
+See [the registered synthetic protocol](M3_SYNTHETIC_EXPERIMENT.md).
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.
