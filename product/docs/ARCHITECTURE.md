@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 16 M3 execution increment: `atlas.synthetic_execution` processes only
+typed, ordered invented bars and precomputed binary long/cash targets. A fixed
+policy schedules each transition at an exact later session, accounts for
+per-side costs with Decimal and records an immutable fill ledger. Missing or
+overlapping events fail rather than moving fills. There is no data adapter,
+signal generator, performance statistic, persistence or order endpoint.
+
 October 15 M3 increment: `atlas.evaluation` partitions immutable ordered session
 metadata into training, validation, purged and excluded samples. Inclusive label
 ends must mature before the next boundary, including a configurable training

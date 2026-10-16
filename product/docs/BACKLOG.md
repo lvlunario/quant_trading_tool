@@ -1,5 +1,13 @@
 # Backlog and decision register
 
+October 16 evening: added the synthetic next-event execution/cost ledger from
+the registered M3 protocol. It handles long/cash transitions, exact Decimal
+per-side costs, configurable session delay, repeated targets and final marking;
+seven tests include independently worked base/adverse arithmetic and fail-closed
+missing, invalid and overlapping events. No strategy results exist. Next:
+implement the registered 200-session generator and fixed 20-session signal,
+then bind experiment inputs/config/code/output before calculating metrics.
+
 October 15 evening: registered the synthetic M3 evaluation specification and
 implemented chronological split planning with label-overlap purging, a safety
 gap and final-holdout exclusion. Seven focused tests pass; no returns, fitting

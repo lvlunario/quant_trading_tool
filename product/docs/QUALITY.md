@@ -125,6 +125,12 @@ unique chronological sessions, empty-partition failure and two expanding folds
 that exclude every final-holdout sample. These checks do not establish feature
 provenance, preprocessing discipline, market returns or a working backtester.
 See [the registered synthetic protocol](M3_SYNTHETIC_EXPERIMENT.md).
+The synthetic execution tests independently check entry/exit notional, costs,
+cash and shares under the registered base and adverse policies. They also check
+repeated-target no-ops and reject missing events, non-Decimal/invalid prices,
+invalid policies, duplicate/unsorted inputs and overlapping delayed decisions.
+These tests prove bounded accounting behavior, not fill realism, a complete
+event engine, investable performance or production order handling.
 
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 

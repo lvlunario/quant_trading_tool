@@ -50,7 +50,7 @@ runs and amendments; do not silently change this specification after results.
 - Freeze selection before a separate final-holdout evaluation; do not repeatedly
   retune on holdout. A synthetic demonstration cannot establish real-world edge.
 
-## Implemented first slice and demo
+## Implemented slices and demos
 
 `atlas.evaluation.plan_fold` accepts immutable session metadata and a `FoldSpec`.
 It returns training, validation, purged and excluded decision-session tuples.
@@ -72,10 +72,35 @@ The one-session gap is a conservative pre-validation separation, not a general
 bidirectional cross-validation embargo implementation. An exchange-calendar
 adapter is still required before these indices can represent actual sessions.
 
+`atlas.synthetic_execution.run_long_cash_ledger` adds an exact Decimal,
+synthetic-only next-event ledger. It accepts ordered invented open/close bars,
+precomputed long/cash targets, initial cash and a fixed per-side cost/delay
+policy. Long entry allocates available cash across notional and entry cost;
+cash targets liquidate all synthetic shares and deduct exit cost. Repeated
+targets do not trade. Missing decision/execution events, overlapping pending
+decisions, invalid prices or ordering fail closed rather than shifting fills.
+
+The independently calculated base fixture begins with $1,001, buys 100 invented
+shares at $10 after 10 bps entry cost, then sells at $12 after 10 bps exit cost,
+ending with $1,198.80. The adverse accounting fixture begins with $110.275,
+uses a two-session delay and 25 bps per side, buys 10 shares at $11 and exits
+at $9 for $89.775. These arithmetic cases verify bookkeeping and delay effects;
+they are not observed returns or evidence for the registered strategy.
+
+```sh
+python -m unittest discover -s tests -p test_synthetic_execution.py -v
+```
+
+The ledger does not yet generate the registered 200 sessions or 20-session
+signals, run folds, model dividends/corporate actions, persist an experiment,
+or calculate report metrics. It deliberately refuses overlapping pending
+decisions instead of defining order netting; a future event engine must make
+that policy explicit before supporting daily delayed targets.
+
 ## Next increment and acceptance boundary
 
-Implement deterministic synthetic prices and a next-event execution/cost ledger
-with hand-calculated cases, including missing events and adverse delay. Then
-bind experiment records to code/config/input/output hashes. M3 target remains
+Implement the registered 200-session deterministic generator and 20-session
+signal without inspecting holdout results. Then bind experiment records to
+code/config/input/output hashes before adding metrics. M3 target remains
 October 31. M2 sourced-workbench deferrals remain independent; this work grants
 no data rights, Fidelity compatibility, release permission or founder approval.
