@@ -14,9 +14,10 @@ Prices, distributions and corporate actions will be invented and labeled as
 such. Real watchlist names, personal holdings and licensed feeds are excluded.
 
 Before running, freeze the generator version/seed, exact input checksum, code
-commit and configuration checksum in an experiment record. The generator,
-record persistence and result runner are not implemented yet. Retain failed
-runs and amendments; do not silently change this specification after results.
+commit and configuration checksum in an experiment record. The generator is
+now implemented; record persistence and the result runner are not. Retain
+failed runs and amendments; do not silently change this specification after
+results.
 
 ## Evaluation protocol
 
@@ -97,10 +98,26 @@ or calculate report metrics. It deliberately refuses overlapping pending
 decisions instead of defining order netting; a future event engine must make
 that policy explicit before supporting daily delayed targets.
 
+`atlas.synthetic_series` now implements the registered generator and signal as
+a separate, unexecuted slice. Version `atlas.synthetic_series@1.0.0`, integer
+seed `20261015` and a fixed integer linear-congruential state produce exactly
+200 four-decimal invented open/close bars. The preregistered 20-session rule
+emits only long/cash state changes through session 159; sessions 160–199 are
+present but cannot produce model-selection targets. The registered fixture has
+11 pre-holdout transitions. These counts and prices are generator regression
+facts, not strategy performance.
+
+```sh
+python -m unittest discover -s tests -p test_synthetic_series.py -v
+```
+
+The generator and signal are not yet composed with the execution ledger. No
+holdout return, comparator, cost-adjusted metric or investment conclusion has
+been calculated or inspected.
+
 ## Next increment and acceptance boundary
 
-Implement the registered 200-session deterministic generator and 20-session
-signal without inspecting holdout results. Then bind experiment records to
-code/config/input/output hashes before adding metrics. M3 target remains
+Bind experiment records to code/config/input/output hashes before composing the
+series, fold planner and execution ledger or adding metrics. M3 target remains
 October 31. M2 sourced-workbench deferrals remain independent; this work grants
 no data rights, Fidelity compatibility, release permission or founder approval.

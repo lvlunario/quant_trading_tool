@@ -1,5 +1,13 @@
 # Backlog and decision register
 
+October 17 evening: executed the M2 checkpoint. The sourced trace remains
+8/8/0/0/0/0, all six sourced criteria are explicitly deferred, publication is
+withheld and no founder response or acceptance is recorded. M3 gained the
+registered deterministic 200-session invented generator and fixed 20-session
+pre-holdout signal; six tests lock 11 target transitions and fail-closed input
+boundaries without calculating performance. Next: bind code/config/input/output
+hashes in an immutable experiment record before composing the existing slices.
+
 October 16 evening: added the synthetic next-event execution/cost ledger from
 the registered M3 protocol. It handles long/cash transitions, exact Decimal
 per-side costs, configurable session delay, repeated targets and final marking;

@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 17 M3 series increment: `atlas.synthetic_series` deterministically
+generates the registered 200-session invented open/close series from a fixed
+integer seed and emits only changes from the preregistered 20-session long/cash
+rule before the reserved holdout starts. The module uses exact Decimal
+quantization, validates contiguous sessions and labels itself synthetic-only.
+It does not execute targets, inspect holdout performance, calculate metrics,
+persist records or connect to market/account/order systems.
+
 October 16 M3 execution increment: `atlas.synthetic_execution` processes only
 typed, ordered invented bars and precomputed binary long/cash targets. A fixed
 policy schedules each transition at an exact later session, accounts for

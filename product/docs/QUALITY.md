@@ -69,6 +69,11 @@ acceptance, the checkpoint state to derive from the assessment date and all
 founder-response/acceptance/release flags to remain false. Invalid inputs and a
 weakened publication decision fail closed; CLI output excludes evidence and
 approval identifiers.
+Synthetic-series tests lock the generator version, seed, 200-session output and
+all 11 pre-holdout target transitions. They independently exercise the
+20-session comparison, prove that holdout sessions cannot emit selection
+targets and reject invalid seeds, sizes, ordering, lookbacks and holdout bounds.
+They do not test strategy returns, market realism or investment validity.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10
