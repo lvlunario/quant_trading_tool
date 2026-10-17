@@ -1,0 +1,26 @@
+name: Atlas foundation
+on:
+  pull_request:
+    paths: ['product/**', '.github/workflows/atlas-tests.yml']
+  push:
+    branches: ['investment-product/**']
+    paths: ['product/**', '.github/workflows/atlas-tests.yml']
+permissions:
+  contents: read
+jobs:
+  kernel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          sparse-checkout: product
+      - name: Verify interpreter
+        run: python3 -c 'import sys; assert sys.version_info >= (3, 11)'
+      - name: Financial invariants and invalid inputs
+        working-directory: product
+        run: python3 -m unittest discover -s tests -v
+      - name: Synthetic smoke test
+        working-directory: product
+        run: python3 -m atlas --demo
