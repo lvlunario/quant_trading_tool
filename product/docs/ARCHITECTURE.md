@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 18 M3 identity increment: `atlas.experiment_registry` serializes the
+registered invented series and fixed protocol configuration in explicit field
+order, reproduces bars and targets from the declared seed, and binds their
+SHA-256 digests to an exact Git commit. The checked-in preregistration manifest
+has no output hash and records both holdout inspection and investment
+performance as false. A separate opaque-byte output receipt provides identity,
+not semantic validation, persistence or performance authority.
+
 October 17 M3 series increment: `atlas.synthetic_series` deterministically
 generates the registered 200-session invented open/close series from a fixed
 integer seed and emits only changes from the preregistered 20-session long/cash

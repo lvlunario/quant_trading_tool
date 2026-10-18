@@ -1,5 +1,13 @@
 # Backlog and decision register
 
+October 18 evening: added the immutable M3 experiment identity layer and
+checked-in preregistration manifest. It reproduces the declared bars and targets
+from the seed, hashes canonical configuration and complete invented inputs, and
+binds them to exact code commit `dd670ae`. The output hash remains deliberately
+null; no holdout or performance evaluation occurred. Ten focused tests cover
+identity changes, fixture reproduction and fail-closed promotion. Next: compose
+the registered validation-only path and bind exact output before metrics.
+
 October 17 evening: executed the M2 checkpoint. The sourced trace remains
 8/8/0/0/0/0, all six sourced criteria are explicitly deferred, publication is
 withheld and no founder response or acceptance is recorded. M3 gained the

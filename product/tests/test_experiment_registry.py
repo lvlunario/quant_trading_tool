@@ -1,6 +1,8 @@
 from dataclasses import replace
 from decimal import Decimal
 from hashlib import sha256
+import json
+from pathlib import Path
 import unittest
 
 from atlas.experiment_registry import (
@@ -29,6 +31,30 @@ class ExperimentRegistryTests(unittest.TestCase):
         self.assertEqual(len(self.manifest.config_sha256), 64)
         self.assertEqual(len(self.manifest.input_sha256), 64)
         self.assertEqual(len(self.manifest.manifest_sha256), 64)
+
+    def test_checked_in_manifest_matches_exact_feature_commit(self):
+        path = Path(__file__).parents[1] / 'fixtures' / 'm3-experiment-manifest.json'
+        checked_in = json.loads(path.read_text(encoding='utf-8'))
+        manifest = register_experiment(
+            self.series, self.config, experiment_id='m3-synthetic-v1',
+            code_commit_sha=checked_in['code_commit_sha'])
+        expected = {
+            'schema_version': manifest.schema_version,
+            'experiment_id': manifest.experiment_id,
+            'protocol_version': manifest.protocol_version,
+            'code_commit_sha': manifest.code_commit_sha,
+            'generator_version': manifest.generator_version,
+            'config_sha256': manifest.config_sha256,
+            'input_sha256': manifest.input_sha256,
+            'status': manifest.status,
+            'output_sha256': manifest.output_sha256,
+            'synthetic_only': manifest.synthetic_only,
+            'holdout_inspected': manifest.holdout_inspected,
+            'investment_performance_established':
+                manifest.investment_performance_established,
+            'manifest_sha256': manifest.manifest_sha256,
+        }
+        self.assertEqual(checked_in, expected)
 
     def test_series_canonical_bytes_have_independent_small_fixture(self):
         series = SyntheticSeries(

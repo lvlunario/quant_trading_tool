@@ -74,6 +74,12 @@ all 11 pre-holdout target transitions. They independently exercise the
 20-session comparison, prove that holdout sessions cannot emit selection
 targets and reject invalid seeds, sizes, ordering, lookbacks and holdout bounds.
 They do not test strategy returns, market realism or investment validity.
+Experiment-registry tests independently specify canonical series bytes, require
+reproduction of bars and targets from the seed, bind an exact code commit and
+prove configuration/input/output byte changes alter their digests. The
+checked-in manifest is regenerated in test and must remain preregistered with a
+null output hash. Invalid identifiers, empty output and any attempted holdout or
+performance promotion fail closed. Hash agreement proves identity, not meaning.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

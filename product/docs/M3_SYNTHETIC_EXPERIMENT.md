@@ -14,10 +14,10 @@ Prices, distributions and corporate actions will be invented and labeled as
 such. Real watchlist names, personal holdings and licensed feeds are excluded.
 
 Before running, freeze the generator version/seed, exact input checksum, code
-commit and configuration checksum in an experiment record. The generator is
-now implemented; record persistence and the result runner are not. Retain
-failed runs and amendments; do not silently change this specification after
-results.
+commit and configuration checksum in an experiment record. The generator and
+checked-in preregistration manifest are now implemented; result persistence and
+the runner are not. Retain failed runs and amendments; do not silently change
+this specification after results.
 
 ## Evaluation protocol
 
@@ -115,9 +115,23 @@ The generator and signal are not yet composed with the execution ledger. No
 holdout return, comparator, cost-adjusted metric or investment conclusion has
 been calculated or inspected.
 
+`atlas.experiment_registry` canonicalizes the fixed configuration and complete
+invented bar/target series, reproduces both bars and targets from the declared
+seed, and binds their SHA-256 digests to an exact 40-character Git commit. The
+checked-in [`fixtures/m3-experiment-manifest.json`](../fixtures/m3-experiment-manifest.json)
+is `preregistered` against code commit `dd670ae`; its output hash is null,
+holdout inspected is false and investment performance established is false.
+A separate receipt can later hash opaque synthetic output bytes, but cannot
+promote those bytes to validated performance or assert holdout inspection.
+
+```sh
+python -m unittest discover -s tests -p test_experiment_registry.py -v
+```
+
 ## Next increment and acceptance boundary
 
-Bind experiment records to code/config/input/output hashes before composing the
-series, fold planner and execution ledger or adding metrics. M3 target remains
-October 31. M2 sourced-workbench deferrals remain independent; this work grants
-no data rights, Fidelity compatibility, release permission or founder approval.
+Compose the preregistered series, fold planner and ledger only on non-holdout
+validation sessions, then bind exact output bytes before adding independently
+checked metrics. M3 target remains October 31. M2 sourced-workbench deferrals
+remain independent; this work grants no data rights, Fidelity compatibility,
+release permission or founder approval.
