@@ -80,6 +80,13 @@ prove configuration/input/output byte changes alter their digests. The
 checked-in manifest is regenerated in test and must remain preregistered with a
 null output hash. Invalid identifiers, empty output and any attempted holdout or
 performance promotion fail closed. Hash agreement proves identity, not meaning.
+Validation-composition tests lock both registered fold partitions, five and two
+base-policy target/fill events, the exact canonical structural bytes and their
+output digest. They reject manifest/config drift and any receipt that promotes
+comparator, adverse, metric, holdout or performance state. The receipt excludes
+cash, shares, marked values, returns, drawdown, turnover and exposure. These
+checks establish composition and identity only; independent metric arithmetic,
+benchmark/adverse execution and final-holdout evidence remain pending.
 The Weekly Review projection test requires four count-only rows, exact 8/5/5/5
 required-field counts, zero complete claims, missing evidence values and false
 report eligibility while excluding every underlying field name. The October 10

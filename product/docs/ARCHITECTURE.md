@@ -1,5 +1,15 @@
 # Architecture and decisions
 
+October 19 M3 composition increment: `atlas.validation_run` reproduces the
+exact registered manifest, plans both fixed chronological folds and runs only
+their validation bars through the base synthetic ledger. Its canonical receipt
+contains window, partition, target and fill counts plus identity fields; ledger
+cash, shares and marked values never cross the boundary. Comparator, adverse
+policy, metrics and holdout inspection remain explicitly false. The checked-in
+output hash binds these exact structural bytes but does not validate investment
+performance. Adverse execution remains blocked until overlapping delayed
+targets have an explicit event-netting rule.
+
 October 18 M3 identity increment: `atlas.experiment_registry` serializes the
 registered invented series and fixed protocol configuration in explicit field
 order, reproduces bars and targets from the declared seed, and binds their

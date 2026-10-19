@@ -1,5 +1,15 @@
 # Backlog and decision register
 
+October 19 evening: composed the registered invented series, both chronological
+validation folds and the base execution ledger behind a structural-only receipt.
+The checked-in amendment binds exact feature commit, config, inputs and output
+bytes; fold receipts report 74/35 and 114/35 train/validation samples with five
+and two base fills. They expose no ledger values or performance. Comparator,
+adverse execution, metrics and holdout remain explicitly unrun; adverse daily
+targets are blocked pending an event-netting rule. Seven focused tests raise the
+local suite to 368. Next: define and independently test comparator alignment and
+overlapping delayed-event semantics before any performance metric or holdout use.
+
 October 18 evening: added the immutable M3 experiment identity layer and
 checked-in preregistration manifest. It reproduces the declared bars and targets
 from the seed, hashes canonical configuration and complete invented inputs, and

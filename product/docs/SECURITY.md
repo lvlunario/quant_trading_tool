@@ -103,6 +103,14 @@ approval state. Its candidate output may recommend review or deferral, but it
 cannot record a founder response, accept the milestone, publish a report or
 authorize release.
 
+The M3 validation receipt is generated only from checked-in invented data and
+an exact manifest. Its public boundary allowlists experiment identity, policy
+parameters and structural partition/target/fill counts. Ledger cash, shares,
+prices and marked values are excluded, as are portfolio, account and source
+data. Output hashing proves byte identity rather than anonymity or correctness;
+real experiment outputs and portfolio analysis still belong in an approved
+private boundary.
+
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 
 The normalized and synthetic-CSV import commands offer a narrow replay control: SHA-256 of exact source bytes plus an atomic SQLite uniqueness ledger containing no holdings. New ledger files are owner-only and permissive existing files are rejected. This helps prevent identical imports from being published twice; it does not encrypt data, authenticate users, provide tenant isolation, prove file authenticity, or make a hash anonymous. Store the ledger and its output only in a private location. Production requires a managed transactional audit store, key/access management, retention rules, backups and concurrency qualification.

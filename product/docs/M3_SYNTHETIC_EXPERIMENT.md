@@ -15,9 +15,10 @@ such. Real watchlist names, personal holdings and licensed feeds are excluded.
 
 Before running, freeze the generator version/seed, exact input checksum, code
 commit and configuration checksum in an experiment record. The generator and
-checked-in preregistration manifest are now implemented; result persistence and
-the runner are not. Retain failed runs and amendments; do not silently change
-this specification after results.
+checked-in preregistration manifest and validation-only composition receipt are
+now implemented; validated metrics and durable result persistence are not.
+Retain failed runs and amendments; do not silently change this specification
+after results.
 
 ## Evaluation protocol
 
@@ -128,10 +129,31 @@ promote those bytes to validated performance or assert holdout inspection.
 python -m unittest discover -s tests -p test_experiment_registry.py -v
 ```
 
+`atlas.validation_run` composes the exact manifest, registered series, fixed
+folds and base execution ledger. It creates one target at each validation start
+from information available at that close, then includes only eligible target
+changes. Fold one records 74 training, 35 validation, 11 purged and 80 excluded
+samples with five targets/fills; fold two records 114/35/11/40 with two
+targets/fills. Bars at and after session 160 never enter either ledger.
+
+[`fixtures/m3-validation-manifest.json`](../fixtures/m3-validation-manifest.json)
+binds the amendment to exact feature commit `b7cf135`; the paired
+[`fixtures/m3-validation-receipt.json`](../fixtures/m3-validation-receipt.json)
+binds 460 canonical structural bytes. It deliberately excludes cash, shares,
+marked values and every performance metric. Comparator and adverse policies are
+not executed. The adverse case remains blocked because daily targets can
+overlap the two-session delay and the current ledger correctly refuses to infer
+event-netting semantics.
+
+```sh
+python -m unittest discover -s tests -p test_validation_run.py -v
+```
+
 ## Next increment and acceptance boundary
 
-Compose the preregistered series, fold planner and ledger only on non-holdout
-validation sessions, then bind exact output bytes before adding independently
-checked metrics. M3 target remains October 31. M2 sourced-workbench deferrals
-remain independent; this work grants no data rights, Fidelity compatibility,
-release permission or founder approval.
+Define comparator alignment and explicit overlapping delayed-event semantics,
+then independently test base/adverse/comparator accounting before adding any
+metric. Keep the final holdout sealed until model selection freezes. M3 target
+remains October 31. M2 sourced-workbench deferrals remain independent; this
+work grants no data rights, Fidelity compatibility, release permission or
+founder approval.
