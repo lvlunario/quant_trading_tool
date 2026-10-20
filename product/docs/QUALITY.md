@@ -146,9 +146,12 @@ See [the registered synthetic protocol](M3_SYNTHETIC_EXPERIMENT.md).
 The synthetic execution tests independently check entry/exit notional, costs,
 cash and shares under the registered base and adverse policies. They also check
 repeated-target no-ops and reject missing events, non-Decimal/invalid prices,
-invalid policies, duplicate/unsorted inputs and overlapping delayed decisions.
-These tests prove bounded accounting behavior, not fill realism, a complete
-event engine, investable performance or production order handling.
+invalid policies, duplicate/unsorted inputs and overlapping delayed decisions
+under the default. Separate hand-calculated cases prove that explicit FIFO
+executes two overlapping 25-bps/two-session targets at their fixed events and
+treats a repeated queued target as a no-op at execution. These tests prove
+bounded accounting behavior, not fill realism, a complete event engine,
+investable performance or production order handling.
 
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 

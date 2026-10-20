@@ -93,11 +93,14 @@ they are not observed returns or evidence for the registered strategy.
 python -m unittest discover -s tests -p test_synthetic_execution.py -v
 ```
 
-The ledger does not yet generate the registered 200 sessions or 20-session
-signals, run folds, model dividends/corporate actions, persist an experiment,
-or calculate report metrics. It deliberately refuses overlapping pending
-decisions instead of defining order netting; a future event engine must make
-that policy explicit before supporting daily delayed targets.
+The ledger now preserves overlap rejection as the default and offers an explicit
+FIFO alternative. FIFO queues each target for its original fixed-delay event;
+later decisions do not cancel or move earlier targets, and a repeated target is
+evaluated against exposure when its event executes. Independently worked tests
+cover overlapping 25-bps/two-session entry and exit plus a repeated queued
+target. The registered adverse configuration has not selected this policy, so
+no adverse experiment has run. This primitive does not generate signals, run
+folds, model dividends/corporate actions, persist results or calculate metrics.
 
 `atlas.synthetic_series` now implements the registered generator and signal as
 a separate, unexecuted slice. Version `atlas.synthetic_series@1.0.0`, integer
@@ -151,9 +154,9 @@ python -m unittest discover -s tests -p test_validation_run.py -v
 
 ## Next increment and acceptance boundary
 
-Define comparator alignment and explicit overlapping delayed-event semantics,
-then independently test base/adverse/comparator accounting before adding any
-metric. Keep the final holdout sealed until model selection freezes. M3 target
-remains October 31. M2 sourced-workbench deferrals remain independent; this
-work grants no data rights, Fidelity compatibility, release permission or
+Bind the FIFO selection in an amended registered configuration, integrate the
+adverse ledger and align buy-and-hold on the same eligible calendar before
+adding any metric. Keep the final holdout sealed until model selection freezes.
+M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
+this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

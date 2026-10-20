@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 20 evening: defined an opt-in FIFO policy for overlapping delayed
+targets while retaining rejection as the execution ledger's default. Every
+queued decision keeps its fixed execution event; later decisions neither cancel
+nor move earlier targets, and repeated targets are no-ops against exposure at
+execution. Two independent arithmetic tests raise the local suite to 370. The
+registered adverse path remains unrun until an amended configuration explicitly
+selects and hashes FIFO. Next: bind that selection, integrate the adverse ledger
+and align a same-calendar buy-and-hold comparator without calculating metrics.
+
 October 19 evening: composed the registered invented series, both chronological
 validation folds and the base execution ledger behind a structural-only receipt.
 The checked-in amendment binds exact feature commit, config, inputs and output

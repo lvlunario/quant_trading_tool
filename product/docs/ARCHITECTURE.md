@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+October 20 M3 event-policy increment: `atlas.synthetic_execution` preserves
+overlap rejection as its default and adds an explicit `fifo` alternative. FIFO
+binds every decision to its original fixed-delay event, executes targets in
+decision order and evaluates repeated targets against exposure at execution;
+later decisions neither cancel nor move earlier events. This is a deterministic
+synthetic event policy, not fill realism or order management. The registered
+adverse experiment remains blocked until an amended configuration explicitly
+selects and hashes this behavior.
+
 October 19 M3 composition increment: `atlas.validation_run` reproduces the
 exact registered manifest, plans both fixed chronological folds and runs only
 their validation bars through the base synthetic ledger. Its canonical receipt
@@ -29,9 +38,10 @@ persist records or connect to market/account/order systems.
 October 16 M3 execution increment: `atlas.synthetic_execution` processes only
 typed, ordered invented bars and precomputed binary long/cash targets. A fixed
 policy schedules each transition at an exact later session, accounts for
-per-side costs with Decimal and records an immutable fill ledger. Missing or
-overlapping events fail rather than moving fills. There is no data adapter,
-signal generator, performance statistic, persistence or order endpoint.
+per-side costs with Decimal and records an immutable fill ledger. Missing events
+fail rather than moving fills; overlap rejection remains the default. There is
+no data adapter, signal generator, performance statistic, persistence or order
+endpoint.
 
 October 15 M3 increment: `atlas.evaluation` partitions immutable ordered session
 metadata into training, validation, purged and excluded samples. Inclusive label
