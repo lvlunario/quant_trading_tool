@@ -53,6 +53,7 @@ class TargetState:
 class ExecutionPolicy:
     cost_bps_per_side: int
     delay_sessions: int = 1
+    overlap_policy: str = 'reject'
 
     def __post_init__(self):
         if (type(self.cost_bps_per_side) is not int or
@@ -60,6 +61,8 @@ class ExecutionPolicy:
             raise ValueError('invalid_cost_bps')
         if type(self.delay_sessions) is not int or self.delay_sessions < 1:
             raise ValueError('invalid_execution_delay')
+        if self.overlap_policy not in ('reject', 'fifo'):
+            raise ValueError('invalid_overlap_policy')
 
     @property
     def cost_rate(self) -> Decimal:
@@ -100,8 +103,11 @@ def run_long_cash_ledger(
 
     A long entry invests all cash including entry cost; a cash target sells all
     shares and deducts exit cost. Repeated targets create no trade. Missing
-    execution events, overlapping pending decisions and post-data decisions
-    fail closed rather than being shifted or backfilled.
+    execution events and post-data decisions fail closed rather than being
+    shifted or backfilled. The default rejects overlapping pending decisions.
+    An explicit ``fifo`` policy queues every target for its fixed later event;
+    later decisions neither cancel nor move earlier targets, and repeated
+    targets are evaluated against exposure at execution time.
     """
     if not isinstance(bars, tuple) or not bars or any(
             not isinstance(row, SyntheticBar) for row in bars):
@@ -129,10 +135,12 @@ def run_long_cash_ledger(
         execution_index = decision_index + policy.delay_sessions
         if execution_index >= len(bars):
             raise ValueError('missing_execution_event')
-        if (execution_indices and
-                (execution_index <= execution_indices[-1] or
-                 decision_index < execution_indices[-1])):
-            raise ValueError('overlapping_execution_event')
+        if execution_indices:
+            if execution_index <= execution_indices[-1]:
+                raise ValueError('non_monotonic_execution_event')
+            if (policy.overlap_policy == 'reject' and
+                    decision_index < execution_indices[-1]):
+                raise ValueError('overlapping_execution_event')
         execution_indices.append(execution_index)
         scheduled.append((signal, bars[execution_index]))
 

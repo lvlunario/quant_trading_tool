@@ -51,6 +51,36 @@ class SyntheticExecutionTests(unittest.TestCase):
              exit_fill.transaction_cost, exit_fill.cash_after),
             (4, Decimal('90'), Decimal('0.225'), Decimal('89.775')))
 
+    def test_fifo_overlap_matches_independent_delayed_arithmetic(self):
+        ledger = run_long_cash_ledger(
+            self.bars, (TargetState(0, Decimal('1')),
+                        TargetState(1, Decimal('0'))),
+            initial_cash=Decimal('110.275'),
+            policy=ExecutionPolicy(25, 2, 'fifo'))
+        entry, exit_fill = ledger.fills
+        self.assertEqual(
+            (entry.decision_session, entry.execution_session, entry.quantity,
+             entry.transaction_cost),
+            (0, 2, Decimal('10'), Decimal('0.275')))
+        self.assertEqual(
+            (exit_fill.decision_session, exit_fill.execution_session,
+             exit_fill.traded_notional, exit_fill.transaction_cost,
+             exit_fill.cash_after),
+            (1, 3, Decimal('120'), Decimal('0.300'), Decimal('119.700')))
+
+    def test_fifo_repeated_pending_target_is_noop_at_execution(self):
+        ledger = run_long_cash_ledger(
+            self.bars, (TargetState(0, Decimal('1')),
+                        TargetState(1, Decimal('1')),
+                        TargetState(2, Decimal('0'))),
+            initial_cash=Decimal('110'),
+            policy=ExecutionPolicy(0, 2, 'fifo'))
+        self.assertEqual(
+            tuple((fill.decision_session, fill.execution_session)
+                  for fill in ledger.fills), ((0, 2), (2, 4)))
+        self.assertEqual(ledger.ending_cash, Decimal('90'))
+        self.assertEqual(ledger.ending_shares, Decimal('0'))
+
     def test_repeated_target_creates_no_trade_or_cost(self):
         ledger = run_long_cash_ledger(
             self.bars, (TargetState(0, Decimal('1')),
@@ -80,7 +110,8 @@ class SyntheticExecutionTests(unittest.TestCase):
         for exposure in (Decimal('-1'), Decimal('.5'), Decimal('NaN'), 1):
             with self.subTest(exposure=exposure), self.assertRaises(ValueError):
                 TargetState(0, exposure)
-        for args in ((-1,), (10001,), (10, 0), (True,), (10, True)):
+        for args in ((-1,), (10001,), (10, 0), (True,), (10, True),
+                     (10, 1, 'replace'), (10, 1, None)):
             with self.subTest(policy=args), self.assertRaises(ValueError):
                 ExecutionPolicy(*args)
         for cash in (Decimal('0'), Decimal('-1'), Decimal('NaN'), 100):
