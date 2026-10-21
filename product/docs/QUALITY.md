@@ -153,6 +153,13 @@ treats a repeated queued target as a no-op at execution. These tests prove
 bounded accounting behavior, not fill realism, a complete event engine,
 investable performance or production order handling.
 
+The adverse-validation registration tests independently prove that FIFO changes
+the configuration hash without changing the original preregistration bytes,
+that the exact manifest reproduces both validation folds under 25 bps and a
+two-session delay, and that mismatched manifests or attempted metric/holdout
+promotion fail closed. The checked-in adverse receipt contains structural
+counts only; it is not a performance result.
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.

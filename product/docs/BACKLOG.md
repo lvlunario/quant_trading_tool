@@ -1,13 +1,20 @@
 # Backlog and decision register
 
+October 21 evening: registered and executed the structural-only adverse
+validation path after explicitly hash-binding FIFO in an amended configuration.
+Both existing validation folds retain their 74/35 and 114/35 train/validation
+counts and five/two targets and fills under 25-bps-per-side costs plus a
+two-session delay. The checked-in receipt excludes cash, shares, marked values,
+returns and every performance metric; comparator execution and holdout
+inspection remain false. Five new tests raise the local suite to 375. Next:
+align and register buy-and-hold on the exact eligible calendar before metrics.
+
 October 20 evening: defined an opt-in FIFO policy for overlapping delayed
 targets while retaining rejection as the execution ledger's default. Every
 queued decision keeps its fixed execution event; later decisions neither cancel
 nor move earlier targets, and repeated targets are no-ops against exposure at
 execution. Two independent arithmetic tests raise the local suite to 370. The
-registered adverse path remains unrun until an amended configuration explicitly
-selects and hashes FIFO. Next: bind that selection, integrate the adverse ledger
-and align a same-calendar buy-and-hold comparator without calculating metrics.
+registered adverse path was still unrun pending an amended configuration.
 
 October 19 evening: composed the registered invented series, both chronological
 validation folds and the base execution ledger behind a structural-only receipt.

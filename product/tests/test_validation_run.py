@@ -209,6 +209,31 @@ class ValidationRunTests(unittest.TestCase):
                 receipt.experiment_id, receipt.manifest_sha256, receipt.folds,
                 25, 2, 'latest')
 
+    def test_checked_in_adverse_amendment_matches_feature_commit(self):
+        fixtures = Path(__file__).parents[1] / 'fixtures'
+        checked_manifest = json.loads((
+            fixtures / 'm3-adverse-validation-manifest.json').read_text('utf-8'))
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id=checked_manifest['experiment_id'],
+            code_commit_sha=checked_manifest['code_commit_sha'])
+        expected_manifest = {
+            **manifest.__dict__, 'manifest_sha256': manifest.manifest_sha256}
+        self.assertEqual(checked_manifest, expected_manifest)
+
+        receipt = compose_adverse_validation_run(self.series, config, manifest)
+        binding = receipt.output_binding(manifest)
+        checked_receipt = json.loads((
+            fixtures / 'm3-adverse-validation-receipt.json').read_text('utf-8'))
+        expected_receipt = {
+            **receipt.__dict__,
+            'folds': [row.__dict__ for row in receipt.folds],
+            'output_sha256': binding.output_sha256,
+            'output_bytes_count': binding.output_bytes_count,
+        }
+        self.assertEqual(checked_receipt, expected_receipt)
+
 
 if __name__ == '__main__':
     unittest.main()

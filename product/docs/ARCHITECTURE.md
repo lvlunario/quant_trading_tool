@@ -1,13 +1,22 @@
 # Architecture and decisions
 
+October 21 M3 adverse-registration increment: `ExperimentConfig` preserves the
+original canonical bytes when no overlap amendment exists, then appends an
+explicit `adverse_overlap_policy=fifo` field for the amended run. The resulting
+manifest binds the altered configuration and the same invented input series to
+feature commit `bca940e`. `atlas.validation_run` executes both validation folds
+at 25 bps per side with a two-session FIFO delay and emits only partition,
+target and fill counts. Comparator, ledger values, metrics and holdout remain
+outside the receipt.
+
 October 20 M3 event-policy increment: `atlas.synthetic_execution` preserves
 overlap rejection as its default and adds an explicit `fifo` alternative. FIFO
 binds every decision to its original fixed-delay event, executes targets in
 decision order and evaluates repeated targets against exposure at execution;
 later decisions neither cancel nor move earlier events. This is a deterministic
 synthetic event policy, not fill realism or order management. The registered
-adverse experiment remains blocked until an amended configuration explicitly
-selects and hashes this behavior.
+adverse experiment remained blocked until the October 21 amendment explicitly
+selected and hashed this behavior.
 
 October 19 M3 composition increment: `atlas.validation_run` reproduces the
 exact registered manifest, plans both fixed chronological folds and runs only

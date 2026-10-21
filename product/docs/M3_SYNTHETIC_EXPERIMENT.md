@@ -98,8 +98,9 @@ FIFO alternative. FIFO queues each target for its original fixed-delay event;
 later decisions do not cancel or move earlier targets, and a repeated target is
 evaluated against exposure when its event executes. Independently worked tests
 cover overlapping 25-bps/two-session entry and exit plus a repeated queued
-target. The registered adverse configuration has not selected this policy, so
-no adverse experiment has run. This primitive does not generate signals, run
+target. The original base receipt continues to record the then-undefined
+adverse policy; the October 21 amendment below separately selects FIFO. This
+primitive does not generate signals, run
 folds, model dividends/corporate actions, persist results or calculate metrics.
 
 `atlas.synthetic_series` now implements the registered generator and signal as
@@ -115,9 +116,9 @@ facts, not strategy performance.
 python -m unittest discover -s tests -p test_synthetic_series.py -v
 ```
 
-The generator and signal are not yet composed with the execution ledger. No
-holdout return, comparator, cost-adjusted metric or investment conclusion has
-been calculated or inspected.
+The generator and signal are now composed with the base and adverse ledgers only
+for the two validation windows described below. No holdout return, comparator,
+cost-adjusted metric or investment conclusion has been calculated or inspected.
 
 `atlas.experiment_registry` canonicalizes the fixed configuration and complete
 invented bar/target series, reproduces both bars and targets from the declared
@@ -148,15 +149,25 @@ not executed. The adverse case remains blocked because daily targets can
 overlap the two-session delay and the current ledger correctly refuses to infer
 event-netting semantics.
 
+The October 21 adverse amendment appends
+`adverse_overlap_policy=fifo` to the otherwise unchanged canonical
+configuration and binds it to feature commit `bca940e`. The paired
+[`m3-adverse-validation-manifest.json`](../fixtures/m3-adverse-validation-manifest.json)
+and
+[`m3-adverse-validation-receipt.json`](../fixtures/m3-adverse-validation-receipt.json)
+run the same two validation folds at 25 bps per side and a two-session delay.
+They record five and two targets/fills, respectively, and bind 409 canonical
+structural bytes. Cash, shares, marked values, returns and every metric remain
+excluded; comparator execution and holdout inspection are false.
+
 ```sh
 python -m unittest discover -s tests -p test_validation_run.py -v
 ```
 
 ## Next increment and acceptance boundary
 
-Bind the FIFO selection in an amended registered configuration, integrate the
-adverse ledger and align buy-and-hold on the same eligible calendar before
-adding any metric. Keep the final holdout sealed until model selection freezes.
+Align and register buy-and-hold on the same eligible calendar before adding any
+metric. Keep the final holdout sealed until model selection freezes.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.
