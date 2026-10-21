@@ -7,7 +7,8 @@ import unittest
 
 from atlas.experiment_registry import ExperimentConfig, register_experiment
 from atlas.validation_run import (
-    ValidationFoldReceipt, ValidationRunReceipt, compose_validation_run,
+    AdverseValidationRunReceipt, ValidationFoldReceipt, ValidationRunReceipt,
+    compose_adverse_validation_run, compose_validation_run,
 )
 from atlas.synthetic_series import registered_series
 
@@ -146,6 +147,67 @@ class ValidationRunTests(unittest.TestCase):
                 replace(receipt, **change)
         with self.assertRaises(ValueError):
             ValidationFoldReceipt('fold-1', 80, 120, 1, 1, 0, 0, 1, 2)
+
+    def test_registered_adverse_run_uses_hash_bound_fifo_without_metrics(self):
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-adverse-v1',
+            code_commit_sha='b' * 40)
+        receipt = compose_adverse_validation_run(self.series, config, manifest)
+        self.assertEqual(receipt.folds, (
+            ValidationFoldReceipt('fold-1', 80, 120, 74, 35, 11, 80, 5, 5),
+            ValidationFoldReceipt('fold-2', 120, 160, 114, 35, 11, 40, 2, 2),
+        ))
+        self.assertEqual(receipt.adverse_cost_bps_per_side, 25)
+        self.assertEqual(receipt.adverse_delay_sessions, 2)
+        self.assertEqual(receipt.adverse_overlap_policy, 'fifo')
+        self.assertTrue(receipt.adverse_policy_executed)
+        self.assertFalse(receipt.comparator_executed)
+        self.assertFalse(receipt.metrics_calculated)
+        self.assertFalse(receipt.holdout_inspected)
+        output = receipt.canonical_bytes().decode('ascii')
+        self.assertIn('adverse_policy=25|2|fifo', output)
+        for prohibited in ('ending_cash', 'ending_shares', 'marked_value',
+                           'return=', 'drawdown=', 'turnover=', 'exposure='):
+            self.assertNotIn(prohibited, output)
+
+    def test_adverse_run_rejects_unamended_or_mismatched_registration(self):
+        with self.assertRaisesRegex(
+                ValueError, 'unsupported_adverse_validation_configuration'):
+            compose_adverse_validation_run(
+                self.series, self.config, self.manifest)
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-adverse-v1',
+            code_commit_sha='b' * 40)
+        with self.assertRaisesRegex(
+                ValueError, 'adverse_validation_manifest_mismatch'):
+            compose_adverse_validation_run(
+                self.series, config,
+                replace(manifest, config_sha256='c' * 64))
+
+    def test_adverse_receipt_cannot_promote_unrun_work(self):
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-adverse-v1',
+            code_commit_sha='b' * 40)
+        receipt = compose_adverse_validation_run(self.series, config, manifest)
+        for change in (
+                {'comparator_executed': True}, {'adverse_policy_executed': False},
+                {'adverse_cost_bps_per_side': 24},
+                {'adverse_delay_sessions': 1},
+                {'metrics_calculated': True}, {'holdout_inspected': True},
+                {'investment_performance_established': True},
+                {'status': 'validated_performance'}):
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                replace(receipt, **change)
+        with self.assertRaises(ValueError):
+            AdverseValidationRunReceipt(
+                receipt.experiment_id, receipt.manifest_sha256, receipt.folds,
+                25, 2, 'latest')
 
 
 if __name__ == '__main__':

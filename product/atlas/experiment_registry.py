@@ -39,6 +39,7 @@ class ExperimentConfig:
     base_delay_sessions: int = 1
     adverse_cost_bps_per_side: int = 25
     adverse_delay_sessions: int = 2
+    adverse_overlap_policy: str | None = None
 
     def __post_init__(self):
         if not re.fullmatch(r'[A-Z][A-Z0-9_]{1,15}', self.instrument_id):
@@ -60,6 +61,8 @@ class ExperimentConfig:
             raise ValueError('invalid_experiment_configuration')
         if self.comparator != 'buy_and_hold':
             raise ValueError('unsupported_experiment_comparator')
+        if self.adverse_overlap_policy not in (None, 'fifo'):
+            raise ValueError('unsupported_adverse_overlap_policy')
         if (not isinstance(self.initial_cash, Decimal) or
                 not self.initial_cash.is_finite() or self.initial_cash <= 0):
             raise ValueError('invalid_experiment_initial_cash')
@@ -79,7 +82,10 @@ class ExperimentConfig:
             ('adverse_cost_bps_per_side', str(self.adverse_cost_bps_per_side)),
             ('adverse_delay_sessions', str(self.adverse_delay_sessions)),
         )
-        return ''.join(f'{name}={value}\n' for name, value in fields).encode('ascii')
+        content = ''.join(f'{name}={value}\n' for name, value in fields)
+        if self.adverse_overlap_policy is not None:
+            content += f'adverse_overlap_policy={self.adverse_overlap_policy}\n'
+        return content.encode('ascii')
 
     @property
     def config_sha256(self) -> str:

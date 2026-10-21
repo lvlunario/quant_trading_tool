@@ -78,7 +78,7 @@ class ExperimentRegistryTests(unittest.TestCase):
             {'initial_cash': Decimal('99999')}, {'base_cost_bps_per_side': 11},
             {'base_delay_sessions': 2}, {'adverse_cost_bps_per_side': 26},
             {'adverse_delay_sessions': 3}, {'label_horizon_sessions': 6},
-            {'training_gap_sessions': 2},
+            {'training_gap_sessions': 2}, {'adverse_overlap_policy': 'fifo'},
         )
         for change in changes:
             with self.subTest(change=change):
@@ -88,6 +88,16 @@ class ExperimentRegistryTests(unittest.TestCase):
         self.assertEqual(
             self.config.config_sha256,
             replace(self.config, initial_cash=Decimal('100000.00')).config_sha256)
+
+    def test_adverse_overlap_amendment_is_explicit_and_hash_bound(self):
+        amended = replace(self.config, adverse_overlap_policy='fifo')
+        self.assertEqual(self.config.config_sha256,
+                         '91135464680c078552719e6934f7788899600b9760999ebabebc3f56d761ceea')
+        self.assertIn(b'adverse_overlap_policy=fifo\n', amended.canonical_bytes())
+        self.assertNotEqual(self.config.config_sha256, amended.config_sha256)
+        with self.assertRaisesRegex(
+                ValueError, 'unsupported_adverse_overlap_policy'):
+            replace(self.config, adverse_overlap_policy='latest')
 
     def test_series_or_config_change_breaks_manifest_identity(self):
         changed_config = register_experiment(

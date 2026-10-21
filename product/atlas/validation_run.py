@@ -1,9 +1,9 @@
 """Validation-only composition for the registered synthetic M3 experiment.
 
 This module connects the frozen invented series, chronological split planner
-and base execution ledger.  Its public receipt contains structural counts and
-identity hashes only.  It does not expose ledger values, calculate performance,
-run the comparator/adverse case or inspect the reserved holdout.
+and execution ledger. Its public receipts contain structural counts and identity
+hashes only. They do not expose ledger values, calculate performance, run the
+comparator or inspect the reserved holdout.
 """
 from dataclasses import dataclass
 from decimal import Decimal
@@ -103,6 +103,64 @@ class ValidationRunReceipt:
         return bind_synthetic_output(manifest, self.canonical_bytes())
 
 
+@dataclass(frozen=True)
+class AdverseValidationRunReceipt:
+    experiment_id: str
+    manifest_sha256: str
+    folds: tuple[ValidationFoldReceipt, ...]
+    adverse_cost_bps_per_side: int
+    adverse_delay_sessions: int
+    adverse_overlap_policy: str
+    schema_version: int = SCHEMA_VERSION
+    status: str = 'synthetic_plumbing_only'
+    comparator_executed: bool = False
+    adverse_policy_executed: bool = True
+    metrics_calculated: bool = False
+    holdout_inspected: bool = False
+    investment_performance_established: bool = False
+
+    def __post_init__(self):
+        if (self.schema_version != SCHEMA_VERSION or
+                self.status != 'synthetic_plumbing_only' or
+                tuple(row.fold_id for row in self.folds) != ('fold-1', 'fold-2') or
+                self.adverse_cost_bps_per_side != 25 or
+                self.adverse_delay_sessions != 2 or
+                self.adverse_overlap_policy != 'fifo' or
+                self.comparator_executed is not False or
+                self.adverse_policy_executed is not True or
+                self.metrics_calculated is not False or
+                self.holdout_inspected is not False or
+                self.investment_performance_established is not False):
+            raise ValueError('invalid_adverse_validation_run_state')
+
+    def canonical_bytes(self) -> bytes:
+        lines = (
+            f'schema_version={self.schema_version}',
+            f'experiment_id={self.experiment_id}',
+            f'manifest_sha256={self.manifest_sha256}',
+            f'status={self.status}',
+            f'adverse_policy={self.adverse_cost_bps_per_side}|'
+            f'{self.adverse_delay_sessions}|{self.adverse_overlap_policy}',
+            *(f'fold={row.fold_id}|{row.validation_start}|{row.validation_end}|'
+              f'{row.train_count}|{row.validation_count}|{row.purged_count}|'
+              f'{row.excluded_count}|{row.target_count}|{row.fill_count}'
+              for row in self.folds),
+            'comparator_executed=false',
+            'adverse_policy_executed=true',
+            'metrics_calculated=false',
+            'holdout_inspected=false',
+            'investment_performance_established=false',
+        )
+        return ('\n'.join(lines) + '\n').encode('ascii')
+
+    def output_binding(self, manifest: ExperimentManifest) -> ExperimentOutputReceipt:
+        if (not isinstance(manifest, ExperimentManifest) or
+                manifest.experiment_id != self.experiment_id or
+                manifest.manifest_sha256 != self.manifest_sha256):
+            raise ValueError('adverse_validation_manifest_mismatch')
+        return bind_synthetic_output(manifest, self.canonical_bytes())
+
+
 def _target_at(series: SyntheticSeries, session: int, lookback: int) -> Decimal:
     return (Decimal('1') if series.bars[session].close_price >
             series.bars[session - lookback].close_price else Decimal('0'))
@@ -161,3 +219,55 @@ def compose_validation_run(
         manifest.experiment_id, manifest.manifest_sha256,
         tuple(fold_receipts), config.base_cost_bps_per_side,
         config.base_delay_sessions)
+
+
+def compose_adverse_validation_run(
+        series: SyntheticSeries, config: ExperimentConfig,
+        manifest: ExperimentManifest) -> AdverseValidationRunReceipt:
+    """Run the registered validation windows through the amended adverse ledger."""
+    if not isinstance(series, SyntheticSeries) or not isinstance(
+            config, ExperimentConfig) or not isinstance(manifest, ExperimentManifest):
+        raise ValueError('invalid_adverse_validation_input')
+    registered_config = ExperimentConfig(adverse_overlap_policy='fifo')
+    if config != registered_config:
+        raise ValueError('unsupported_adverse_validation_configuration')
+    expected = register_experiment(
+        series, config, experiment_id=manifest.experiment_id,
+        code_commit_sha=manifest.code_commit_sha)
+    if manifest != expected:
+        raise ValueError('adverse_validation_manifest_mismatch')
+
+    samples = tuple(
+        SampleWindow(session, session, session + config.label_horizon_sessions)
+        for session in range(config.sessions))
+    adverse_policy = ExecutionPolicy(
+        config.adverse_cost_bps_per_side, config.adverse_delay_sessions,
+        config.adverse_overlap_policy)
+    fold_receipts: list[ValidationFoldReceipt] = []
+    for index, (start, end) in enumerate(_REGISTERED_WINDOWS, start=1):
+        split = plan_fold(samples, FoldSpec(
+            0, start, end, config.holdout_start,
+            config.training_gap_sessions))
+        eligible = set(split.validation_sessions)
+        signals = (TargetState(
+            start, _target_at(series, start, config.lookback_sessions)),) + tuple(
+                target for target in series.targets
+                if target.decision_session > start and
+                target.decision_session in eligible)
+        ledger = run_long_cash_ledger(
+            series.bars[start:end], signals, initial_cash=config.initial_cash,
+            policy=adverse_policy)
+        if (ledger.marked_at_session >= config.holdout_start or
+                any(fill.decision_session not in eligible or
+                    fill.execution_session >= config.holdout_start
+                    for fill in ledger.fills)):
+            raise ValueError('holdout_boundary_violation')
+        fold_receipts.append(ValidationFoldReceipt(
+            f'fold-{index}', start, end, len(split.train_sessions),
+            len(split.validation_sessions), len(split.purged_sessions),
+            len(split.excluded_sessions), len(signals), len(ledger.fills)))
+
+    return AdverseValidationRunReceipt(
+        manifest.experiment_id, manifest.manifest_sha256,
+        tuple(fold_receipts), config.adverse_cost_bps_per_side,
+        config.adverse_delay_sessions, config.adverse_overlap_policy)
