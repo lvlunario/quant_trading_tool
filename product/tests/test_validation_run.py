@@ -178,6 +178,31 @@ class ValidationRunTests(unittest.TestCase):
                 receipt.experiment_id, receipt.manifest_sha256, receipt.folds,
                 'cash', 10, 1, 25, 2, 'fifo')
 
+    def test_checked_in_comparator_evidence_matches_feature_commit(self):
+        fixtures = Path(__file__).parents[1] / 'fixtures'
+        checked_manifest = json.loads((
+            fixtures / 'm3-comparator-validation-manifest.json').read_text('utf-8'))
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id=checked_manifest['experiment_id'],
+            code_commit_sha=checked_manifest['code_commit_sha'])
+        self.assertEqual(
+            checked_manifest,
+            {**manifest.__dict__, 'manifest_sha256': manifest.manifest_sha256})
+
+        receipt = compose_comparator_validation_run(
+            self.series, config, manifest)
+        binding = receipt.output_binding(manifest)
+        checked_receipt = json.loads((
+            fixtures / 'm3-comparator-validation-receipt.json').read_text('utf-8'))
+        self.assertEqual(checked_receipt, {
+            **receipt.__dict__,
+            'folds': [row.__dict__ for row in receipt.folds],
+            'output_sha256': binding.output_sha256,
+            'output_bytes_count': binding.output_bytes_count,
+        })
+
     def test_receipt_discloses_unrun_work_without_financial_values(self):
         receipt = compose_validation_run(
             self.series, self.config, self.manifest)

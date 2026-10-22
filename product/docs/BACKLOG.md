@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 22 evening: registered buy-and-hold on the exact two validation
+calendars under both the base 10-bps/one-session policy and adverse
+25-bps/two-session-FIFO policy. The hash-bound receipt records 35 eligible
+decision samples, the exact mark session and one target/fill per policy in each
+fold, while excluding every ledger value and performance metric. Five new tests
+raise the local suite to 380. Next: independently specify and test
+validation-only cumulative return, drawdown, turnover and exposure arithmetic
+before releasing any candidate/comparator metric; keep holdout sealed.
+
 October 21 evening: registered and executed the structural-only adverse
 validation path after explicitly hash-binding FIFO in an amended configuration.
 Both existing validation folds retain their 74/35 and 114/35 train/validation

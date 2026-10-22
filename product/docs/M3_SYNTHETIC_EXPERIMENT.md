@@ -160,13 +160,26 @@ They record five and two targets/fills, respectively, and bind 409 canonical
 structural bytes. Cash, shares, marked values, returns and every metric remain
 excluded; comparator execution and holdout inspection are false.
 
+The October 22 comparator amendment uses the same FIFO-amended configuration
+and exact invented input hash. Its checked-in
+[`m3-comparator-validation-manifest.json`](../fixtures/m3-comparator-validation-manifest.json)
+binds feature commit `40ce171`, and the paired
+[`m3-comparator-validation-receipt.json`](../fixtures/m3-comparator-validation-receipt.json)
+runs one buy-and-hold target in each [80,120) and [120,160) calendar under both
+10-bps/one-session and 25-bps/two-session-FIFO assumptions. Each fold retains
+35 eligible decision samples, marks only at sessions 119 and 159, and records
+one target/fill per policy. The 483 canonical bytes contain no cash, shares,
+marked values, returns, drawdowns, turnover or exposure. Metrics and holdout
+inspection remain false.
+
 ```sh
 python -m unittest discover -s tests -p test_validation_run.py -v
 ```
 
 ## Next increment and acceptance boundary
 
-Align and register buy-and-hold on the same eligible calendar before adding any
+Define independently checked validation-only cumulative-return, drawdown,
+turnover and exposure arithmetic before emitting any candidate/comparator
 metric. Keep the final holdout sealed until model selection freezes.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
