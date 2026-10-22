@@ -7,8 +7,10 @@ import unittest
 
 from atlas.experiment_registry import ExperimentConfig, register_experiment
 from atlas.validation_run import (
-    AdverseValidationRunReceipt, ValidationFoldReceipt, ValidationRunReceipt,
-    compose_adverse_validation_run, compose_validation_run,
+    AdverseValidationRunReceipt, ComparatorFoldReceipt,
+    ComparatorValidationRunReceipt, ValidationFoldReceipt, ValidationRunReceipt,
+    compose_adverse_validation_run, compose_comparator_validation_run,
+    compose_validation_run,
 )
 from atlas.synthetic_series import registered_series
 
@@ -100,6 +102,81 @@ class ValidationRunTests(unittest.TestCase):
             'output_bytes_count': binding.output_bytes_count,
         }
         self.assertEqual(checked_receipt, expected_receipt)
+
+    def test_comparator_uses_same_calendar_under_both_policies(self):
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-comparator-v1',
+            code_commit_sha='c' * 40)
+        receipt = compose_comparator_validation_run(
+            self.series, config, manifest)
+        self.assertEqual(receipt.folds, (
+            ComparatorFoldReceipt('fold-1', 80, 120, 35, 119, 1, 1, 1, 1),
+            ComparatorFoldReceipt('fold-2', 120, 160, 35, 159, 1, 1, 1, 1),
+        ))
+        self.assertTrue(receipt.comparator_executed)
+        self.assertTrue(receipt.base_comparator_executed)
+        self.assertTrue(receipt.adverse_comparator_executed)
+        self.assertFalse(receipt.metrics_calculated)
+        self.assertFalse(receipt.holdout_inspected)
+
+    def test_comparator_receipt_is_structural_and_hash_bound(self):
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-comparator-v1',
+            code_commit_sha='c' * 40)
+        receipt = compose_comparator_validation_run(
+            self.series, config, manifest)
+        output = receipt.canonical_bytes().decode('ascii')
+        self.assertIn('comparator=buy_and_hold', output)
+        self.assertIn('base_policy=10|1', output)
+        self.assertIn('adverse_policy=25|2|fifo', output)
+        for prohibited in ('ending_cash', 'ending_shares', 'marked_value',
+                           'return=', 'drawdown=', 'turnover=', 'exposure='):
+            self.assertNotIn(prohibited, output)
+        binding = receipt.output_binding(manifest)
+        self.assertEqual(
+            binding.output_sha256,
+            sha256(receipt.canonical_bytes()).hexdigest())
+
+    def test_comparator_rejects_unamended_or_mismatched_registration(self):
+        with self.assertRaisesRegex(
+                ValueError, 'unsupported_comparator_validation_configuration'):
+            compose_comparator_validation_run(
+                self.series, self.config, self.manifest)
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-comparator-v1',
+            code_commit_sha='c' * 40)
+        with self.assertRaisesRegex(
+                ValueError, 'comparator_validation_manifest_mismatch'):
+            compose_comparator_validation_run(
+                self.series, config,
+                replace(manifest, input_sha256='d' * 64))
+
+    def test_comparator_receipt_cannot_promote_performance_or_holdout(self):
+        config = replace(self.config, adverse_overlap_policy='fifo')
+        manifest = register_experiment(
+            self.series, config,
+            experiment_id='m3-synthetic-comparator-v1',
+            code_commit_sha='c' * 40)
+        receipt = compose_comparator_validation_run(
+            self.series, config, manifest)
+        for change in (
+                {'metrics_calculated': True}, {'holdout_inspected': True},
+                {'investment_performance_established': True},
+                {'base_comparator_executed': False},
+                {'adverse_comparator_executed': False},
+                {'status': 'validated_performance'}):
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                replace(receipt, **change)
+        with self.assertRaises(ValueError):
+            ComparatorValidationRunReceipt(
+                receipt.experiment_id, receipt.manifest_sha256, receipt.folds,
+                'cash', 10, 1, 25, 2, 'fifo')
 
     def test_receipt_discloses_unrun_work_without_financial_values(self):
         receipt = compose_validation_run(
