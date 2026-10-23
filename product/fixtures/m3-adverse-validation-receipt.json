@@ -1,0 +1,40 @@
+{
+  "experiment_id": "m3-synthetic-adverse-v1",
+  "manifest_sha256": "1d9a61c7e30b35561d2005d871a4343fd1fa53eb6066ee83df5874c6ea666fae",
+  "folds": [
+    {
+      "fold_id": "fold-1",
+      "validation_start": 80,
+      "validation_end": 120,
+      "train_count": 74,
+      "validation_count": 35,
+      "purged_count": 11,
+      "excluded_count": 80,
+      "target_count": 5,
+      "fill_count": 5
+    },
+    {
+      "fold_id": "fold-2",
+      "validation_start": 120,
+      "validation_end": 160,
+      "train_count": 114,
+      "validation_count": 35,
+      "purged_count": 11,
+      "excluded_count": 40,
+      "target_count": 2,
+      "fill_count": 2
+    }
+  ],
+  "adverse_cost_bps_per_side": 25,
+  "adverse_delay_sessions": 2,
+  "adverse_overlap_policy": "fifo",
+  "schema_version": 1,
+  "status": "synthetic_plumbing_only",
+  "comparator_executed": false,
+  "adverse_policy_executed": true,
+  "metrics_calculated": false,
+  "holdout_inspected": false,
+  "investment_performance_established": false,
+  "output_sha256": "ce1ebc7d422207e72ec8ddb58d88b87abd95d0d519cddd301e7036734045ee72",
+  "output_bytes_count": 409
+}
