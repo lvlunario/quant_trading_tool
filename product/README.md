@@ -6,12 +6,17 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated October 22, 2026
+## What you can try and when — updated October 23, 2026
 
 As of October 22, the latest local suite has 380 passing tests. M3 includes a
 hash-bound structural buy-and-hold comparator on both registered validation
 calendars under the base and adverse execution assumptions; its receipt contains
 only calendar and target/fill counts, not financial values or performance.
+
+As of October 23, a separate synthetic arithmetic kernel fixes the definitions
+for gross/net cumulative return, maximum drawdown, turnover and long exposure.
+Six independently worked fixtures pass and the full local suite has 386 tests;
+the registered experiment still emits no metric and the final holdout is sealed.
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
@@ -282,7 +287,7 @@ The `atlas.macro_vintages` contract keeps original and revised economic releases
 
 The root `src/` quantum experiment is legacy research and is not imported by Atlas. Its historical validation approach is not accepted performance evidence.
 
-M3 engineering work now includes a [registered synthetic experiment protocol](docs/M3_SYNTHETIC_EXPERIMENT.md), tested chronological split planner, deterministic 200-session invented series with fixed 20-session pre-holdout targets and validation-only base and adverse composition receipts bound to exact code/config/input/output hashes. The adverse amendment explicitly selects FIFO, 25-bps-per-side costs and a two-session delay; it exposes only structural counts. Comparator, metrics and holdout inspection remain unrun. No complete backtest or performance result is available yet.
+M3 engineering work now includes a [registered synthetic experiment protocol](docs/M3_SYNTHETIC_EXPERIMENT.md), tested chronological split planner, deterministic 200-session invented series with fixed 20-session pre-holdout targets and validation-only base, adverse and buy-and-hold composition receipts bound to exact code/config/input/output hashes. The adverse amendment explicitly selects FIFO, 25-bps-per-side costs and a two-session delay; all receipts expose only structural counts. A separate hand-worked arithmetic kernel fixes four validation metric definitions but has not been connected to the registered experiment. Holdout inspection remains false. No complete backtest or performance result is available yet.
 The preceding slice added a synthetic-only Decimal execution ledger for
 next-event long/cash transitions, fixed per-side costs and base/adverse delays.
 It is accounting infrastructure, not a broker/order adapter or performance claim.

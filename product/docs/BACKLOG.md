@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 23 evening: fixed the synthetic validation metric semantics without
+running the registered experiment. Gross return replays identical targets,
+delay and FIFO at zero cost; net return/drawdown include configured costs;
+turnover divides absolute traded notional by initial capital; exposure counts
+long close marks. Six hand-worked tests raise the full suite to 386 and prevent
+holdout/performance promotion. Next: bind this kernel to the registered
+candidate and comparator in a redacted validation-only metric receipt while
+keeping the final holdout sealed.
+
 October 22 evening: registered buy-and-hold on the exact two validation
 calendars under both the base 10-bps/one-session policy and adverse
 25-bps/two-session-FIFO policy. The hash-bound receipt records 35 eligible

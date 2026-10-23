@@ -160,6 +160,14 @@ two-session delay, and that mismatched manifests or attempted metric/holdout
 promotion fail closed. The checked-in adverse receipt contains structural
 counts only; it is not a performance result.
 
+The M3 metric-arithmetic tests use independent small invented ledgers to verify
+gross replay, cost-inclusive net return, initial-capital/running-peak drawdown,
+absolute-notional turnover and close-mark exposure. They include a round trip,
+a 25% peak-to-trough loss, entry-cost drawdown, FIFO/delay preservation and
+fail-closed missing events. These tests fix arithmetic semantics only: the
+kernel is not connected to the registered experiment, releases no candidate or
+comparator result and cannot promote holdout or investment-performance state.
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.

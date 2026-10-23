@@ -176,11 +176,26 @@ inspection remain false.
 python -m unittest discover -s tests -p test_validation_run.py -v
 ```
 
+`atlas.evaluation_metrics` now fixes the arithmetic boundary separately from
+the registered experiment. Gross cumulative return replays identical targets,
+delay and FIFO semantics with zero transaction cost. Net cumulative return and
+maximum drawdown use the supplied cost policy and close marks, with initial
+capital as the first peak. Turnover is total absolute traded notional divided
+by initial capital; long exposure is long close marks divided by all supplied
+close marks. Six hand-worked tests cover exact round-trip arithmetic, a 25%
+drawdown, entry-cost loss, FIFO/delay preservation, invalid events and
+fail-closed state promotion. No registered candidate/comparator metric or
+holdout value is calculated.
+
+```sh
+python -m unittest discover -s tests -p test_evaluation_metrics.py -v
+```
+
 ## Next increment and acceptance boundary
 
-Define independently checked validation-only cumulative-return, drawdown,
-turnover and exposure arithmetic before emitting any candidate/comparator
-metric. Keep the final holdout sealed until model selection freezes.
+Bind the exact metric semantics to the registered validation candidate and
+comparator, then emit a redacted, hash-bound validation-only metric receipt.
+Keep the final holdout sealed until model selection freezes.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

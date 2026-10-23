@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 23 M3 metric-semantics increment: `atlas.evaluation_metrics` replays the
+same invented targets, delay and overlap policy at zero cost for gross return,
+while the supplied policy drives net return, close-mark drawdown and turnover.
+Turnover uses absolute traded notional divided by initial capital; exposure is
+the fraction of supplied close marks held long after any opening fill. Initial
+capital is the first drawdown peak. The module accepts no experiment manifest,
+does not select or compare a strategy and cannot inspect or claim a holdout.
+
 October 21 M3 adverse-registration increment: `ExperimentConfig` preserves the
 original canonical bytes when no overlap amendment exists, then appends an
 explicit `adverse_overlap_policy=fifo` field for the amended run. The resulting
