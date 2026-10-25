@@ -191,11 +191,27 @@ holdout value is calculated.
 python -m unittest discover -s tests -p test_evaluation_metrics.py -v
 ```
 
+The October 25 registered metric amendment binds feature commit `2dde2f5` in
+[`m3-validation-metrics-manifest.json`](../fixtures/m3-validation-metrics-manifest.json).
+Its paired
+[`m3-validation-metrics-receipt.json`](../fixtures/m3-validation-metrics-receipt.json)
+contains eight exact Decimal metric vectors: candidate and buy-and-hold under
+base and adverse policies for each of the two validation folds. The canonical
+1,755-byte output is hash-bound and excludes bars, prices, cash, shares,
+quantities and fills. These are invented validation outputs, not empirical
+returns. Selection is not frozen, real-data validation is false, the holdout is
+uninspected and investment performance is not established.
+
+```sh
+python -m unittest discover -s tests -p test_validation_metric_run.py -v
+```
+
 ## Next increment and acceptance boundary
 
-Bind the exact metric semantics to the registered validation candidate and
-comparator, then emit a redacted, hash-bound validation-only metric receipt.
-Keep the final holdout sealed until model selection freezes.
+Prepare the October 26 M3 review packet from the immutable validation receipt.
+Recommend a prospective selection-freeze disposition without tuning or
+redefining metrics after observing them; keep the final holdout sealed until
+that disposition is explicitly recorded.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

@@ -168,6 +168,13 @@ fail-closed missing events. These tests fix arithmetic semantics only: the
 kernel is not connected to the registered experiment, releases no candidate or
 comparator result and cannot promote holdout or investment-performance state.
 
+The registered validation-metric tests require both exact fold calendars, 40
+close marks per candidate/comparator/policy vector, exact manifest and output
+hashes, and rejection of changed configuration, identity or state. The public
+fixture serializes Decimal metrics as strings and excludes every price, cash,
+share, quantity, fill and traded-notional field. Passing these tests does not
+freeze selection, validate real data or authorize final-holdout inspection.
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.

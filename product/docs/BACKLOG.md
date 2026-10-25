@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 25 evening: bound the exact metric semantics to the registered
+candidate and buy-and-hold comparator across both fixed validation folds and
+both execution policies. The 1,755-byte receipt contains eight Decimal metric
+vectors while excluding prices, cash, shares and fills; selection, real-data
+validation, holdout inspection and performance claims remain false. Seven
+focused tests raise the full suite to 393. Next: prepare the October 26 M3
+review packet and recommend a prospective selection-freeze disposition without
+post-result tuning; keep holdout sealed.
+
 October 23 evening: fixed the synthetic validation metric semantics without
 running the registered experiment. Gross return replays identical targets,
 delay and FIFO at zero cost; net return/drawdown include configured costs;

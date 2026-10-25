@@ -1,6 +1,8 @@
 from dataclasses import replace
 from decimal import Decimal
 from hashlib import sha256
+import json
+from pathlib import Path
 import unittest
 
 from atlas.evaluation_metrics import EvaluationMetrics
@@ -100,6 +102,59 @@ class ValidationMetricRunTests(unittest.TestCase):
         with self.assertRaisesRegex(
                 ValueError, 'validation_metric_manifest_mismatch'):
             receipt.output_binding(other)
+
+    def test_checked_in_evidence_matches_feature_commit_and_exact_output(self):
+        fixtures = Path(__file__).parents[1] / 'fixtures'
+        checked_manifest = json.loads((
+            fixtures / 'm3-validation-metrics-manifest.json').read_text('utf-8'))
+        manifest = register_experiment(
+            self.series, self.config,
+            experiment_id=checked_manifest['experiment_id'],
+            code_commit_sha=checked_manifest['code_commit_sha'])
+        self.assertEqual(
+            checked_manifest,
+            {**manifest.__dict__, 'manifest_sha256': manifest.manifest_sha256})
+
+        receipt = compose_validation_metric_run(
+            self.series, self.config, manifest)
+        binding = receipt.output_binding(manifest)
+
+        def metric(row):
+            return {
+                name: (format(value, 'f') if isinstance(value, Decimal) else value)
+                for name, value in row.__dict__.items()
+            }
+
+        expected = {
+            'schema_version': receipt.schema_version,
+            'experiment_id': receipt.experiment_id,
+            'manifest_sha256': receipt.manifest_sha256,
+            'status': receipt.status,
+            'benchmark': receipt.benchmark,
+            'folds': [{
+                'fold_id': fold.fold_id,
+                'validation_start': fold.validation_start,
+                'validation_end': fold.validation_end,
+                'eligible_decision_count': fold.eligible_decision_count,
+                'candidate_base': metric(fold.candidate_base),
+                'comparator_base': metric(fold.comparator_base),
+                'candidate_adverse': metric(fold.candidate_adverse),
+                'comparator_adverse': metric(fold.comparator_adverse),
+            } for fold in receipt.folds],
+            'metrics_calculated': receipt.metrics_calculated,
+            'comparator_executed': receipt.comparator_executed,
+            'adverse_policy_executed': receipt.adverse_policy_executed,
+            'selection_frozen': receipt.selection_frozen,
+            'holdout_inspected': receipt.holdout_inspected,
+            'real_data_validated': receipt.real_data_validated,
+            'investment_performance_established':
+                receipt.investment_performance_established,
+            'output_sha256': binding.output_sha256,
+            'output_bytes_count': binding.output_bytes_count,
+        }
+        checked_receipt = json.loads((
+            fixtures / 'm3-validation-metrics-receipt.json').read_text('utf-8'))
+        self.assertEqual(checked_receipt, expected)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+October 25 M3 validation-metric increment: `atlas.validation_metric_run`
+reproduces the FIFO-amended manifest, candidate targets, buy-and-hold comparator
+and both registered execution policies for only [80,120) and [120,160). It
+emits gross/net return, drawdown, turnover and exposure as canonical decimal
+strings while excluding bars, prices, cash, shares and fills. The receipt keeps
+selection, holdout inspection, real-data validation and investment-performance
+claims false.
+
 October 23 M3 metric-semantics increment: `atlas.evaluation_metrics` replays the
 same invented targets, delay and overlap policy at zero cost for gross return,
 while the supplied policy drives net return, close-mark drawdown and turnover.

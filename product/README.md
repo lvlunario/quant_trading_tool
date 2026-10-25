@@ -6,7 +6,7 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated October 23, 2026
+## What you can try and when — updated October 25, 2026
 
 As of October 22, the latest local suite has 380 passing tests. M3 includes a
 hash-bound structural buy-and-hold comparator on both registered validation
@@ -17,6 +17,12 @@ As of October 23, a separate synthetic arithmetic kernel fixes the definitions
 for gross/net cumulative return, maximum drawdown, turnover and long exposure.
 Six independently worked fixtures pass and the full local suite has 386 tests;
 the registered experiment still emits no metric and the final holdout is sealed.
+
+As of October 25, the registered candidate and buy-and-hold comparator emit a
+hash-bound synthetic validation-only metric receipt across both fixed folds and
+both cost/delay policies. It contains eight metric vectors but no prices, cash,
+shares or fills. Selection is not frozen, real-data validation is false and the
+final holdout remains sealed. The full local suite has 393 passing tests.
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 
