@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 26 M3 freeze-governance increment: `atlas.selection_freeze` binds the
+exact registered manifest and validation-output digest to a prospective
+`freeze_without_tuning` disposition. The immutable candidate is deliberately
+`review_required`; it cannot record a founder response, freeze selection,
+authorize or inspect the holdout, accept the milestone, validate real data or
+establish investment performance.
+
 October 25 M3 validation-metric increment: `atlas.validation_metric_run`
 reproduces the FIFO-amended manifest, candidate targets, buy-and-hold comparator
 and both registered execution policies for only [80,120) and [120,160). It

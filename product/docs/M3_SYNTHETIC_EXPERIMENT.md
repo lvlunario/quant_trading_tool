@@ -206,12 +206,25 @@ uninspected and investment performance is not established.
 python -m unittest discover -s tests -p test_validation_metric_run.py -v
 ```
 
+The October 26 prospective freeze candidate in
+[`m3-selection-freeze-candidate.json`](../fixtures/m3-selection-freeze-candidate.json)
+binds the exact metric manifest, its 1,755-byte output and feature commit
+`c15f1c6`. It recommends `freeze_without_tuning` while recording that the
+candidate and metric definition have not changed after validation. Its status
+is `review_required`; selection is not frozen, holdout access is not authorized,
+no founder response or milestone acceptance is recorded, and the final holdout
+remains uninspected. The candidate cannot establish real-data or investment
+performance.
+
+```sh
+python -m unittest discover -s tests -p test_selection_freeze.py -v
+```
+
 ## Next increment and acceptance boundary
 
-Prepare the October 26 M3 review packet from the immutable validation receipt.
-Recommend a prospective selection-freeze disposition without tuning or
-redefining metrics after observing them; keep the final holdout sealed until
-that disposition is explicitly recorded.
+Record an actual founder disposition only if one is received. Otherwise keep
+the final holdout sealed and prepare the October 31 limitations/acceptance
+packet from the immutable validation and freeze-candidate receipts.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

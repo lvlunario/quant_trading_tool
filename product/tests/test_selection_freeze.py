@@ -1,5 +1,7 @@
 from dataclasses import replace
 from hashlib import sha256
+import json
+from pathlib import Path
 import unittest
 
 from atlas.experiment_registry import ExperimentConfig, register_experiment
@@ -107,6 +109,23 @@ class SelectionFreezeTests(unittest.TestCase):
                 {'status': 'approved'}):
             with self.subTest(change=change), self.assertRaises(ValueError):
                 SelectionFreezeCandidate(**{**candidate.__dict__, **change})
+
+    def test_checked_in_candidate_binds_feature_commit_and_exact_receipt(self):
+        fixtures = Path(__file__).parents[1] / 'fixtures'
+        checked = json.loads((
+            fixtures / 'm3-selection-freeze-candidate.json').read_text('utf-8'))
+        manifest = register_experiment(
+            self.series, self.config,
+            experiment_id=checked['experiment_id'],
+            code_commit_sha='2dde2f5379c179d267e257581996bcfc542be008')
+        metrics = compose_validation_metric_run(
+            self.series, self.config, manifest)
+        candidate = prepare_selection_freeze_candidate(
+            manifest, metrics,
+            prepared_by_code_commit_sha=checked['prepared_by_code_commit_sha'])
+        self.assertEqual(
+            checked, {**candidate.__dict__,
+                      'candidate_sha256': candidate.candidate_sha256})
 
 
 if __name__ == '__main__':

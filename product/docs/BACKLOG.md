@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 26 evening: prepared a hash-bound M3 selection-freeze candidate from
+the exact 1,755-byte synthetic validation receipt. It recommends freezing the
+unchanged candidate and metric definitions without post-result tuning but
+keeps status review-required and all founder-response, selection, holdout,
+real-data, acceptance and performance gates false. Seven focused tests raise
+the full local suite to 400. Next: record an actual founder disposition if one
+is received; otherwise keep the holdout sealed and complete the October 31 M3
+limitations/acceptance packet without expanding the experiment.
+
 October 25 evening: bound the exact metric semantics to the registered
 candidate and buy-and-hold comparator across both fixed validation folds and
 both execution policies. The 1,755-byte receipt contains eight Decimal metric
