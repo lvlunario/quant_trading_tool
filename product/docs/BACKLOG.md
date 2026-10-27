@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 27 evening: added a hash-bound M3 milestone-readiness snapshot. It
+reports 3/6 criteria ready—registered protocol, reproducible validation and
+cost/benchmark controls—while selection freeze, final holdout and options
+scenario acceptance remain explicitly blocked. Decision dependencies are
+separate from engineering work; no founder response, acceptance, release or
+performance claim is recorded. Eight focused tests raise the full suite to 408.
+Next: add deterministic collateral-reservation and stale-chain acceptance
+evidence without opening the holdout or inventing current chain data.
+
 October 26 evening: prepared a hash-bound M3 selection-freeze candidate from
 the exact 1,755-byte synthetic validation receipt. It recommends freezing the
 unchanged candidate and metric definitions without post-result tuning but

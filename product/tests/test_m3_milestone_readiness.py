@@ -2,6 +2,7 @@ from dataclasses import replace
 from datetime import date, datetime, timezone
 from hashlib import sha256
 import json
+from pathlib import Path
 import unittest
 
 from atlas.experiment_registry import ExperimentConfig, register_experiment
@@ -120,6 +121,49 @@ class M3MilestoneReadinessTests(unittest.TestCase):
                 'net_cumulative_return', 'account_id', 'holding',
                 'source_uri', 'approval_id'):
             self.assertNotIn(excluded, encoded)
+
+    def test_checked_in_readiness_binds_feature_and_exact_evidence(self):
+        fixtures = Path(__file__).parents[1] / 'fixtures'
+        checked = json.loads((
+            fixtures / 'm3-milestone-readiness.json').read_text('utf-8'))
+        readiness = assess_m3_milestone_readiness(
+            self.manifest, self.metrics, self.freeze,
+            assessed_at=datetime.fromisoformat(checked['assessed_at']),
+            prepared_by_code_commit_sha=checked[
+                'prepared_by_code_commit_sha'])
+        expected = {
+            'schema_version': readiness.schema_version,
+            'assessed_at': readiness.assessed_at.isoformat(),
+            'target_date': readiness.target_date.isoformat(),
+            'experiment_id': readiness.experiment_id,
+            'manifest_sha256': readiness.manifest_sha256,
+            'validation_output_sha256': readiness.validation_output_sha256,
+            'validation_output_bytes_count':
+                readiness.validation_output_bytes_count,
+            'freeze_candidate_sha256': readiness.freeze_candidate_sha256,
+            'prepared_by_code_commit_sha':
+                readiness.prepared_by_code_commit_sha,
+            'scope': readiness.scope,
+            'registered_protocol_ready': readiness.registered_protocol_ready,
+            'reproducible_validation_ready':
+                readiness.reproducible_validation_ready,
+            'costs_and_benchmark_ready':
+                readiness.costs_and_benchmark_ready,
+            'selection_frozen': readiness.selection_frozen,
+            'holdout_authorized': readiness.holdout_authorized,
+            'holdout_inspected': readiness.holdout_inspected,
+            'options_acceptance_ready': readiness.options_acceptance_ready,
+            'real_data_validated': readiness.real_data_validated,
+            'founder_response_recorded':
+                readiness.founder_response_recorded,
+            'milestone_accepted': readiness.milestone_accepted,
+            'release_authorized': readiness.release_authorized,
+            'investment_performance_established':
+                readiness.investment_performance_established,
+            'readiness_sha256': readiness.readiness_sha256,
+            'public_summary': readiness.public_summary(),
+        }
+        self.assertEqual(checked, expected)
 
 
 if __name__ == '__main__':

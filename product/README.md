@@ -6,7 +6,7 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated October 25, 2026
+## What you can try and when — updated October 27, 2026
 
 As of October 22, the latest local suite has 380 passing tests. M3 includes a
 hash-bound structural buy-and-hold comparator on both registered validation
@@ -30,6 +30,13 @@ after validation. Its status is `review_required`: selection remains unfrozen,
 holdout access is unauthorized, no founder response is recorded and no
 performance or milestone claim is made. Seven focused tests raise the full
 local suite to 400 tests.
+
+As of October 27, a typed M3 readiness snapshot binds that freeze candidate to
+the exact experiment evidence and reports three of six milestone criteria
+ready. Registration, reproducible validation and cost/benchmark controls pass;
+selection freeze, final holdout and options acceptance remain blocked. No
+founder response or milestone acceptance is recorded. Eight focused tests raise
+the full local suite to 408 tests.
 
 The default repository page still shows the legacy README on `main`. Active Atlas work is in [draft PR #1](https://github.com/lvlunario/quant_trading_tool/pull/1); use this branch's product README for current progress. The merge remains a founder acceptance decision.
 

@@ -220,11 +220,25 @@ performance.
 python -m unittest discover -s tests -p test_selection_freeze.py -v
 ```
 
+The October 27
+[`m3-milestone-readiness.json`](../fixtures/m3-milestone-readiness.json)
+snapshot binds the exact manifest, validation output, freeze candidate and
+feature commit `5c5c810`. It reports three of six M3 criteria ready:
+registration, reproducible validation and cost/benchmark controls. Selection
+freeze, final holdout and options scenario acceptance remain blocked. Decision
+dependencies are separated from missing engineering evidence; the receipt
+cannot record a founder response, milestone acceptance, release or investment
+performance.
+
+```sh
+python -m unittest discover -s tests -p test_m3_milestone_readiness.py -v
+```
+
 ## Next increment and acceptance boundary
 
 Record an actual founder disposition only if one is received. Otherwise keep
-the final holdout sealed and prepare the October 31 limitations/acceptance
-packet from the immutable validation and freeze-candidate receipts.
+the final holdout sealed and complete deterministic collateral-reservation and
+stale-chain acceptance evidence before the October 31 limitations packet.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

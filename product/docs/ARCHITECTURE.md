@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+October 27 M3 readiness increment: `atlas.m3_milestone_readiness` composes the
+exact manifest, validation receipt and prospective freeze candidate into a
+public-safe six-criterion snapshot. It reports registration, reproducibility
+and cost/benchmark controls ready while keeping selection freeze, final holdout
+and options acceptance blocked. Decision dependencies remain distinct from
+engineering evidence and no state transition can record acceptance or release.
+
 October 26 M3 freeze-governance increment: `atlas.selection_freeze` binds the
 exact registered manifest and validation-output digest to a prospective
 `freeze_without_tuning` disposition. The immutable candidate is deliberately
