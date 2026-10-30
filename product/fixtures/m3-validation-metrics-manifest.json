@@ -1,0 +1,15 @@
+{
+  "experiment_id": "m3-synthetic-metrics-v1",
+  "protocol_version": "atlas.m3.synthetic@1.0.0",
+  "code_commit_sha": "2dde2f5379c179d267e257581996bcfc542be008",
+  "generator_version": "atlas.synthetic_series@1.0.0",
+  "config_sha256": "a3c80e28e0a6a4d2b9c117b318581fb59912b0fa010d5b699ccf55e88772885d",
+  "input_sha256": "ab1102625feefae9354310355e8641114b81613eefe09ad3bf02c0fc6c924862",
+  "schema_version": 1,
+  "status": "preregistered",
+  "output_sha256": null,
+  "synthetic_only": true,
+  "holdout_inspected": false,
+  "investment_performance_established": false,
+  "manifest_sha256": "f68cd3e7e174d6cad70f490d582818ebdcdc9b30b968a558c6681fc9db9d5576"
+}
