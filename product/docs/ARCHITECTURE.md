@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+October 30 M3 options-control increment: `atlas.options_acceptance` accepts
+only fixed synthetic standard-contract requests, reserves gross put strike
+obligations plus fees without crediting premium, aggregates covered-call share
+encumbrances by synthetic instrument and rejects aggregate reuse. A separate
+15-minute timestamp gate blocks stale, future and timezone-naive synthetic
+chains. Its public evidence is count-only and keeps live-chain validation,
+actionable ranking and founder acceptance false. This is not broker buying
+power, portfolio reconciliation, market-data validation or an order path.
+
 October 27 M3 readiness increment: `atlas.m3_milestone_readiness` composes the
 exact manifest, validation receipt and prospective freeze candidate into a
 public-safe six-criterion snapshot. It reports registration, reproducibility

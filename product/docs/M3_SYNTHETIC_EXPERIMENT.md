@@ -234,11 +234,23 @@ performance.
 python -m unittest discover -s tests -p test_m3_milestone_readiness.py -v
 ```
 
+The October 30 options-control increment adds an independently runnable fixed
+synthetic acceptance receipt. It reserves gross cash for cash-secured puts and
+shares for covered calls across a batch, rejects reuse of either collateral
+pool, and blocks stale, future or timezone-naive chain timestamps. Its public
+output excludes collateral amounts and instrument identifiers. It records no
+live-chain validation, actionable ranking or founder acceptance.
+
+```sh
+python -m unittest discover -s tests -p test_options_acceptance.py -v
+python -m atlas.options_acceptance
+```
+
 ## Next increment and acceptance boundary
 
 Record an actual founder disposition only if one is received. Otherwise keep
-the final holdout sealed and complete deterministic collateral-reservation and
-stale-chain acceptance evidence before the October 31 limitations packet.
+the final holdout sealed and assemble the October 31 limitations packet with
+the now-complete synthetic options-control evidence.
 M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
 this work grants no data rights, Fidelity compatibility, release permission or
 founder approval.

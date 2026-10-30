@@ -189,6 +189,15 @@ engineering dependencies separate, exclude financial/private values and reject
 any attempted promotion of selection, holdout, options acceptance, real data,
 founder response, milestone acceptance, release or investment performance.
 
+The M3 options-acceptance tests independently verify aggregate gross put-cash
+and covered-call share reservations, duplicate scenario rejection, strict
+synthetic-only requests, whole-share inputs and fail-closed stale, future or
+timezone-naive chain timestamps. They also prove the deterministic public
+receipt excludes collateral values, instrument identifiers and chain times and
+cannot authorize an actionable ranking, validate a live chain or record
+founder acceptance. These tests do not cover broker buying power, adjusted
+contracts, liquidity, Greeks, corporate calendars or assignment behavior.
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.

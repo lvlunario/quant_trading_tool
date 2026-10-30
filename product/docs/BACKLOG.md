@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 30 evening: added deterministic synthetic option-collateral acceptance
+evidence. The batch ledger reserves gross put cash and covered-call shares,
+blocks aggregate double-use and rejects stale, future or timezone-naive chain
+timestamps. Its public receipt excludes collateral values and instruments and
+keeps live-chain validation, actionable ranking and founder acceptance false.
+Nine focused tests raise the full suite to 417. Next: assemble the October 31
+M3 limitations/acceptance packet while keeping the final holdout sealed unless
+the founder explicitly approves the unchanged freeze and holdout inspection.
+
 October 27 evening: added a hash-bound M3 milestone-readiness snapshot. It
 reports 3/6 criteria ready—registered protocol, reproducible validation and
 cost/benchmark controls—while selection freeze, final holdout and options
