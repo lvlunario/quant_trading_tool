@@ -1,5 +1,11 @@
 # Architecture and decisions
 
+October 31 M3 checkpoint: `atlas.m3_checkpoint` composes the prior immutable
+readiness snapshot with the deterministic options-control evidence. It reports
+the target as due and keeps M3 at 3/6 acceptance criteria because engineering
+evidence cannot substitute for founder freeze, holdout or scenario-review
+decisions. The final holdout remains sealed and all promotion flags fail closed.
+
 October 30 M3 options-control increment: `atlas.options_acceptance` accepts
 only fixed synthetic standard-contract requests, reserves gross put strike
 obligations plus fees without crediting premium, aggregates covered-call share

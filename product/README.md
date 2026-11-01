@@ -6,7 +6,13 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated October 30, 2026
+## What you can try and when — updated October 31, 2026
+
+As of October 31, a typed due-date checkpoint separates completed M3
+engineering controls from three still-missing founder decisions. M3 remains
+acceptance-blocked at 3/6 criteria and the final holdout remains sealed. Seven
+focused tests raise the full local suite to 424 tests. The dated asynchronous
+review packet is not a completed meeting or approval.
 
 As of October 30, Atlas has a deterministic synthetic options-acceptance
 receipt. A batch reservation ledger aggregates gross cash obligations for
@@ -115,7 +121,7 @@ The first screen prototype will use clearly labeled synthetic values and let the
 
 Product briefings lead with what the founder can try, its next visible deliverable/date, tests, risks and decisions. The connected local preview is available; browser/device QA and founder feedback remain pending. The [metric-semantics contract](docs/METRICS.md) is now implemented as a backend dependency; sourced values and research integration remain pending.
 
-Latest asynchronous review: [October 26 M3 concept and iteration packet](docs/reviews/2026-10-26-M3.md). The [October 17 executed checkpoint](docs/reviews/2026-10-17-M2-checkpoint.md) records six sourced deferrals and no founder response. Latest public evidence update: [October 17 weekly watchlist delta](docs/research/2026-10-17-weekly-watchlist.html). These artifacts present evidence and research hypotheses; neither is a completed meeting, founder approval or investment recommendation.
+Latest asynchronous review: [October 31 M3 checkpoint](docs/reviews/2026-10-31-M3.md). The [October 17 executed checkpoint](docs/reviews/2026-10-17-M2-checkpoint.md) records six sourced deferrals and no founder response. Latest public evidence update: [October 31 weekly watchlist delta](docs/research/2026-10-31-weekly-watchlist.html). These artifacts present evidence and research hypotheses; neither is a completed meeting, founder approval or investment recommendation.
 
 ## Run the foundation
 

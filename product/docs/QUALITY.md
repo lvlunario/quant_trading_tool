@@ -198,6 +198,11 @@ cannot authorize an actionable ranking, validate a live chain or record
 founder acceptance. These tests do not cover broker buying power, adjusted
 contracts, liquidity, Greeks, corporate calendars or assignment behavior.
 
+The October 31 checkpoint tests verify Manila target boundaries, exact
+readiness/options evidence binding, separate engineering and decision states,
+three explicit founder dependencies, public-value redaction and rejection of
+selection, holdout, acceptance, release, real-data or performance promotion.
+
 Register the hypothesis, universe and benchmark before experimenting. Use information available at each decision date: filings after publication, macro vintage/revisions, historical constituents including delistings. Fit normalization on training data only. Use chronological walk-forward validation; purge/embargo overlapping label windows. Keep a final holdout untouched until model selection ends. Record every experiment, including failed ones, to expose selection bias.
 
 Signals at a bar close execute no earlier than the next eligible tradable event. Account for bid/ask, slippage, commissions, dividends, splits, cash return, borrow/financing when applicable, trading halts and liquidity/capacity. Test fees and delays at adverse levels. Options history must include actual contract quotes and corporate-action adjustments; do not reconstruct tradable historical premiums from today's IV or a theoretical model and call them observed fills.

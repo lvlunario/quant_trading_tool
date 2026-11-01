@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+October 31 evening: added a typed M3 due-date checkpoint and asynchronous
+review packet. Protocol and options engineering controls are ready, but only
+3/6 acceptance criteria pass: selection freeze, final holdout and options
+scenario acceptance await explicit founder decisions. Seven focused tests
+raise the full suite to 424; the holdout remains sealed. Also published the
+Saturday primary-source macro/watchlist delta with CRBS still unresolved.
+Next: begin the bounded integrated private prototype slice without claiming M3
+acceptance; record founder responses only if actually received.
+
 October 30 evening: added deterministic synthetic option-collateral acceptance
 evidence. The batch ledger reserves gross put cash and covered-call shares,
 blocks aggregate double-use and rejects stale, future or timezone-naive chain
