@@ -25,6 +25,24 @@ class CliTests(unittest.TestCase):
         self.assertEqual(report['portfolio']['mode'], 'synthetic')
         self.assertEqual(report['hypothetical_put']['expiration_pnl'], '-2801')
 
+    def test_integrated_readiness_demo_is_count_only_and_read_only(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--integrated-readiness-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            report['status'],
+            'synthetic_demo_ready_external_dependencies_blocked')
+        self.assertEqual(report['research']['stage_passed_counts'],
+                         [8, 8, 0, 0, 0, 0])
+        self.assertFalse(report['portfolio']['fidelity_validated'])
+        self.assertFalse(report['options']['real_chain_validated'])
+        self.assertFalse(report['capabilities']['order_path_enabled'])
+        for excluded in ('account_id', 'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

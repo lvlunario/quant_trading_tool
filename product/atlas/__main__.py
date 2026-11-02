@@ -60,6 +60,8 @@ def main():
                         help="invented broker-shaped mapping; not Fidelity-compatible")
     source.add_argument("--synthetic-csv-demo", type=Path,
                         help="invented synthetic CSV only; not a broker/Fidelity import")
+    source.add_argument("--integrated-readiness-demo", action="store_true",
+                        help="count-only localhost integration; no private state")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -79,6 +81,52 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
+        elif args.integrated_readiness_demo:
+            from .integrated_readiness import (
+                compose_integrated_prototype_readiness,
+            )
+            from .m2_acceptance_trace import build_m2_acceptance_trace
+            from .options_acceptance import (
+                build_synthetic_options_acceptance_evidence,
+            )
+            from .receipts import import_receipt
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+            from .weekly_report_readiness import assess_weekly_report_readiness
+            from .weekly_research_report import (
+                build_synthetic_weekly_research_report,
+            )
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / 'fixtures'
+            portfolio_report = synthetic_csv_report(
+                (fixtures / 'synthetic-broker.csv').read_bytes(), now=now)
+            registry = load_public_watchlist_registry(
+                (fixtures / 'public-watchlist-identities.json').read_bytes(),
+                now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / 'public-research-sources.json').read_bytes(),
+                registry, now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / 'public-source-rights-evidence.json').read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            capture = assess_source_capture_authorization(
+                catalog, rights, at=now)
+            trace = build_m2_acceptance_trace(registry, catalog, rights, capture)
+            weekly = build_synthetic_weekly_research_report(
+                period_end=now.date(), generated_at=now)
+            research = assess_weekly_report_readiness(weekly, trace)
+            report = compose_integrated_prototype_readiness(
+                import_receipt(portfolio_report), research,
+                build_synthetic_options_acceptance_evidence(),
+                assessed_at=now).public_summary()
         elif args.broker_demo:
             from .broker_mapping import map_synthetic_broker_export
 
