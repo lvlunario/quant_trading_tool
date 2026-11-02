@@ -1,5 +1,14 @@
 # Backlog and decision register
 
+November 2 evening: added a typed count-only integration boundary and CLI demo
+for the smallest localhost synthetic workflow. It composes two reconciled
+invented import rows, the 8/8/0/0/0/0 research gate state and two fixed option
+scenarios with four controls. Six focused and 430 full-suite tests pass.
+Authentication, private persistence, durable replay protection, Fidelity/live
+data validation, sourced publication and orders remain false. Next: project
+this exact allowlist into a single fixed localhost overview route and add
+browser/accessibility assertions without creating private-state claims.
+
 October 31 evening: added a typed M3 due-date checkpoint and asynchronous
 review packet. Protocol and options engineering controls are ready, but only
 3/6 acceptance criteria pass: selection freeze, final holdout and options

@@ -20,6 +20,13 @@ The inherited public repository tracks a `.env` file. Its contents were not insp
 
 Production controls above are planned, not implemented by the CLI. Collect only necessary data, use account aliases, encrypt in transit/at rest, define retention and deletion/export, avoid raw portfolio data in telemetry or general AI training, and disclose subprocessors. Obtain appropriate consent before ingestion.
 
+The integrated-readiness command is a localhost, read-only projection. It
+accepts no caller-selected source, account export, chain, network location or
+credentials and persists nothing. Its allowlist exposes only row, universe,
+gate, scenario and control counts plus controlled dependency codes. It must not
+be treated as authentication, tenant isolation, durable replay protection,
+private storage, Fidelity validation, chain validation or an order path.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

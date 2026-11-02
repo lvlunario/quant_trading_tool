@@ -1,5 +1,13 @@
 # Research, QA and release quality
 
+Integrated-readiness tests require exact typed portfolio, research and options
+artifacts, one aware assessment timestamp, synthetic reconciliation with no
+rejected rows, and the non-durable replay decision. They lock the public
+8/8/0/0/0/0 research counts, two fixed option scenarios, four control results
+and all disabled private/action capabilities. User-export mode, replay-backed
+eligibility, mismatched time and wrong types fail closed. CLI privacy coverage
+excludes account/source identifiers, collateral values and performance fields.
+
 ## Verification levels
 
 1. Unit: independent expected values for money, weights and expiry payoffs; invalid-input cases.

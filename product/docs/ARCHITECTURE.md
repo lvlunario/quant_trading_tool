@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+November 2 integration boundary: `atlas.integrated_readiness` accepts only a
+reconciled synthetic `ImportReceipt`, the typed blocked
+`WeeklyReportReadiness` at the same aware timestamp and fixed synthetic
+`OptionsAcceptanceEvidence`. Its public summary carries counts and controlled
+states only. It rejects user-export mode, durable-replay eligibility, timestamp
+drift and promoted option evidence. The CLI demo composes existing fixture
+pipelines locally while keeping authentication, private persistence, network
+retrieval and orders false. This is an integration contract, not M4 acceptance.
+
 October 31 M3 checkpoint: `atlas.m3_checkpoint` composes the prior immutable
 readiness snapshot with the deterministic options-control evidence. It reports
 the target as due and keeps M3 at 3/6 acceptance criteria because engineering

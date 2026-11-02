@@ -8,6 +8,14 @@ Project decisions are now delegated to engineering: the private read-only/paper 
 
 ## What you can try and when — updated October 31, 2026
 
+As of November 2, `python3 -m atlas --integrated-readiness-demo` composes the
+checked-in synthetic portfolio receipt, public research-readiness state and
+synthetic options controls into one count-only localhost status. It processes
+two invented import rows, preserves the public 8/8/0/0/0/0 research gate
+counts and reports two fixed option scenarios with four controls. Authentication,
+private persistence, durable replay protection, Fidelity validation, sourced
+publication, live-chain validation and orders remain explicitly disabled.
+
 As of October 31, a typed due-date checkpoint separates completed M3
 engineering controls from three still-missing founder decisions. M3 remains
 acceptance-blocked at 3/6 criteria and the final holdout remains sealed. Seven
