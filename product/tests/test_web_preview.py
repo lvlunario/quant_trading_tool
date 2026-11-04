@@ -5,9 +5,11 @@ from urllib.parse import urlencode
 import unittest
 
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
-                               render_m1_status, render_page,
+                               render_integrated_readiness, render_m1_status,
+                               render_page,
                                public_m2_acceptance_trace,
                                public_m2_synthetic_conformance,
+                               public_integrated_readiness,
                                render_research_work_items, render_weekly_review,
                                serve_preview)
 
@@ -115,12 +117,60 @@ class WebPreviewTests(unittest.TestCase):
         self.assertIn('href="/m1-status">View M1 conformance', page)
         self.assertIn('href="/research-work-items">Open Research workbench', page)
         self.assertIn('href="/weekly-review">Open synthetic Weekly Review', page)
+        self.assertIn('href="/integrated-readiness">Open integrated readiness',
+                      page)
         self.assertIn('href="/checklist"', page)
         self.assertNotIn('<!-- interactive-options-link -->', page)
         for section in ('overview', 'portfolio', 'research', 'options', 'weekly'):
             self.assertIn(f'id="{section}"', page)
         _, _, lab = self.request("GET", "/")
         self.assertIn('href="/overview"', lab)
+
+    def test_integrated_readiness_projects_exact_count_only_contract(self):
+        report = public_integrated_readiness()
+        self.assertEqual(report['portfolio']['input_rows'], 2)
+        self.assertEqual(report['research']['stage_passed_counts'],
+                         [8, 8, 0, 0, 0, 0])
+        self.assertEqual((report['options']['scenario_count'],
+                          report['options']['control_count']), (2, 4))
+        status, headers, page = self.request("GET", "/integrated-readiness")
+        self.assertEqual(status, 200)
+        self.assertEqual(headers['Cache-Control'], 'no-store')
+        self.assertIn(
+            'data-integrated-status="synthetic_demo_ready_external_dependencies_blocked"',
+            page)
+        self.assertIn('data-input-rows="2"', page)
+        self.assertIn('data-research-passed-counts="8,8,0,0,0,0"', page)
+        self.assertIn('data-option-scenarios="2"', page)
+        self.assertIn('data-option-controls="4"', page)
+
+    def test_integrated_readiness_is_readonly_redacted_and_accessible(self):
+        page = render_integrated_readiness()
+        for marker in ('<html lang="en">', '<nav aria-label="Atlas">',
+                       '<main aria-describedby="scope-note"',
+                       'aria-labelledby="portfolio-heading"',
+                       'aria-labelledby="research-heading"',
+                       'aria-labelledby="options-heading"',
+                       'aria-labelledby="capabilities-heading"'):
+            self.assertIn(marker, page)
+        for disabled in ('data-durable-replay="false"',
+                         'data-fidelity-validated="false"',
+                         'data-publication-authorized="false"',
+                         'data-real-chain-validated="false"',
+                         'data-actionable-ranking="false"',
+                         'data-authentication="false"',
+                         'data-private-persistence="false"',
+                         'data-network-retrieval="false"',
+                         'data-order-path="false"',
+                         'data-release-authorized="false"'):
+            self.assertIn(disabled, page)
+        for excluded in ('<form', '<input', '<button', '<script', 'account_id',
+                         'source_uri', 'instrument_id', 'reserved_cash',
+                         'gross_cumulative_return', 'nvda', 'qcom', 'crbs'):
+            self.assertNotIn(excluded, page.lower())
+        status, _, _ = self.request(
+            "GET", "/integrated-readiness?mode=private")
+        self.assertEqual(status, 404)
 
     def test_provider_qualification_projection_is_blocked_and_redacted(self):
         status, _, page = self.request("GET", "/overview")

@@ -14,11 +14,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .conformance import m1_import_conformance, recommend_m1_disposition
+from .integrated_readiness import compose_integrated_prototype_readiness
 from .import_workflow import synthetic_csv_report
 from .m2_acceptance_trace import build_m2_acceptance_trace
 from .m2_milestone_readiness import assess_m2_milestone_readiness
 from .m2_synthetic_conformance import assess_m2_synthetic_conformance
+from .options_acceptance import build_synthetic_options_acceptance_evidence
 from .research_work_items import compose_research_work_queue
+from .receipts import import_receipt
 from .rights_evidence import (assess_reviewed_rights,
                               load_reviewed_rights_evidence)
 from .rights_review_worksheet import build_rights_review_worksheet
@@ -40,6 +43,8 @@ DEFAULTS = {"strike": "50", "premium_per_share": "2", "terminal_price": "48",
             "fees": "0", "available_cash": "5000"}
 WORKBENCH_AS_OF = datetime(2026, 10, 5, tzinfo=timezone.utc)
 WEEKLY_REVIEW_AS_OF = datetime(2026, 10, 8, 11, 0, tzinfo=timezone.utc)
+INTEGRATED_READINESS_AS_OF = datetime(2026, 11, 4, 11, 0,
+                                     tzinfo=timezone.utc)
 RESEARCH_ROUTE_FILTERS = {
     "/research-work-items": "all",
     "/research-work-items/identity": "identity_unresolved",
@@ -58,8 +63,48 @@ def render_overview():
         '<a href="/m1-status">View M1 conformance →</a></p>').replace(
         "<!-- interactive-research-work-items-link -->",
         '<p><a href="/research-work-items">Open Research workbench →</a> · '
-        '<a href="/weekly-review">Open synthetic Weekly Review →</a></p>').replace(
+        '<a href="/weekly-review">Open synthetic Weekly Review →</a> · '
+        '<a href="/integrated-readiness">Open integrated readiness →</a></p>').replace(
         '../docs/PROGRAM.md#founder-phase-acceptance-checklist', '/checklist')
+
+
+def public_integrated_readiness(at=INTEGRATED_READINESS_AS_OF):
+    """Compose the three checked-in synthetic slices at one fixed cutoff."""
+    fixtures = Path(__file__).resolve().parents[1] / "fixtures"
+    portfolio_report = synthetic_csv_report(
+        (fixtures / "synthetic-broker.csv").read_bytes(), now=at)
+    trace = _m2_acceptance_trace(at)
+    weekly = build_synthetic_weekly_research_report(
+        period_end=at.date(), generated_at=at)
+    research = assess_weekly_report_readiness(weekly, trace)
+    return compose_integrated_prototype_readiness(
+        import_receipt(portfolio_report), research,
+        build_synthetic_options_acceptance_evidence(),
+        assessed_at=at).public_summary()
+
+
+def render_integrated_readiness():
+    """Render one fixed count-only view with no action or private-data path."""
+    report = public_integrated_readiness()
+    portfolio, research, options = (
+        report['portfolio'], report['research'], report['options'])
+    capabilities = report['capabilities']
+    dependencies = ''.join(
+        f'<li>{escape(item.replace("_", " ").title())}</li>'
+        for item in report['external_dependencies'])
+    return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atlas Integrated Readiness · Synthetic</title>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:940px;margin:auto;padding:24px}}main{{display:grid;gap:18px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:20px}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:minmax(190px,1fr) 2fr;gap:8px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<body><nav aria-label="Atlas"><a href="/overview">Return to five-area overview</a></nav>
+<h1>Integrated readiness</h1>
+<p class="warning" id="scope-note"><strong>Synthetic localhost demonstration only.</strong> This page is read-only and records no acceptance, release or trading authority.</p>
+<main aria-describedby="scope-note" data-integrated-status="{escape(report['status'], quote=True)}" data-integrated-scope="{escape(report['scope'], quote=True)}">
+<section aria-labelledby="portfolio-heading" data-portfolio-status="{escape(portfolio['status'], quote=True)}" data-input-rows="{portfolio['input_rows']}" data-rejected-rows="{portfolio['rejected_rows']}" data-publishable-rows="{portfolio['publishable_rows']}" data-durable-replay="{str(portfolio['durable_replay_protection']).lower()}" data-fidelity-validated="{str(portfolio['fidelity_validated']).lower()}"><h2 id="portfolio-heading">Portfolio truth</h2><p><strong>{portfolio['input_rows']} invented rows reconciled; {portfolio['rejected_rows']} rejected.</strong></p><p>Durable replay and Fidelity validation are unavailable.</p></section>
+<section aria-labelledby="research-heading" data-research-status="{escape(research['status'], quote=True)}" data-research-passed-counts="{','.join(str(value) for value in research['stage_passed_counts'])}" data-sourced-statements="{research['sourced_statement_count']}" data-sourced-metrics="{research['sourced_metric_count']}" data-publication-authorized="{str(research['publication_authorized']).lower()}"><h2 id="research-heading">Research readiness</h2><p><strong>Sourced publication remains blocked.</strong> Gate counts: {' / '.join(str(value) for value in research['stage_passed_counts'])}.</p><p>There are zero sourced statements and zero sourced metrics.</p></section>
+<section aria-labelledby="options-heading" data-options-status="{escape(options['status'], quote=True)}" data-option-scenarios="{options['scenario_count']}" data-option-controls="{options['control_count']}" data-real-chain-validated="{str(options['real_chain_validated']).lower()}" data-actionable-ranking="{str(options['actionable_ranking_authorized']).lower()}"><h2 id="options-heading">Options controls</h2><p><strong>{options['scenario_count']} fixed scenarios exercise {options['control_count']} controls.</strong></p><p>Live-chain validation and actionable ranking remain unavailable.</p></section>
+<section aria-labelledby="capabilities-heading" data-authentication="{str(capabilities['authentication_implemented']).lower()}" data-private-persistence="{str(capabilities['private_persistence_implemented']).lower()}" data-network-retrieval="{str(capabilities['network_retrieval_enabled']).lower()}" data-order-path="{str(capabilities['order_path_enabled']).lower()}" data-release-authorized="{str(report['release_authorized']).lower()}" data-performance-established="{str(report['investment_performance_established']).lower()}"><h2 id="capabilities-heading">Boundaries and dependencies</h2><dl><dt>Read-only</dt><dd>Yes</dd><dt>Localhost only</dt><dd>Yes</dd><dt>Authentication</dt><dd>Not implemented</dd><dt>Private persistence</dt><dd>Not implemented</dd><dt>Order path</dt><dd>Disabled</dd></dl><h3>External dependencies</h3><ul>{dependencies}</ul></section>
+</main><p>No portfolio identifiers, instruments, source addresses, collateral values or performance results are displayed.</p></body></html>'''
 
 
 def public_research_work_queue():
@@ -501,7 +546,7 @@ def make_handler(token):
         def do_GET(self):
             if not self._valid_host() or self.path not in {
                     "/", "/overview", "/checklist", "/import-demo", "/m1-status",
-                    "/weekly-review",
+                    "/weekly-review", "/integrated-readiness",
                     *RESEARCH_ROUTE_FILTERS}:
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
@@ -515,6 +560,8 @@ def make_handler(token):
                 self._send(200, render_m1_status())
             elif self.path == "/weekly-review":
                 self._send(200, render_weekly_review())
+            elif self.path == "/integrated-readiness":
+                self._send(200, render_integrated_readiness())
             elif self.path in RESEARCH_ROUTE_FILTERS:
                 self._send(200, render_research_work_items(
                     RESEARCH_ROUTE_FILTERS[self.path]))
