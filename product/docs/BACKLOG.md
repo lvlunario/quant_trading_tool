@@ -1,5 +1,15 @@
 # Backlog and decision register
 
+November 4 founder response: recorded the actual “approve all tasks per best
+practices” instruction as three narrow M3 dispositions bound to the exact
+reviewed evidence: unchanged selection freeze approved, one final synthetic
+holdout inspection authorized after the freeze, and fixed synthetic options
+scenarios accepted for engineering progression. Seven focused tests raise the
+full suite to 439. M3 is 5/6; the holdout remains uninspected and merge,
+release, real-data, performance and trading authority remain false. Next:
+execute the registered final synthetic holdout exactly once and bind a redacted
+receipt without tuning or extrapolating to real investment performance.
+
 November 4 evening: projected the strict integrated-readiness allowlist into
 one exact localhost route and linked it from the synthetic overview. The page
 uses semantic landmarks and labelled sections, inherits no-store/security

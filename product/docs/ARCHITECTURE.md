@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+November 4 founder-decision boundary: `atlas.m3_founder_decision` layers the
+actual three-part response over the immutable selection candidate and options
+evidence rather than mutating those historical records. It hash-binds both
+inputs, freezes the unchanged candidate, authorizes at most one subsequent
+synthetic holdout inspection and records synthetic scenario acceptance. It
+keeps inspection, M3 acceptance, merge, release, real-data validation,
+performance and trading flags false. The next runner must require this exact
+record before opening the final holdout and must emit one immutable receipt.
+
 November 4 browser projection: `render_integrated_readiness` exposes the
 November 2 composition contract through one exact localhost GET route. The
 handler rejects query variants and non-local hosts; the existing response path

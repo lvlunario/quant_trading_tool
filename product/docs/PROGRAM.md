@@ -2,6 +2,23 @@
 
 ## Delegated project decisions — September 22, 2026
 
+## Explicit M3 founder decisions — November 4, 2026
+
+The founder responded “Approve all tasks per best practices” to the three
+decisions in the October 31 checkpoint and November 4 update. Atlas records
+that actual response narrowly as: approve the unchanged
+`freeze_without_tuning` selection; authorize one final registered synthetic
+holdout inspection after the freeze; and accept the fixed synthetic options
+scenarios for engineering progression. The exact prior evidence hashes and
+normalized dispositions are preserved in
+`fixtures/m3-founder-decision.json`.
+
+This response is not M3 acceptance and does not authorize merge, release,
+deployment, private-data ingestion, paid data, real-money orders or investment
+performance claims. M3 is 5/6 ready until the single authorized holdout run is
+executed and its exact receipt is independently checked. The original
+review-required artifacts remain unchanged as point-in-time records.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.

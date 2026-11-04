@@ -1,5 +1,12 @@
 # Research, QA and release quality
 
+Founder-decision tests bind the normalized response to the exact prior freeze
+candidate and options-evidence hashes, lock all three dispositions and require
+the remaining M3 state to be 5/6 with the holdout uninspected. They reject
+wrong/promoted evidence, naive timestamps and attempts to infer milestone,
+merge, release, real-data, performance or trading authority. The checked-in
+decision fixture must reproduce the exact canonical decision hash.
+
 Integrated-readiness tests require exact typed portfolio, research and options
 artifacts, one aware assessment timestamp, synthetic reconciliation with no
 rejected rows, and the non-durable replay decision. They lock the public

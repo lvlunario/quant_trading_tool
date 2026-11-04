@@ -8,6 +8,14 @@ Project decisions are now delegated to engineering: the private read-only/paper 
 
 ## What you can try and when — updated October 31, 2026
 
+On November 4 the founder approved all three decisions presented in the M3
+checkpoint: freeze the unchanged synthetic candidate, authorize exactly one
+final synthetic holdout inspection after that freeze, and accept the fixed
+synthetic options scenarios for engineering progression. The hash-bound record
+advances M3 readiness to 5/6; the holdout has not yet been inspected and M3 is
+not accepted. The response grants no merge, release, real-data or trading
+authority.
+
 As of November 2, `python3 -m atlas --integrated-readiness-demo` composes the
 checked-in synthetic portfolio receipt, public research-readiness state and
 synthetic options controls into one count-only localhost status. It processes
