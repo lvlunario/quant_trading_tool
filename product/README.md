@@ -16,6 +16,12 @@ counts and reports two fixed option scenarios with four controls. Authentication
 private persistence, durable replay protection, Fidelity validation, sourced
 publication, live-chain validation and orders remain explicitly disabled.
 
+As of November 4, the same allowlist is visible at the fixed localhost
+`/integrated-readiness` route. The page uses semantic landmarks and labelled
+sections, inherits no-store and restrictive security headers, accepts no query
+variant or input, and adds no private-data or action path. Three focused browser
+tests raise the full local suite to 432 tests.
+
 As of October 31, a typed due-date checkpoint separates completed M3
 engineering controls from three still-missing founder decisions. M3 remains
 acceptance-blocked at 3/6 criteria and the final holdout remains sealed. Seven

@@ -26,6 +26,11 @@ credentials and persists nothing. Its allowlist exposes only row, universe,
 gate, scenario and control counts plus controlled dependency codes. It must not
 be treated as authentication, tenant isolation, durable replay protection,
 private storage, Fidelity validation, chain validation or an order path.
+The browser projection uses one exact route and the same allowlist. Query
+variants are rejected, non-local hosts remain blocked and every response uses
+no-store, restrictive content security policy, no-referrer and nosniff
+headers. This is browser-level exposure reduction, not authentication or an
+independent accessibility/security assessment.
 
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,

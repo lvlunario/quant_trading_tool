@@ -1,5 +1,13 @@
 # Backlog and decision register
 
+November 4 evening: projected the strict integrated-readiness allowlist into
+one exact localhost route and linked it from the synthetic overview. The page
+uses semantic landmarks and labelled sections, inherits no-store/security
+headers, rejects query variants and exposes no controls or private/performance
+fields. Three focused tests raise the full suite to 432. Next: define a typed
+local session boundary for the future private workflow without representing it
+as implemented authentication or persistence.
+
 November 2 evening: added a typed count-only integration boundary and CLI demo
 for the smallest localhost synthetic workflow. It composes two reconciled
 invented import rows, the 8/8/0/0/0/0 research gate state and two fixed option

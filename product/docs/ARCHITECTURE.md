@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+November 4 browser projection: `render_integrated_readiness` exposes the
+November 2 composition contract through one exact localhost GET route. The
+handler rejects query variants and non-local hosts; the existing response path
+adds no-store, restrictive CSP, MIME-sniffing and referrer protections. The
+HTML is an explicit allowlist of aggregate states and counts, with no form,
+script, upload, fetch, persistence or action endpoint.
+
 November 2 integration boundary: `atlas.integrated_readiness` accepts only a
 reconciled synthetic `ImportReceipt`, the typed blocked
 `WeeklyReportReadiness` at the same aware timestamp and fixed synthetic

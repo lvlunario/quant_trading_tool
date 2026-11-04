@@ -7,6 +7,11 @@ rejected rows, and the non-durable replay decision. They lock the public
 and all disabled private/action capabilities. User-export mode, replay-backed
 eligibility, mismatched time and wrong types fail closed. CLI privacy coverage
 excludes account/source identifiers, collateral values and performance fields.
+Browser projection tests require the fixed route, exact count contract,
+no-store response, semantic navigation/main landmarks, labelled sections and
+all private/action capability flags false. They reject query-selected modes and
+exclude forms, inputs, buttons, scripts, real watchlist symbols, identifiers,
+collateral values and performance fields.
 
 ## Verification levels
 
