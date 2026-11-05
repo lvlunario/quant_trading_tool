@@ -19,6 +19,21 @@ performance claims. M3 is 5/6 ready until the single authorized holdout run is
 executed and its exact receipt is independently checked. The original
 review-required artifacts remain unchanged as point-in-time records.
 
+## Final synthetic holdout inspection — November 5, 2026
+
+Atlas executed the single authorized inspection after the selection freeze was
+recorded. `fixtures/m3-final-holdout-receipt.json` binds the exact registered
+manifest, freeze candidate, founder decision, published execution-boundary
+commit and 1,204-byte metric output. The public artifact exposes hashes,
+calendar and execution counts only; all metric values remain redacted.
+
+All six M3 engineering criteria are now ready for founder review. This is not
+M3 milestone acceptance and does not establish real-data validity, investment
+performance, release, merge or trading authority. No repeat inspection or
+post-holdout tuning is authorized. The next decision is to accept, defer or
+request bounded changes to the synthetic M3 engineering scope; real-market
+evidence remains a separate future gate.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.

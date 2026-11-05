@@ -123,6 +123,15 @@ data. Output hashing proves byte identity rather than anonymity or correctness;
 real experiment outputs and portfolio analysis still belong in an approved
 private boundary.
 
+The final-holdout receipt applies a narrower public allowlist: exact evidence
+hashes, published execution commit, inspection time/ordinal, synthetic
+calendar, target/fill counts, metric-output hash/size and controlled authority
+flags. Metric values, bars, prices, cash, shares, quantities and fills are
+excluded. Hashing proves byte identity, not privacy, correctness or investable
+edge. The receipt cannot authorize another inspection, post-holdout tuning,
+milestone acceptance, release, real-data use, performance claims, merge or
+trading.
+
 The synthetic Options Lab preview is a temporary local development surface, not a hosted control. It binds only to IPv4 loopback, validates the Host/path/content type, requires a per-process form token, limits request size and field cardinality, suppresses request logs, returns no-store and restrictive browser headers, and persists nothing. Use invented values only and stop the process after review. These controls reduce accidental exposure; they do not provide authentication, TLS, tenant isolation, production CSRF assurance or permission to process portfolio data.
 
 The normalized and synthetic-CSV import commands offer a narrow replay control: SHA-256 of exact source bytes plus an atomic SQLite uniqueness ledger containing no holdings. New ledger files are owner-only and permissive existing files are rejected. This helps prevent identical imports from being published twice; it does not encrypt data, authenticate users, provide tenant isolation, prove file authenticity, or make a hash anonymous. Store the ledger and its output only in a private location. Production requires a managed transactional audit store, key/access management, retention rules, backups and concurrency qualification.

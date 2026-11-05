@@ -6,7 +6,17 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated October 31, 2026
+## What you can try and when — updated November 5, 2026
+
+On November 5 Atlas executed the single authorized final synthetic holdout
+inspection against published boundary commit `9043a68`. The public receipt
+binds the exact 1,204-byte metric output by SHA-256 while withholding every
+metric value. It records 35 eligible decisions on sessions 160–199, the frozen
+candidate, aligned buy-and-hold comparator, and both registered cost/delay
+policies. M3 engineering readiness is now 6/6, but M3 milestone acceptance,
+real-data validation, investment performance, release, merge and trading
+authority remain false. Repeat inspection and post-holdout tuning are not
+authorized.
 
 On November 4 the founder approved all three decisions presented in the M3
 checkpoint: freeze the unchanged synthetic candidate, authorize exactly one

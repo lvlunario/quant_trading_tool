@@ -246,11 +246,23 @@ python -m unittest discover -s tests -p test_options_acceptance.py -v
 python -m atlas.options_acceptance
 ```
 
+The November 5 final-holdout increment executes the one inspection authorized
+by the November 4 founder decision. `atlas.final_holdout` requires the exact
+registered manifest, selection-freeze candidate and founder-decision hashes,
+then evaluates the frozen candidate and aligned buy-and-hold comparator on
+sessions 160–199 under both registered policies. The public receipt binds the
+exact 1,204-byte metric output while exposing only calendar and execution
+counts. Metric values remain redacted; no relative-performance interpretation
+or post-result selection is made.
+
+```sh
+python -m unittest tests.test_final_holdout -v
+```
+
 ## Next increment and acceptance boundary
 
-Record an actual founder disposition only if one is received. Otherwise keep
-the final holdout sealed and assemble the October 31 limitations packet with
-the now-complete synthetic options-control evidence.
-M3 target remains October 31. M2 sourced-workbench deferrals remain independent;
-this work grants no data rights, Fidelity compatibility, release permission or
-founder approval.
+M3 engineering evidence is 6/6 ready for founder review. Reproducing the exact
+hash-bound artifact is verification, not authorization for another analytical
+inspection. Milestone acceptance, release, merge, real-data validation,
+investment performance and trading remain false until separately and
+explicitly decided. M2 sourced-workbench deferrals remain independent.

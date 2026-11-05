@@ -1,5 +1,16 @@
 # Research, QA and release quality
 
+Final-holdout tests require the exact frozen manifest, freeze-candidate hash,
+actual founder-decision hash, aware post-decision timestamp and published
+40-character execution commit. They verify the 160–199 calendar, 35 eligible
+decisions, aligned buy-and-hold comparator, base/adverse policies,
+deterministic metric binding and checked-in redacted receipt. They fail closed
+on changed configuration, manifest, freeze evidence, repeat inspection,
+post-result tuning, milestone/release/real-data/performance/merge/trading
+promotion, and public exposure of metric or ledger values. Reproduction
+confirms the same artifact; it does not authorize an alternative selection or
+a second analytical inspection.
+
 Founder-decision tests bind the normalized response to the exact prior freeze
 candidate and options-evidence hashes, lock all three dispositions and require
 the remaining M3 state to be 5/6 with the holdout uninspected. They reject

@@ -1,5 +1,15 @@
 # Backlog and decision register
 
+November 5 evening: executed the single authorized final synthetic holdout
+inspection after publishing the fail-closed boundary at `9043a68`. The
+redacted receipt binds the exact manifest, freeze candidate, founder decision
+and 1,204-byte metric output while exposing no metric values. Seven focused
+tests raise the full suite to 446. M3 engineering readiness is 6/6; milestone
+acceptance, repeat inspection, post-result tuning, release, real-data validity,
+investment performance, merge and trading remain false. Next: founder reviews
+the M3 evidence and engineering continues the bounded November 14 local/private
+application work without inferring acceptance.
+
 November 4 founder response: recorded the actual “approve all tasks per best
 practices” instruction as three narrow M3 dispositions bound to the exact
 reviewed evidence: unchanged selection freeze approved, one final synthetic

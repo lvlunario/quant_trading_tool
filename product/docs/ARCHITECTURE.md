@@ -1,5 +1,15 @@
 # Architecture and decisions
 
+November 5 M3 holdout boundary: `atlas.final_holdout` requires the exact
+registered synthetic manifest, prospective freeze candidate and actual founder
+decision before it can evaluate sessions 160–199. It reproduces the frozen
+long/cash rule and buy-and-hold comparator under the registered base and adverse
+policies, then exposes only calendar/execution counts and a hash of the four
+metric vectors. The checked-in receipt binds published code commit `9043a68`
+and records inspection ordinal one. It cannot authorize a repeat inspection,
+post-result tuning, milestone acceptance, release, real-data validation,
+investment-performance claims, merge or trading.
+
 November 4 founder-decision boundary: `atlas.m3_founder_decision` layers the
 actual three-part response over the immutable selection candidate and options
 evidence rather than mutating those historical records. It hash-binds both
