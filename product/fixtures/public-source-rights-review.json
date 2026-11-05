@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "assessed_at": "2026-10-04T00:00:00+00:00",
+  "use_case": "internal_research",
+  "retrieval_policy": {
+    "max_source_bytes": 5242880,
+    "allowed_content_types": ["text/html", "application/pdf", "application/json"],
+    "follow_redirects": false,
+    "retain_source_bytes": false,
+    "network_fetch_enabled": false
+  },
+  "reviews": [
+    {"document_id":"DOC_WATCH2026100301","symbol":"NVDA","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100302","symbol":"MU","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100303","symbol":"AVGO","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100304","symbol":"QCOM","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100305","symbol":"PLTR","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100306","symbol":"SPCX","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100307","symbol":"QBTS","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null},
+    {"document_id":"DOC_WATCH2026100308","symbol":"RGTI","review_state":"not_started","terms_uri":null,"evidence_sha256":null,"reviewed_at":null,"valid_until":null}
+  ]
+}

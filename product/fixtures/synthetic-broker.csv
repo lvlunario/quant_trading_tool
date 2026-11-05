@@ -1,0 +1,4 @@
+account_key,row_type,ticker,quantity,price,market_value
+ALPHA,EQUITY,DEMO,2.5,10,25
+ALPHA,CASH,,0,0,75
+ALPHA,ACCOUNT_TOTAL,,,,100

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "inspection_id": "m3-final-synthetic-holdout-v1",
+  "inspection_ordinal": 1,
+  "status": "synthetic_holdout_inspected_once",
+  "scope": "frozen_synthetic_engineering_only",
+  "experiment_id": "m3-synthetic-metrics-v1",
+  "manifest_sha256": "f68cd3e7e174d6cad70f490d582818ebdcdc9b30b968a558c6681fc9db9d5576",
+  "freeze_candidate_sha256": "8834a63fbcf0146fdc25f258f1b4f91189cd4c53985e00bced76b597a1e047cf",
+  "founder_decision_sha256": "b134340308a1eb4f056ba66b5205e26f6550ece18e4fefba1fbaf875206f17d1",
+  "executed_by_code_commit_sha": "9043a688fc2a532d83ad6f10f45ea848e78e3ff5",
+  "inspected_at": "2026-11-05T12:02:09.507341+00:00",
+  "holdout_calendar": {
+    "start": 160,
+    "end_exclusive": 200,
+    "eligible_decision_count": 35
+  },
+  "benchmark": "buy_and_hold",
+  "execution": {
+    "candidate_target_count": 2,
+    "candidate_base_fill_count": 1,
+    "candidate_adverse_fill_count": 1,
+    "comparator_target_count": 1,
+    "comparator_base_fill_count": 1,
+    "comparator_adverse_fill_count": 1
+  },
+  "metric_output_sha256": "8113c8d884538efcd7fead7fa86912304c10a6d2ad0587ef44012cd0222416d6",
+  "metric_output_bytes_count": 1204,
+  "metric_values_redacted": true,
+  "m3_readiness": {
+    "ready_count": 6,
+    "required_count": 6,
+    "next_decision": "founder_m3_milestone_acceptance"
+  },
+  "selection_frozen": true,
+  "holdout_authorized": true,
+  "holdout_inspected": true,
+  "metrics_calculated": true,
+  "comparator_executed": true,
+  "adverse_policy_executed": true,
+  "repeat_inspection_authorized": false,
+  "post_holdout_tuning_authorized": false,
+  "m3_engineering_criteria_ready": true,
+  "milestone_acceptance_recorded": false,
+  "release_authorized": false,
+  "real_data_validated": false,
+  "investment_performance_established": false,
+  "merge_authorized": false,
+  "trading_authorized": false,
+  "limitations": [
+    "invented deterministic series only",
+    "metric values withheld from the public receipt",
+    "no repeat inspection or post-holdout tuning authorized",
+    "no inference to live markets or investment performance"
+  ],
+  "receipt_sha256": "1cb6b47033c91a61f449330a1e9c87ce38f60e5dbb71a95eec4cf1e575d61543"
+}

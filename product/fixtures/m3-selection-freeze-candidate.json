@@ -1,0 +1,20 @@
+{
+  "experiment_id": "m3-synthetic-metrics-v1",
+  "manifest_sha256": "f68cd3e7e174d6cad70f490d582818ebdcdc9b30b968a558c6681fc9db9d5576",
+  "validation_output_sha256": "50e9979878b39e902bbda24422da8e46f4a77498d010b4df11cbde2df330edb5",
+  "validation_output_bytes_count": 1755,
+  "prepared_by_code_commit_sha": "c15f1c6644c0a5d7f4d00f48b7a76389f458da72",
+  "schema_version": 1,
+  "status": "review_required",
+  "recommended_disposition": "freeze_without_tuning",
+  "candidate_changed_after_validation": false,
+  "metric_definition_changed_after_validation": false,
+  "selection_frozen": false,
+  "holdout_authorized": false,
+  "founder_response_recorded": false,
+  "holdout_inspected": false,
+  "real_data_validated": false,
+  "milestone_accepted": false,
+  "investment_performance_established": false,
+  "candidate_sha256": "8834a63fbcf0146fdc25f258f1b4f91189cd4c53985e00bced76b597a1e047cf"
+}
