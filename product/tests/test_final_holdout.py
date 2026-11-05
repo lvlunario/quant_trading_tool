@@ -121,6 +121,18 @@ class FinalHoldoutTests(unittest.TestCase):
                 ValueError, 'invalid_final_holdout_execution_identity'):
             self.inspect(executed_by_code_commit_sha='not-a-commit')
 
+    def test_checked_in_receipt_matches_the_single_registered_inspection(self):
+        checked_in = json.loads((
+            Path(__file__).parents[1] / 'fixtures' /
+            'm3-final-holdout-receipt.json').read_text())
+        inspection = self.inspect(
+            executed_by_code_commit_sha=
+                checked_in['executed_by_code_commit_sha'],
+            inspected_at=datetime.fromisoformat(checked_in['inspected_at']))
+        expected = inspection.receipt.public_summary()
+        expected['receipt_sha256'] = inspection.receipt.receipt_sha256
+        self.assertEqual(checked_in, expected)
+
     def test_adjacent_authority_cannot_be_promoted(self):
         receipt = self.inspect().receipt
         for change in (
