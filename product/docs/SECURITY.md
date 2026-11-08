@@ -32,6 +32,16 @@ no-store, restrictive content security policy, no-referrer and nosniff
 headers. This is browser-level exposure reduction, not authentication or an
 independent accessibility/security assessment.
 
+The November 8 local-session boundary adds lifetime enforcement to those read
+routes. Each preview process receives a 15-minute boundary, capped at 30
+minutes, and evaluates host, method, exact target and an aware observation
+time before rendering a page. Reads at expiry return a restart response. It
+does not bind a person, credential, account, cookie or tenant and provides no
+revocation service, rate limit, TLS, durable store, cross-process state,
+private-data permission or recovery flow. Treat it as defense in depth for an
+invented localhost demo only, never as evidence that the M4 authentication or
+access-isolation gate is met.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

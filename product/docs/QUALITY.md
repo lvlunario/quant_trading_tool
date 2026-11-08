@@ -1,5 +1,15 @@
 # Research, QA and release quality
 
+Local-session tests lock the 15-minute default and 30-minute maximum, exact
+loopback hosts, exact GET route set, aware issue/expiry interval and controlled
+denial reasons. They reject broadened policy, query variants, mutations, wrong
+types, naive timestamps and all reads at expiry. CLI and HTTP tests require the
+public output to remain redacted and explicitly false for identity,
+authentication, cookies, durable session state, private persistence and
+release. These checks verify a process-local request boundary; they do not
+exercise managed authentication, MFA, tenant authorization, revocation,
+private storage or recovery.
+
 Final-holdout tests require the exact frozen manifest, freeze-candidate hash,
 actual founder-decision hash, aware post-decision timestamp and published
 40-character execution commit. They verify the 160–199 calendar, 35 eligible

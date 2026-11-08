@@ -1,5 +1,16 @@
 # Architecture and decisions
 
+November 8 local-session boundary: `atlas.local_session` creates a fixed
+process-local allowlist for the existing synthetic preview. It accepts only
+the two loopback host labels, `GET`, and the exact checked-in read routes for
+15 minutes by default with a hard 30-minute maximum. A request before issue or
+at/after expiry is denied; the browser returns 403 for an expired local read
+and 404 for an unrecognized host, method or route. The public summary is
+count-only and keeps identity, authentication, cookies, durable session state,
+private persistence and release authority false. This reduces exposure of the
+temporary local process; it is not the managed authentication, authorization,
+storage or recovery architecture required by M4.
+
 November 5 M3 holdout boundary: `atlas.final_holdout` requires the exact
 registered synthetic manifest, prospective freeze candidate and actual founder
 decision before it can evaluate sessions 160–199. It reproduces the frozen

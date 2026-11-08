@@ -1,5 +1,16 @@
 # Backlog and decision register
 
+November 8 evening: completed the typed short-lived request boundary for the
+localhost synthetic preview. It permits only exact allowlisted GET routes on
+loopback for 15 minutes by default, caps the lifetime at 30 minutes and fails
+closed before issue and at expiry. The preview now returns a controlled 403
+restart response for expired reads. Seven direct boundary tests plus CLI and
+HTTP integration coverage raise the full suite to 459. The November 7 dated
+public-evidence packet and four contract tests are also checked in without
+creating a recommendation. Next: define the typed private-environment
+readiness receipt for managed authentication, storage, recovery, redaction and
+UAT dependencies without claiming that infrastructure has been provisioned.
+
 November 5 evening: executed the single authorized final synthetic holdout
 inspection after publishing the fail-closed boundary at `9043a68`. The
 redacted receipt binds the exact manifest, freeze candidate, founder decision
@@ -217,6 +228,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 | Symbol ambiguity | Confirm CRBS issuer; verify SPCX via primary source | Open |
 
 ## Next concrete increment
+
+Define a public-safe private-environment readiness receipt for M4. It should
+enumerate managed identity/authentication, authorized private storage,
+recovery/restore evidence, log redaction and founder UAT as independently
+blocked dependencies, expose controlled states only and provide no credential,
+private-data, deployment or acceptance path. Do not promote the process-local
+session boundary to authentication.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and
