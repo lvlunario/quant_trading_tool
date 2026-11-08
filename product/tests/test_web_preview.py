@@ -2,6 +2,7 @@ from http.client import HTTPConnection
 from http.server import HTTPServer
 from threading import Thread
 from urllib.parse import urlencode
+from datetime import datetime, timedelta, timezone
 import unittest
 
 from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
@@ -12,6 +13,7 @@ from atlas.web_preview import (calculate_put, make_handler, render_import_demo,
                                public_integrated_readiness,
                                render_research_work_items, render_weekly_review,
                                serve_preview)
+from atlas.local_session import build_local_session_boundary
 
 
 RESEARCH_PATHS = (
@@ -171,6 +173,30 @@ class WebPreviewTests(unittest.TestCase):
         status, _, _ = self.request(
             "GET", "/integrated-readiness?mode=private")
         self.assertEqual(status, 404)
+
+    def test_expired_local_session_boundary_blocks_read_routes(self):
+        issued_at = datetime(2026, 11, 7, 11, 0, tzinfo=timezone.utc)
+        boundary = build_local_session_boundary(
+            issued_at=issued_at, lifetime_seconds=60)
+        server = HTTPServer(
+            ("127.0.0.1", 0),
+            make_handler(self.token, session_boundary=boundary,
+                         now=lambda: issued_at + timedelta(seconds=60)))
+        thread = Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        try:
+            connection = HTTPConnection("127.0.0.1", server.server_port,
+                                        timeout=2)
+            connection.request("GET", "/integrated-readiness")
+            response = connection.getresponse()
+            page = response.read().decode()
+            self.assertEqual(response.status, 403)
+            self.assertIn("Local demo session expired", page)
+            connection.close()
+        finally:
+            server.shutdown()
+            server.server_close()
+            thread.join()
 
     def test_provider_qualification_projection_is_blocked_and_redacted(self):
         status, _, page = self.request("GET", "/overview")

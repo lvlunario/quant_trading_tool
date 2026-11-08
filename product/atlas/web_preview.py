@@ -16,6 +16,7 @@ from pathlib import Path
 from .conformance import m1_import_conformance, recommend_m1_disposition
 from .integrated_readiness import compose_integrated_prototype_readiness
 from .import_workflow import synthetic_csv_report
+from .local_session import build_local_session_boundary, evaluate_local_read
 from .m2_acceptance_trace import build_m2_acceptance_trace
 from .m2_milestone_readiness import assess_m2_milestone_readiness
 from .m2_synthetic_conformance import assess_m2_synthetic_conformance
@@ -522,7 +523,13 @@ def render_page(*, token, values=None, result=None, error=None):
 <p><strong>Important:</strong> expiration-only math omits early assignment, dividends, taxes, interest, bid/ask spread, liquidity and changing volatility. Nothing is saved.</p></main></body></html>"""
 
 
-def make_handler(token):
+def make_handler(token, *, session_boundary=None, now=None):
+    if session_boundary is None:
+        session_boundary = build_local_session_boundary(
+            issued_at=datetime.now(timezone.utc))
+    if now is None:
+        now = lambda: datetime.now(timezone.utc)
+
     class PreviewHandler(BaseHTTPRequestHandler):
         def log_message(self, *_):
             return
@@ -544,10 +551,15 @@ def make_handler(token):
             return host in {"127.0.0.1", "localhost"}
 
         def do_GET(self):
-            if not self._valid_host() or self.path not in {
-                    "/", "/overview", "/checklist", "/import-demo", "/m1-status",
-                    "/weekly-review", "/integrated-readiness",
-                    *RESEARCH_ROUTE_FILTERS}:
+            decision = evaluate_local_read(
+                session_boundary, host=self.headers.get("Host", ""),
+                method="GET", target=self.path, observed_at=now())
+            if not decision.allowed:
+                if decision.reason == "session_not_current":
+                    self._send(403, render_page(
+                        token=token,
+                        error="Local demo session expired; restart the preview"))
+                    return
                 self._send(404, render_page(token=token, error="Page not found"))
                 return
             if self.path == "/overview":

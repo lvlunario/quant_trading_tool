@@ -62,6 +62,8 @@ def main():
                         help="invented synthetic CSV only; not a broker/Fidelity import")
     source.add_argument("--integrated-readiness-demo", action="store_true",
                         help="count-only localhost integration; no private state")
+    source.add_argument("--local-session-boundary-demo", action="store_true",
+                        help="short local read boundary; not authentication")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -81,6 +83,11 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
+        elif args.local_session_boundary_demo:
+            from .local_session import build_local_session_boundary
+
+            report = build_local_session_boundary(
+                issued_at=datetime.now(timezone.utc)).public_summary()
         elif args.integrated_readiness_demo:
             from .integrated_readiness import (
                 compose_integrated_prototype_readiness,

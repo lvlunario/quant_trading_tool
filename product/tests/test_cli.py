@@ -43,6 +43,18 @@ class CliTests(unittest.TestCase):
                          'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_local_session_boundary_demo_is_not_authentication(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--local-session-boundary-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['status'], 'local_request_boundary_defined')
+        self.assertEqual(report['lifetime_seconds'], 900)
+        self.assertFalse(report['identity_verified'])
+        self.assertFalse(report['authentication_implemented'])
+        self.assertFalse(report['durable_session_store'])
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)
