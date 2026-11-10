@@ -1,5 +1,16 @@
 # Architecture and decisions
 
+November 10 private-environment receipt:
+`atlas.private_environment_readiness` converts the five remaining M4 control
+dependencies into an exact typed tuple. Managed authentication, authorized
+private storage, recovery/restore evidence, redacted operational logging and
+founder UAT each have one controlled blocker and cannot be promoted by caller
+input. The receipt accepts only an aware assessment inside a valid
+`LocalSessionBoundary`; that boundary is reported as synthetic localhost
+evidence while identity and authentication remain false. The public projection
+is 0/5 ready, contains no credential or financial fields and cannot authorize
+acceptance, deployment, private data, release or real money.
+
 November 8 local-session boundary: `atlas.local_session` creates a fixed
 process-local allowlist for the existing synthetic preview. It accepts only
 the two loopback host labels, `GET`, and the exact checked-in read routes for

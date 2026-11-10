@@ -1,5 +1,14 @@
 # Research, QA and release quality
 
+Private-environment readiness tests lock the five-control order and controlled
+blockers, require every criterion to remain blocked, and reject changed scope,
+promotion, naive assessment times or a receipt outside the local boundary's
+active interval. Public-output tests exclude credentials, tokens, secrets,
+account/source identifiers, symbols and performance fields while requiring
+acceptance, deployment, private-data, release and real-money authority to stay
+false. The CLI test proves the same 0/5 state. These tests verify readiness
+accounting, not the missing controls themselves.
+
 Local-session tests lock the 15-minute default and 30-minute maximum, exact
 loopback hosts, exact GET route set, aware issue/expiry interval and controlled
 denial reasons. They reject broadened policy, query variants, mutations, wrong

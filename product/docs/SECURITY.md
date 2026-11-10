@@ -42,6 +42,16 @@ private-data permission or recovery flow. Treat it as defense in depth for an
 invented localhost demo only, never as evidence that the M4 authentication or
 access-isolation gate is met.
 
+The M4 private-environment receipt keeps managed authentication, authorized
+private storage, recovery/restore evidence, redacted operational logging and
+founder UAT as separate, independently evidenced controls. The current public
+receipt records all five as blocked: no managed identity has been provisioned,
+no authorized private storage exists, restore has not been demonstrated, log
+redaction has not been verified and founder UAT has not been recorded. Its
+fixed 0/5 result cannot be changed through command-line evidence flags. This is
+a gap register and control contract, not a substitute for implementation,
+independent review or a release decision.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

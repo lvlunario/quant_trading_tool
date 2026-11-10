@@ -1,5 +1,15 @@
 # Backlog and decision register
 
+November 10 evening: added a typed M4 private-environment readiness receipt.
+It records managed authentication, authorized private storage,
+recovery/restore evidence, redacted operational logging and founder UAT as
+five independent blocked controls, exposes no promotion input and leaves
+acceptance, deployment, private data, release and real money false. Six direct
+tests plus CLI coverage raise the full suite to 466. November 8 exact-head CI
+run #356 is verified passed. Next: project this same 0/5 receipt into the exact
+localhost integrated-readiness page as a count-only panel without adding a
+credential, evidence upload or state transition.
+
 November 8 evening: completed the typed short-lived request boundary for the
 localhost synthetic preview. It permits only exact allowlisted GET routes on
 loopback for 15 minutes by default, caps the lifetime at 30 minutes and fails
@@ -229,12 +239,11 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
-Define a public-safe private-environment readiness receipt for M4. It should
-enumerate managed identity/authentication, authorized private storage,
-recovery/restore evidence, log redaction and founder UAT as independently
-blocked dependencies, expose controlled states only and provide no credential,
-private-data, deployment or acceptance path. Do not promote the process-local
-session boundary to authentication.
+Project the typed M4 private-environment readiness receipt into the fixed
+localhost integrated-readiness route. Show only the 0/5 aggregate and the five
+controlled criterion/blocker labels; retain the short-lived request boundary,
+no-store headers, no forms and no state transition. Do not add credentials,
+private evidence, uploads, persistence, deployment or acceptance controls.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and
