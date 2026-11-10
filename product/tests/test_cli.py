@@ -55,6 +55,20 @@ class CliTests(unittest.TestCase):
         self.assertFalse(report['authentication_implemented'])
         self.assertFalse(report['durable_session_store'])
 
+    def test_private_environment_readiness_demo_stays_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--private-environment-readiness-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 0)
+        report = json.loads(run.stdout)
+        self.assertEqual(report['criteria_total'], 5)
+        self.assertEqual(report['criteria_ready'], 0)
+        self.assertEqual(report['criteria_blocked'], 5)
+        self.assertFalse(report['capabilities']['authentication_implemented'])
+        self.assertFalse(report['private_data_authorized'])
+        self.assertFalse(report['release_authorized'])
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

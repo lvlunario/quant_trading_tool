@@ -64,6 +64,9 @@ def main():
                         help="count-only localhost integration; no private state")
     source.add_argument("--local-session-boundary-demo", action="store_true",
                         help="short local read boundary; not authentication")
+    source.add_argument("--private-environment-readiness-demo",
+                        action="store_true",
+                        help="M4 external control gaps; provisions nothing")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -83,6 +86,18 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
+        elif args.private_environment_readiness_demo:
+            from .local_session import build_local_session_boundary
+            from .private_environment_readiness import (
+                assess_private_environment_readiness,
+            )
+
+            now = datetime.now(timezone.utc)
+            report = assess_private_environment_readiness(
+                assessed_at=now,
+                local_session=build_local_session_boundary(
+                    issued_at=now),
+            ).public_summary()
         elif args.local_session_boundary_demo:
             from .local_session import build_local_session_boundary
 
