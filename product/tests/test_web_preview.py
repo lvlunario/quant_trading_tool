@@ -153,6 +153,7 @@ class WebPreviewTests(unittest.TestCase):
                        'aria-labelledby="portfolio-heading"',
                        'aria-labelledby="research-heading"',
                        'aria-labelledby="options-heading"',
+                       'aria-labelledby="private-environment-heading"',
                        'aria-labelledby="capabilities-heading"'):
             self.assertIn(marker, page)
         for disabled in ('data-durable-replay="false"',
@@ -173,6 +174,27 @@ class WebPreviewTests(unittest.TestCase):
         status, _, _ = self.request(
             "GET", "/integrated-readiness?mode=private")
         self.assertEqual(status, 404)
+
+    def test_integrated_readiness_projects_exact_m4_control_gaps(self):
+        status, _, page = self.request("GET", "/integrated-readiness")
+        self.assertEqual(status, 200)
+        self.assertIn('data-private-criteria-ready="0"', page)
+        self.assertIn('data-private-criteria-total="5"', page)
+        self.assertIn('data-private-criteria-blocked="5"', page)
+        expected = (
+            ("Managed Authentication", "managed_identity_not_provisioned"),
+            ("Authorized Private Storage", "private_storage_not_provisioned"),
+            ("Recovery Restore Evidence", "restore_not_demonstrated"),
+            ("Redacted Operational Logging", "log_redaction_not_verified"),
+            ("Founder UAT", "founder_uat_not_recorded"),
+        )
+        positions = []
+        for criterion, blocker in expected:
+            self.assertEqual(page.count(f'<th scope="row">{criterion}</th>'), 1)
+            self.assertEqual(page.count(f'<code>{blocker}</code>'), 1)
+            positions.append(page.index(f'<th scope="row">{criterion}</th>'))
+        self.assertEqual(positions, sorted(positions))
+        self.assertEqual(page.count("Blocked External Evidence"), 5)
 
     def test_expired_local_session_boundary_blocks_read_routes(self):
         issued_at = datetime(2026, 11, 7, 11, 0, tzinfo=timezone.utc)

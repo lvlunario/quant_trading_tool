@@ -21,6 +21,7 @@ from .m2_acceptance_trace import build_m2_acceptance_trace
 from .m2_milestone_readiness import assess_m2_milestone_readiness
 from .m2_synthetic_conformance import assess_m2_synthetic_conformance
 from .options_acceptance import build_synthetic_options_acceptance_evidence
+from .private_environment_readiness import assess_private_environment_readiness
 from .research_work_items import compose_research_work_queue
 from .receipts import import_receipt
 from .rights_evidence import (assess_reviewed_rights,
@@ -84,19 +85,38 @@ def public_integrated_readiness(at=INTEGRATED_READINESS_AS_OF):
         assessed_at=at).public_summary()
 
 
-def render_integrated_readiness():
+def public_private_environment_readiness(
+        at=INTEGRATED_READINESS_AS_OF, local_session=None):
+    """Build the fixed, typed M4 gap receipt for the local read boundary."""
+    if local_session is None:
+        local_session = build_local_session_boundary(issued_at=at)
+    return assess_private_environment_readiness(
+        assessed_at=at, local_session=local_session).public_summary()
+
+
+def render_integrated_readiness(
+        *, private_at=INTEGRATED_READINESS_AS_OF, local_session=None):
     """Render one fixed count-only view with no action or private-data path."""
     report = public_integrated_readiness()
+    private = public_private_environment_readiness(
+        at=private_at, local_session=local_session)
     portfolio, research, options = (
         report['portfolio'], report['research'], report['options'])
     capabilities = report['capabilities']
     dependencies = ''.join(
         f'<li>{escape(item.replace("_", " ").title())}</li>'
         for item in report['external_dependencies'])
+    private_rows = ''.join(
+        '<tr>'
+        f'<th scope="row">{escape(item["name"].replace("_", " ").title().replace("Uat", "UAT"))}</th>'
+        f'<td>{escape(item["status"].replace("_", " ").title())}</td>'
+        f'<td><code>{escape(item["blocker"])}</code></td>'
+        '</tr>'
+        for item in private['criteria'])
     return f'''<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Atlas Integrated Readiness · Synthetic</title>
-<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:940px;margin:auto;padding:24px}}main{{display:grid;gap:18px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:20px}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:minmax(190px,1fr) 2fr;gap:8px}}dt{{font-weight:700}}dd{{margin:0}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
+<style>:root{{font:16px/1.5 system-ui;color:#183244;background:#edf3f5}}body{{max-width:940px;margin:auto;padding:24px}}main{{display:grid;gap:18px}}section{{background:#fff;border:1px solid #c4d5dc;border-radius:12px;padding:20px}}.warning{{background:#fff0c4;padding:12px}}dl{{display:grid;grid-template-columns:minmax(190px,1fr) 2fr;gap:8px}}dt,th{{font-weight:700}}dd{{margin:0}}table{{border-collapse:collapse;width:100%}}th,td{{border-bottom:1px solid #dbe5e9;padding:8px;text-align:left;vertical-align:top}}code{{overflow-wrap:anywhere}}:focus-visible{{outline:3px solid #bf6400;outline-offset:3px}}</style></head>
 <body><nav aria-label="Atlas"><a href="/overview">Return to five-area overview</a></nav>
 <h1>Integrated readiness</h1>
 <p class="warning" id="scope-note"><strong>Synthetic localhost demonstration only.</strong> This page is read-only and records no acceptance, release or trading authority.</p>
@@ -104,6 +124,7 @@ def render_integrated_readiness():
 <section aria-labelledby="portfolio-heading" data-portfolio-status="{escape(portfolio['status'], quote=True)}" data-input-rows="{portfolio['input_rows']}" data-rejected-rows="{portfolio['rejected_rows']}" data-publishable-rows="{portfolio['publishable_rows']}" data-durable-replay="{str(portfolio['durable_replay_protection']).lower()}" data-fidelity-validated="{str(portfolio['fidelity_validated']).lower()}"><h2 id="portfolio-heading">Portfolio truth</h2><p><strong>{portfolio['input_rows']} invented rows reconciled; {portfolio['rejected_rows']} rejected.</strong></p><p>Durable replay and Fidelity validation are unavailable.</p></section>
 <section aria-labelledby="research-heading" data-research-status="{escape(research['status'], quote=True)}" data-research-passed-counts="{','.join(str(value) for value in research['stage_passed_counts'])}" data-sourced-statements="{research['sourced_statement_count']}" data-sourced-metrics="{research['sourced_metric_count']}" data-publication-authorized="{str(research['publication_authorized']).lower()}"><h2 id="research-heading">Research readiness</h2><p><strong>Sourced publication remains blocked.</strong> Gate counts: {' / '.join(str(value) for value in research['stage_passed_counts'])}.</p><p>There are zero sourced statements and zero sourced metrics.</p></section>
 <section aria-labelledby="options-heading" data-options-status="{escape(options['status'], quote=True)}" data-option-scenarios="{options['scenario_count']}" data-option-controls="{options['control_count']}" data-real-chain-validated="{str(options['real_chain_validated']).lower()}" data-actionable-ranking="{str(options['actionable_ranking_authorized']).lower()}"><h2 id="options-heading">Options controls</h2><p><strong>{options['scenario_count']} fixed scenarios exercise {options['control_count']} controls.</strong></p><p>Live-chain validation and actionable ranking remain unavailable.</p></section>
+<section aria-labelledby="private-environment-heading" data-private-environment-status="{escape(private['status'], quote=True)}" data-private-criteria-ready="{private['criteria_ready']}" data-private-criteria-total="{private['criteria_total']}" data-private-criteria-blocked="{private['criteria_blocked']}"><h2 id="private-environment-heading">Private-environment readiness</h2><p><strong>{private['criteria_ready']}/{private['criteria_total']} controls ready.</strong> All five controls require external evidence.</p><table><caption>M4 control gaps</caption><thead><tr><th scope="col">Criterion</th><th scope="col">State</th><th scope="col">Controlled blocker</th></tr></thead><tbody>{private_rows}</tbody></table></section>
 <section aria-labelledby="capabilities-heading" data-authentication="{str(capabilities['authentication_implemented']).lower()}" data-private-persistence="{str(capabilities['private_persistence_implemented']).lower()}" data-network-retrieval="{str(capabilities['network_retrieval_enabled']).lower()}" data-order-path="{str(capabilities['order_path_enabled']).lower()}" data-release-authorized="{str(report['release_authorized']).lower()}" data-performance-established="{str(report['investment_performance_established']).lower()}"><h2 id="capabilities-heading">Boundaries and dependencies</h2><dl><dt>Read-only</dt><dd>Yes</dd><dt>Localhost only</dt><dd>Yes</dd><dt>Authentication</dt><dd>Not implemented</dd><dt>Private persistence</dt><dd>Not implemented</dd><dt>Order path</dt><dd>Disabled</dd></dl><h3>External dependencies</h3><ul>{dependencies}</ul></section>
 </main><p>No portfolio identifiers, instruments, source addresses, collateral values or performance results are displayed.</p></body></html>'''
 
@@ -551,9 +572,10 @@ def make_handler(token, *, session_boundary=None, now=None):
             return host in {"127.0.0.1", "localhost"}
 
         def do_GET(self):
+            observed_at = now()
             decision = evaluate_local_read(
                 session_boundary, host=self.headers.get("Host", ""),
-                method="GET", target=self.path, observed_at=now())
+                method="GET", target=self.path, observed_at=observed_at)
             if not decision.allowed:
                 if decision.reason == "session_not_current":
                     self._send(403, render_page(
@@ -573,7 +595,9 @@ def make_handler(token, *, session_boundary=None, now=None):
             elif self.path == "/weekly-review":
                 self._send(200, render_weekly_review())
             elif self.path == "/integrated-readiness":
-                self._send(200, render_integrated_readiness())
+                self._send(200, render_integrated_readiness(
+                    private_at=observed_at,
+                    local_session=session_boundary))
             elif self.path in RESEARCH_ROUTE_FILTERS:
                 self._send(200, render_research_work_items(
                     RESEARCH_ROUTE_FILTERS[self.path]))
