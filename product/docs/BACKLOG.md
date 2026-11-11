@@ -5,9 +5,9 @@ exact localhost integrated-readiness route. The page shows 0/5 ready and the
 five ordered controlled criterion/status/blocker rows only. One timestamp now
 drives both local access evaluation and the typed assessment; no credential,
 upload, persistence, approval or deployment path was added. Thirty-eight
-focused tests and 467 full-suite tests pass locally. November 10 exact-head CI
-run #360 is verified passed; current-head hosted verification follows
-publication. Next: compose a typed November 14 M4 checkpoint candidate from
+focused tests and 467 full-suite tests pass locally. Exact-head Atlas
+foundation run #362 passed on the published projection head. Next: compose a
+typed November 14 M4 checkpoint candidate from
 the integrated synthetic status and 0/5 control receipt, recommending explicit
 deferral without recording a founder response or acceptance.
 
