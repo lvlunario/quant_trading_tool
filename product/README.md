@@ -6,7 +6,15 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated November 10, 2026
+## What you can try and when — updated November 11, 2026
+
+As of November 11, the fixed localhost `/integrated-readiness` page projects
+the typed M4 private-environment receipt beside the existing synthetic
+portfolio, research and options status. It shows exactly 0/5 ready and the
+five controlled criterion/blocker pairs. The handler uses the same request
+time for local-boundary evaluation and receipt assessment, retains no-store
+and restrictive browser headers, and adds no credential, upload, persistence,
+approval or deployment path. The view is a gap register, not a private app.
 
 As of November 10,
 `python3 -m atlas --private-environment-readiness-demo` emits a typed,

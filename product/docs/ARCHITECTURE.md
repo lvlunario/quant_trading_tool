@@ -1,5 +1,13 @@
 # Architecture and decisions
 
+November 11 private-readiness browser projection:
+`render_integrated_readiness` now constructs the typed M4 receipt inside the
+same active `LocalSessionBoundary` that admitted the request. One observed
+timestamp is used for both the access decision and readiness assessment. The
+HTML allowlist exposes only the 0/5 aggregate and the five ordered controlled
+criterion/status/blocker rows. It adds no input, evidence upload, credential,
+persistence, approval or deployment path and cannot promote any control.
+
 November 10 private-environment receipt:
 `atlas.private_environment_readiness` converts the five remaining M4 control
 dependencies into an exact typed tuple. Managed authentication, authorized

@@ -1,5 +1,16 @@
 # Backlog and decision register
 
+November 11 evening: projected the typed private-environment receipt into the
+exact localhost integrated-readiness route. The page shows 0/5 ready and the
+five ordered controlled criterion/status/blocker rows only. One timestamp now
+drives both local access evaluation and the typed assessment; no credential,
+upload, persistence, approval or deployment path was added. Thirty-eight
+focused tests and 467 full-suite tests pass locally. November 10 exact-head CI
+run #360 is verified passed; current-head hosted verification follows
+publication. Next: compose a typed November 14 M4 checkpoint candidate from
+the integrated synthetic status and 0/5 control receipt, recommending explicit
+deferral without recording a founder response or acceptance.
+
 November 10 evening: added a typed M4 private-environment readiness receipt.
 It records managed authentication, authorized private storage,
 recovery/restore evidence, redacted operational logging and founder UAT as
@@ -239,11 +250,12 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
-Project the typed M4 private-environment readiness receipt into the fixed
-localhost integrated-readiness route. Show only the 0/5 aggregate and the five
-controlled criterion/blocker labels; retain the short-lived request boundary,
-no-store headers, no forms and no state transition. Do not add credentials,
-private evidence, uploads, persistence, deployment or acceptance controls.
+Compose a typed November 14 M4 checkpoint candidate from the existing
+integrated synthetic status and the 0/5 private-environment receipt. Emit only
+aggregate evidence and controlled deferrals, with a recommendation to defer
+the private milestone while continuing the local synthetic fallback. Do not
+record a founder response, milestone acceptance, deployment, private-data or
+release authority.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and

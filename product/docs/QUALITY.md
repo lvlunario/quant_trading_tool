@@ -1,5 +1,13 @@
 # Research, QA and release quality
 
+The integrated-readiness HTTP test now requires the exact 0/5/5 aggregate,
+all five ordered M4 criterion/blocker pairs and five blocked states. Existing
+browser privacy coverage continues to exclude forms, inputs, buttons, scripts,
+financial identifiers and performance fields while requiring no-store and all
+private/action capabilities to remain false. The route constructs the receipt
+inside the already validated short-lived local boundary; these assertions
+test a read-only projection, not authentication or private infrastructure.
+
 Private-environment readiness tests lock the five-control order and controlled
 blockers, require every criterion to remain blocked, and reject changed scope,
 promotion, naive assessment times or a receipt outside the local boundary's

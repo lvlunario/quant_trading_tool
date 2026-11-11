@@ -52,6 +52,14 @@ fixed 0/5 result cannot be changed through command-line evidence flags. This is
 a gap register and control contract, not a substitute for implementation,
 independent review or a release decision.
 
+The integrated-readiness browser projection instantiates that receipt only
+after the exact localhost GET has passed the active short-lived boundary. The
+same aware observation time is reused for the receipt, preventing the page
+from displaying a readiness assessment outside the boundary interval. Its
+allowlist contains only the 0/5 aggregate and controlled criterion, status and
+blocker labels. It adds no credential, private evidence, upload, persistence,
+approval or deployment control and therefore does not satisfy any M4 gate.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private
