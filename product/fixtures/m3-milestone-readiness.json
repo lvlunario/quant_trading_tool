@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "assessed_at": "2026-10-27T19:25:00+08:00",
+  "target_date": "2026-10-31",
+  "experiment_id": "m3-synthetic-metrics-v1",
+  "manifest_sha256": "f68cd3e7e174d6cad70f490d582818ebdcdc9b30b968a558c6681fc9db9d5576",
+  "validation_output_sha256": "50e9979878b39e902bbda24422da8e46f4a77498d010b4df11cbde2df330edb5",
+  "validation_output_bytes_count": 1755,
+  "freeze_candidate_sha256": "8834a63fbcf0146fdc25f258f1b4f91189cd4c53985e00bced76b597a1e047cf",
+  "prepared_by_code_commit_sha": "5c5c8102a776ecec65ca7764054d41d54356d9c2",
+  "scope": "synthetic_engineering_only",
+  "registered_protocol_ready": true,
+  "reproducible_validation_ready": true,
+  "costs_and_benchmark_ready": true,
+  "selection_frozen": false,
+  "holdout_authorized": false,
+  "holdout_inspected": false,
+  "options_acceptance_ready": false,
+  "real_data_validated": false,
+  "founder_response_recorded": false,
+  "milestone_accepted": false,
+  "release_authorized": false,
+  "investment_performance_established": false,
+  "readiness_sha256": "d9f76d681895ef2eb0fab2c7ed32a284dfd04112db1b10f51378cddec4177e58",
+  "public_summary": {
+    "schema_version": 1,
+    "status": "blocked",
+    "phase": "M3 Strategy laboratory",
+    "scope": "synthetic_engineering_only",
+    "assessed_at": "2026-10-27T19:25:00+08:00",
+    "target_date": "2026-10-31",
+    "target_status": "scheduled",
+    "days_to_target": 4,
+    "criteria": [
+      {"criterion": "registered_protocol", "status": "ready", "blocker": "none"},
+      {"criterion": "reproducible_validation", "status": "ready", "blocker": "none"},
+      {"criterion": "costs_and_benchmark", "status": "ready", "blocker": "none"},
+      {"criterion": "selection_freeze", "status": "blocked", "blocker": "founder_selection_freeze_response_required"},
+      {"criterion": "final_holdout", "status": "blocked", "blocker": "selection_freeze_and_holdout_authorization_required"},
+      {"criterion": "options_scenario_acceptance", "status": "blocked", "blocker": "collateral_and_stale_chain_evidence_incomplete"}
+    ],
+    "ready_count": 3,
+    "required_count": 6,
+    "decision_dependencies": [
+      "founder_selection_freeze_response",
+      "founder_holdout_authorization"
+    ],
+    "engineering_dependencies": [
+      "final_holdout_receipt",
+      "options_collateral_reservation_evidence",
+      "stale_chain_blocking_evidence"
+    ],
+    "real_data_validated": false,
+    "founder_response_recorded": false,
+    "milestone_acceptance_recorded": false,
+    "release_authorized": false,
+    "investment_performance_established": false,
+    "recommendation": "keep holdout sealed; request explicit selection and holdout decisions; complete options evidence before M3 acceptance"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "status": "holdout_authorized_pending_one_time_inspection",
+  "scope": "synthetic_m3_governance_only",
+  "decided_at": "2026-11-04T12:30:00+00:00",
+  "decisions": [
+    {
+      "decision": "selection_freeze",
+      "disposition": "approved_freeze_without_tuning",
+      "status": "approved"
+    },
+    {
+      "decision": "final_synthetic_holdout",
+      "disposition": "authorized_once_after_selection_freeze",
+      "status": "authorized_not_inspected"
+    },
+    {
+      "decision": "synthetic_options_scenarios",
+      "disposition": "accepted_fixed_synthetic_scenarios",
+      "status": "accepted_for_engineering_progression"
+    }
+  ],
+  "m3_readiness": {
+    "ready_count": 5,
+    "required_count": 6,
+    "remaining_criterion": "final_holdout_receipt"
+  },
+  "sequence_guard": "selection is frozen; execute at most one registered synthetic holdout inspection and bind its exact receipt",
+  "founder_response_recorded": true,
+  "selection_frozen": true,
+  "holdout_authorized": true,
+  "holdout_inspected": false,
+  "options_acceptance_recorded": true,
+  "milestone_acceptance_recorded": false,
+  "release_authorized": false,
+  "real_data_validated": false,
+  "investment_performance_established": false,
+  "merge_authorized": false,
+  "trading_authorized": false,
+  "freeze_candidate_sha256": "8834a63fbcf0146fdc25f258f1b4f91189cd4c53985e00bced76b597a1e047cf",
+  "options_evidence_sha256": "94c37736e787e2a1036a9d1b27a4c22ae55ebd3eee9083b180a16e6abdf3e69c",
+  "decision_sha256": "b134340308a1eb4f056ba66b5205e26f6550ece18e4fefba1fbaf875206f17d1"
+}
