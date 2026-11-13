@@ -33,8 +33,7 @@ checkpoint date November 14, 0/5 private controls ready, five
 - Seven direct checkpoint tests pass.
 - All 36 CLI tests pass.
 - Full local suite: 475 tests passed in 13.115 seconds.
-- Previous exact-head hosted baseline: Atlas foundation run #364 passed.
-- Current candidate-head hosted verification is recorded after publication.
+- Candidate-head hosted verification: Atlas foundation run #366 passed.
 
 These results verify the checkpoint contract and existing synthetic fallback.
 They do not implement or test the five missing private controls.

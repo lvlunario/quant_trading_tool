@@ -6,9 +6,9 @@ receipts, emits aggregate evidence plus five controlled deferrals and
 recommends deferring the private milestone while continuing the localhost
 synthetic fallback. It cannot record a founder response or promote acceptance,
 deployment, private data, release or real money. Seven direct tests plus all
-36 CLI tests pass; the complete local suite passes 475 tests. November 11
-exact-head CI run #364 is verified passed; current-head verification follows
-publication. Next: on November 14 execute the due checkpoint against the
+36 CLI tests pass; the complete local suite passes 475 tests. Atlas foundation
+run #366 passed on the published checkpoint-candidate head. Next: on November
+14 execute the due checkpoint against the
 published head, record only an actual founder response, and publish the
 required Saturday public-evidence delta without accepting M4 by date.
 
