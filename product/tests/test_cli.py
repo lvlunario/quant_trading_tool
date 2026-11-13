@@ -69,6 +69,31 @@ class CliTests(unittest.TestCase):
         self.assertFalse(report['private_data_authorized'])
         self.assertFalse(report['release_authorized'])
 
+    def test_m4_checkpoint_demo_recommends_explicit_deferral(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m4-checkpoint-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['checkpoint_date']),
+            ('candidate', 'blocked', '2026-11-14'))
+        self.assertEqual(
+            (report['private_environment']['criteria_ready'],
+             report['private_environment']['criteria_required'],
+             report['private_environment']['criteria_deferred']),
+            (0, 5, 5))
+        self.assertTrue(all(
+            item['recommendation'] == 'recommend_defer'
+            for item in report['criteria']))
+        self.assertTrue(report['continue_local_synthetic_fallback'])
+        self.assertFalse(report['founder_response_recorded'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        for excluded in ('account_id', 'credential', 'source_uri',
+                         'reserved_cash', 'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

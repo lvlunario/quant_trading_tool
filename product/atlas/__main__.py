@@ -67,6 +67,8 @@ def main():
     source.add_argument("--private-environment-readiness-demo",
                         action="store_true",
                         help="M4 external control gaps; provisions nothing")
+    source.add_argument("--m4-checkpoint-demo", action="store_true",
+                        help="November 14 deferral candidate; no acceptance")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -86,6 +88,65 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
+        elif args.m4_checkpoint_demo:
+            from .integrated_readiness import (
+                compose_integrated_prototype_readiness,
+            )
+            from .local_session import build_local_session_boundary
+            from .m2_acceptance_trace import build_m2_acceptance_trace
+            from .m4_checkpoint import assess_m4_checkpoint_candidate
+            from .options_acceptance import (
+                build_synthetic_options_acceptance_evidence,
+            )
+            from .private_environment_readiness import (
+                assess_private_environment_readiness,
+            )
+            from .receipts import import_receipt
+            from .rights_evidence import (
+                assess_reviewed_rights, load_reviewed_rights_evidence,
+            )
+            from .source_capture_authorization import (
+                assess_source_capture_authorization,
+            )
+            from .source_catalog import load_public_source_catalog
+            from .watchlist_registry import load_public_watchlist_registry
+            from .weekly_report_readiness import assess_weekly_report_readiness
+            from .weekly_research_report import (
+                build_synthetic_weekly_research_report,
+            )
+
+            now = datetime.now(timezone.utc)
+            fixtures = Path(__file__).parents[1] / "fixtures"
+            portfolio_report = synthetic_csv_report(
+                (fixtures / "synthetic-broker.csv").read_bytes(), now=now)
+            registry = load_public_watchlist_registry(
+                (fixtures / "public-watchlist-identities.json").read_bytes(),
+                now=now)
+            catalog = load_public_source_catalog(
+                (fixtures / "public-research-sources.json").read_bytes(),
+                registry, now=now)
+            evidence = load_reviewed_rights_evidence(
+                (fixtures / "public-source-rights-evidence.json").read_bytes(),
+                catalog, now=now)
+            rights = assess_reviewed_rights(catalog, evidence, at=now)
+            capture = assess_source_capture_authorization(
+                catalog, rights, at=now)
+            trace = build_m2_acceptance_trace(
+                registry, catalog, rights, capture)
+            weekly = build_synthetic_weekly_research_report(
+                period_end=now.date(), generated_at=now)
+            integrated = compose_integrated_prototype_readiness(
+                import_receipt(portfolio_report),
+                assess_weekly_report_readiness(weekly, trace),
+                build_synthetic_options_acceptance_evidence(),
+                assessed_at=now,
+            )
+            private = assess_private_environment_readiness(
+                assessed_at=now,
+                local_session=build_local_session_boundary(issued_at=now),
+            )
+            report = assess_m4_checkpoint_candidate(
+                integrated, private).public_summary()
         elif args.private_environment_readiness_demo:
             from .local_session import build_local_session_boundary
             from .private_environment_readiness import (
