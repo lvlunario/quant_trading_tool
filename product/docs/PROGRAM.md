@@ -34,6 +34,19 @@ post-holdout tuning is authorized. The next decision is to accept, defer or
 request bounded changes to the synthetic M3 engineering scope; real-market
 evidence remains a separate future gate.
 
+## M4 checkpoint candidate — November 13, 2026
+
+Atlas now composes the exact local synthetic integration state with the typed
+0/5 private-environment receipt into a November 14 checkpoint candidate. The
+candidate recommends deferring the authenticated private milestone while
+continuing the local synthetic fallback. It exposes only aggregate evidence
+and five controlled deferrals and cannot record a founder response,
+acceptance, deployment, private-data use, release or real-money authority.
+
+The [candidate packet](reviews/2026-11-14-M4-checkpoint-candidate.md) is
+preparation for the checkpoint, not a completed review or approval. The
+November 14 disposition remains pending an actual founder response.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.
@@ -46,7 +59,7 @@ The founder delegated routine project decisions; the following dispositions are 
 - Review workload: engineering owns routine V&V and phase recommendations. Report material exceptions and show usable milestones; stop repeatedly requesting scope, fallback or destination-policy decisions already made here. Preserve the phase checklists as evidence requirements.
 - Existing explicit boundaries remain: no automatic merge, paid purchase, production deployment, outreach or real-money orders. Final prototype release acceptance remains separate.
 
-Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, and the exact gap state is visible on the fixed integrated-readiness page. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 14 and December 12 remain conditional on private-access and data prerequisites.
+Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, the exact gap state is visible on the fixed integrated-readiness page, and a typed November 14 checkpoint candidate recommends deferral. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 14 and December 12 remain conditional on private-access and data prerequisites.
 
 ## Mandate and acceptance
 

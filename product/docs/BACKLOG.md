@@ -1,5 +1,17 @@
 # Backlog and decision register
 
+November 13 evening: added the typed November 14 M4 checkpoint candidate. It
+hash-binds the exact local synthetic integration and 0/5 private-environment
+receipts, emits aggregate evidence plus five controlled deferrals and
+recommends deferring the private milestone while continuing the localhost
+synthetic fallback. It cannot record a founder response or promote acceptance,
+deployment, private data, release or real money. Seven direct tests plus all
+36 CLI tests pass; the complete local suite passes 475 tests. November 11
+exact-head CI run #364 is verified passed; current-head verification follows
+publication. Next: on November 14 execute the due checkpoint against the
+published head, record only an actual founder response, and publish the
+required Saturday public-evidence delta without accepting M4 by date.
+
 November 11 evening: projected the typed private-environment receipt into the
 exact localhost integrated-readiness route. The page shows 0/5 ready and the
 five ordered controlled criterion/status/blocker rows only. One timestamp now
@@ -250,12 +262,13 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
-Compose a typed November 14 M4 checkpoint candidate from the existing
-integrated synthetic status and the 0/5 private-environment receipt. Emit only
-aggregate evidence and controlled deferrals, with a recommendation to defer
-the private milestone while continuing the local synthetic fallback. Do not
-record a founder response, milestone acceptance, deployment, private-data or
-release authority.
+On November 14 execute the M4 checkpoint against the published candidate and
+record its due-state evidence. Keep the recommendation to defer the private
+milestone and continue only the local synthetic fallback unless an actual
+founder response changes the disposition. Also publish the required Saturday
+public-evidence delta with current primary sources, keeping CRBS unresolved
+unless issuer/exchange/class evidence resolves it. Do not infer acceptance,
+private-data, deployment, release or trading authority from the date.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and

@@ -60,6 +60,14 @@ allowlist contains only the 0/5 aggregate and controlled criterion, status and
 blocker labels. It adds no credential, private evidence, upload, persistence,
 approval or deployment control and therefore does not satisfy any M4 gate.
 
+The M4 checkpoint candidate consumes only the two typed, public-safe readiness
+objects at one timestamp. It internally binds their canonical summaries but
+does not expose those hashes. Public output is restricted to aggregate
+synthetic counts and the controlled 0/5 deferral rows. Its recommendation to
+continue the localhost synthetic fallback is not authorization for hosting,
+private storage, private-data ingestion, deployment, release or real-money
+activity.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

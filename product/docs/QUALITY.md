@@ -1,5 +1,13 @@
 # Research, QA and release quality
 
+M4 checkpoint tests require exact typed and timestamp-aligned inputs, the
+2-row/8-8-0-0-0-0/2-scenario/4-control aggregate and all five ordered private
+deferrals. They cover Manila midnight boundaries, deterministic candidate
+hashing, wrong and changed inputs, every authority-promotion flag and exclusion
+of input hashes, credentials, portfolio fields and performance values. The CLI
+test requires a blocked exit and the same defer recommendation. These checks
+verify disposition accounting, not the missing private controls.
+
 The integrated-readiness HTTP test now requires the exact 0/5/5 aggregate,
 all five ordered M4 criterion/blocker pairs and five blocked states. Existing
 browser privacy coverage continues to exclude forms, inputs, buttons, scripts,

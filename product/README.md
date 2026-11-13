@@ -6,7 +6,16 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated November 11, 2026
+## What you can try and when — updated November 13, 2026
+
+As of November 13,
+`python3 -m atlas --m4-checkpoint-demo` composes the exact local synthetic
+integration state with the typed 0/5 private-environment receipt. It emits a
+candidate for the November 14 checkpoint, recommends deferring the private
+milestone and continuing only the local synthetic fallback, and exits blocked.
+All five control rows remain explicit deferrals. The candidate cannot record a
+founder response, milestone acceptance, deployment, private-data use, release
+or real-money authority.
 
 As of November 11, the fixed localhost `/integrated-readiness` page projects
 the typed M4 private-environment receipt beside the existing synthetic

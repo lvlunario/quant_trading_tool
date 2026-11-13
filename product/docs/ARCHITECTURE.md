@@ -1,5 +1,15 @@
 # Architecture and decisions
 
+November 13 M4 checkpoint candidate:
+`atlas.m4_checkpoint` accepts only the typed integrated synthetic readiness
+and private-environment receipt at the same aware timestamp. It verifies the
+exact 2-row portfolio, 8/8/0/0/0/0 research gates, two option scenarios, four
+option controls and 0/5 private-control state, then hash-binds both source
+summaries. Its public boundary contains aggregate evidence and five controlled
+deferrals only. Manila calendar boundaries determine whether November 14 is
+scheduled, due or elapsed. No constructor path can promote acceptance,
+deployment, private data, release or real money.
+
 November 11 private-readiness browser projection:
 `render_integrated_readiness` now constructs the typed M4 receipt inside the
 same active `LocalSessionBoundary` that admitted the request. One observed
