@@ -94,6 +94,32 @@ class CliTests(unittest.TestCase):
                          'reserved_cash', 'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m4_checkpoint_execution_demo_records_late_deferral(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--m4-checkpoint-execution-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['checkpoint_date'], report['checkpoint_status']),
+            ('executed', 'blocked', '2026-11-14', 'executed_late'))
+        self.assertGreaterEqual(report['days_after_checkpoint'], 1)
+        self.assertTrue(report['candidate_bound'])
+        self.assertEqual(report['disposition'],
+                         'deferred_pending_explicit_founder_disposition')
+        self.assertTrue(all(
+            item['disposition'] == 'deferred'
+            for item in report['criteria']))
+        self.assertTrue(report['continue_local_synthetic_fallback'])
+        self.assertFalse(report['founder_response_recorded'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        for excluded in ('candidate_sha256', 'account_id', 'credential',
+                         'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

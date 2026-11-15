@@ -69,6 +69,8 @@ def main():
                         help="M4 external control gaps; provisions nothing")
     source.add_argument("--m4-checkpoint-demo", action="store_true",
                         help="November 14 deferral candidate; no acceptance")
+    source.add_argument("--m4-checkpoint-execution-demo", action="store_true",
+                        help="elapsed M4 deferral record; no acceptance")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -88,13 +90,17 @@ def main():
             from .web_preview import serve_preview
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
-        elif args.m4_checkpoint_demo:
+        elif (args.m4_checkpoint_demo or
+              args.m4_checkpoint_execution_demo):
             from .integrated_readiness import (
                 compose_integrated_prototype_readiness,
             )
             from .local_session import build_local_session_boundary
             from .m2_acceptance_trace import build_m2_acceptance_trace
-            from .m4_checkpoint import assess_m4_checkpoint_candidate
+            from .m4_checkpoint import (
+                assess_m4_checkpoint_candidate,
+                execute_m4_checkpoint,
+            )
             from .options_acceptance import (
                 build_synthetic_options_acceptance_evidence,
             )
@@ -145,8 +151,13 @@ def main():
                 assessed_at=now,
                 local_session=build_local_session_boundary(issued_at=now),
             )
-            report = assess_m4_checkpoint_candidate(
-                integrated, private).public_summary()
+            candidate = assess_m4_checkpoint_candidate(integrated, private)
+            report = (
+                execute_m4_checkpoint(
+                    candidate, executed_at=now).public_summary()
+                if args.m4_checkpoint_execution_demo else
+                candidate.public_summary()
+            )
         elif args.private_environment_readiness_demo:
             from .local_session import build_local_session_boundary
             from .private_environment_readiness import (
