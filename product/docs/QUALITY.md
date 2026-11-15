@@ -1,5 +1,13 @@
 # Research, QA and release quality
 
+M4 checkpoint-execution tests require the exact candidate, an aware
+post-candidate timestamp and a Manila date on or after November 14. They
+separately cover due and late execution, reject early/backdated/wrong inputs,
+lock all five deferrals, test deterministic execution hashing and reject every
+founder-response or authority promotion. CLI coverage requires a blocked exit,
+an explicit late status after the target and a redacted public receipt. These
+tests prove checkpoint accounting, not the missing controls or acceptance.
+
 M4 checkpoint tests require exact typed and timestamp-aligned inputs, the
 2-row/8-8-0-0-0-0/2-scenario/4-control aggregate and all five ordered private
 deferrals. They cover Manila midnight boundaries, deterministic candidate

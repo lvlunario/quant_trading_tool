@@ -68,6 +68,14 @@ continue the localhost synthetic fallback is not authorization for hosting,
 private storage, private-data ingestion, deployment, release or real-money
 activity.
 
+The M4 checkpoint execution accepts only that fixed typed candidate and an
+aware timestamp at or after the target date. It records whether execution was
+due or late so missed work cannot be backdated. The public receipt exposes only
+the bound-state boolean, timing, controlled blockers and five deferrals; it
+omits the candidate digest and all private or financial values. Founder
+response, acceptance, deployment, private data, release and real-money flags
+remain false and cannot be promoted through constructor input.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

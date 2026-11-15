@@ -47,6 +47,21 @@ The [candidate packet](reviews/2026-11-14-M4-checkpoint-candidate.md) is
 preparation for the checkpoint, not a completed review or approval. The
 November 14 disposition remains pending an actual founder response.
 
+## M4 checkpoint execution — November 15, 2026
+
+No November 14 execution artifact or founder disposition was present on the
+published branch. Atlas therefore executed the checkpoint on November 15 as a
+late record rather than backdating work. The execution binds the typed
+candidate, retains the verified 0/5 private-control state and defers all five
+criteria pending an explicit founder disposition. Only the local synthetic
+fallback continues.
+
+The [execution packet](reviews/2026-11-15-M4-checkpoint.md) is an engineering
+checkpoint record, not a completed meeting, founder response, milestone
+acceptance, deployment approval or release. The next program boundary is
+November 28, when stabilization must begin; private-prototype scope remains at
+risk unless the five external controls receive real evidence before then.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.

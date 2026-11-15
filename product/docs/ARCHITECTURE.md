@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+November 15 M4 checkpoint execution:
+`execute_m4_checkpoint` accepts only the typed candidate and an aware
+execution time at or after the Manila target date. It rejects early or
+pre-candidate execution, binds the canonical candidate summary and emits a
+public-safe due/late record. The record fixes all five criteria to deferred
+pending an explicit founder disposition, exposes neither input hashes nor
+financial/private values, and has no constructor path for acceptance,
+deployment, private data, release or real money.
+
 November 13 M4 checkpoint candidate:
 `atlas.m4_checkpoint` accepts only the typed integrated synthetic readiness
 and private-environment receipt at the same aware timestamp. It verifies the

@@ -1,5 +1,16 @@
 # Backlog and decision register
 
+November 15 evening: executed the elapsed November 14 M4 checkpoint without
+backdating it. The typed execution record binds the candidate, reports one day
+late, keeps the private environment at 0/5 and defers all five controls pending
+an explicit founder disposition. It continues only the local synthetic
+fallback and cannot promote acceptance, deployment, private data, release or
+real money. Twelve direct checkpoint tests plus all 37 CLI tests pass; the full
+local suite passes 481 tests. No November 14 execution or Saturday research
+packet was present on the branch, so neither was invented or backdated. Next:
+prepare the November 16 asynchronous concept/iteration review and publish a
+separately dated public-evidence catch-up while keeping CRBS unresolved.
+
 November 13 evening: added the typed November 14 M4 checkpoint candidate. It
 hash-binds the exact local synthetic integration and 0/5 private-environment
 receipts, emits aggregate evidence plus five controlled deferrals and
@@ -262,13 +273,14 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
-On November 14 execute the M4 checkpoint against the published candidate and
-record its due-state evidence. Keep the recommendation to defer the private
-milestone and continue only the local synthetic fallback unless an actual
-founder response changes the disposition. Also publish the required Saturday
-public-evidence delta with current primary sources, keeping CRBS unresolved
-unless issuer/exchange/class evidence resolves it. Do not infer acceptance,
-private-data, deployment, release or trading authority from the date.
+On November 16 prepare the asynchronous concept/iteration review from the
+executed M4 checkpoint: demo the late deferral receipt, compare planned versus
+shipped, report QA and dependencies, and present no more than three recommended
+decisions. Record only an actual founder response as approval. Publish the
+missed public-evidence update as a separately dated catch-up using current
+primary sources; do not backdate it or resolve CRBS without issuer/exchange/
+class evidence. Do not infer acceptance, private-data, deployment, release or
+trading authority from a review packet or elapsed milestone.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and
