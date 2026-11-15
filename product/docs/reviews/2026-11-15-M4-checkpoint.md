@@ -35,7 +35,7 @@ bound candidate, 0/5 private controls ready and five deferred rows.
 - Twelve direct checkpoint tests pass.
 - All 37 CLI tests pass.
 - Full local suite: 481 tests passed in 12.052 seconds.
-- Hosted verification is recorded only after publication.
+- Checkpoint-head hosted verification: Atlas foundation run #370 passed.
 
 These results verify candidate binding, due/late accounting, controlled
 deferral and privacy boundaries. They do not implement or test the five

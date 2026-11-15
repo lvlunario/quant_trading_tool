@@ -6,8 +6,9 @@ late, keeps the private environment at 0/5 and defers all five controls pending
 an explicit founder disposition. It continues only the local synthetic
 fallback and cannot promote acceptance, deployment, private data, release or
 real money. Twelve direct checkpoint tests plus all 37 CLI tests pass; the full
-local suite passes 481 tests. No November 14 execution or Saturday research
-packet was present on the branch, so neither was invented or backdated. Next:
+local suite passes 481 tests. Atlas foundation run #370 passed on the published
+checkpoint-execution head. No November 14 execution or Saturday research packet
+was present on the branch, so neither was invented or backdated. Next:
 prepare the November 16 asynchronous concept/iteration review and publish a
 separately dated public-evidence catch-up while keeping CRBS unresolved.
 
