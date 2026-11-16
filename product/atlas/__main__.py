@@ -71,6 +71,8 @@ def main():
                         help="November 14 deferral candidate; no acceptance")
     source.add_argument("--m4-checkpoint-execution-demo", action="store_true",
                         help="elapsed M4 deferral record; no acceptance")
+    source.add_argument("--m4-iteration-review-demo", action="store_true",
+                        help="three-decision review packet; no approvals")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -91,7 +93,8 @@ def main():
             serve_preview(args.preview_port if args.preview_port is not None else 8765)
             return 0
         elif (args.m4_checkpoint_demo or
-              args.m4_checkpoint_execution_demo):
+              args.m4_checkpoint_execution_demo or
+              args.m4_iteration_review_demo):
             from .integrated_readiness import (
                 compose_integrated_prototype_readiness,
             )
@@ -101,6 +104,7 @@ def main():
                 assess_m4_checkpoint_candidate,
                 execute_m4_checkpoint,
             )
+            from .m4_iteration_review import prepare_m4_iteration_review
             from .options_acceptance import (
                 build_synthetic_options_acceptance_evidence,
             )
@@ -152,12 +156,16 @@ def main():
                 local_session=build_local_session_boundary(issued_at=now),
             )
             candidate = assess_m4_checkpoint_candidate(integrated, private)
-            report = (
-                execute_m4_checkpoint(
+            if args.m4_iteration_review_demo:
+                execution = execute_m4_checkpoint(
+                    candidate, executed_at=now)
+                report = prepare_m4_iteration_review(
+                    execution, reviewed_at=now).public_summary()
+            elif args.m4_checkpoint_execution_demo:
+                report = execute_m4_checkpoint(
                     candidate, executed_at=now).public_summary()
-                if args.m4_checkpoint_execution_demo else
-                candidate.public_summary()
-            )
+            else:
+                report = candidate.public_summary()
         elif args.private_environment_readiness_demo:
             from .local_session import build_local_session_boundary
             from .private_environment_readiness import (

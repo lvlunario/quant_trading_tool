@@ -120,6 +120,31 @@ class CliTests(unittest.TestCase):
                          'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m4_iteration_review_demo_has_three_unapproved_decisions(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas', '--m4-iteration-review-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['scheduled_review_date']),
+            ('review_packet', 'blocked', '2026-11-16'))
+        self.assertIn(report['review_timing'],
+                      ('prepared_on_date', 'prepared_late'))
+        self.assertEqual(report['recommendation_count'], 3)
+        self.assertTrue(all(
+            item['status'] == 'recommend'
+            for item in report['recommendations']))
+        self.assertFalse(report['meeting_completed'])
+        self.assertFalse(report['founder_response_recorded'])
+        self.assertFalse(report['decisions_approved'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        for excluded in ('execution_sha256', 'account_id', 'credential',
+                         'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)
