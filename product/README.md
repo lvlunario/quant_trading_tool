@@ -6,7 +6,16 @@ Atlas will connect portfolio exposure, company fundamentals, economic conditions
 
 Project decisions are now delegated to engineering: the private read-only/paper scope and synthetic fallback are adopted, and M0’s engineering baseline is conditionally accepted for continued development. Browser/device QA and final release acceptance remain open. See [decision record](docs/PROGRAM.md#delegated-project-decisions--september-22-2026).
 
-## What you can try and when — updated November 15, 2026
+## What you can try and when — updated November 16, 2026
+
+As of November 16,
+`python3 -m atlas --m4-iteration-review-demo` prepares the scheduled Monday
+concept/iteration packet from the typed checkpoint execution. It reports the
+0/5 private-control state, planned-versus-shipped scope, five dependencies and
+exactly three unapproved recommendations. The command exits blocked and cannot
+record a meeting, founder response, approval, acceptance, deployment,
+private-data use, release or real-money authority. See the
+[review packet](docs/reviews/2026-11-16-M4-iteration-review.md).
 
 As of November 15,
 `python3 -m atlas --m4-checkpoint-execution-demo` executes the elapsed

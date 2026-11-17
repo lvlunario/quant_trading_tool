@@ -62,6 +62,21 @@ acceptance, deployment approval or release. The next program boundary is
 November 28, when stabilization must begin; private-prototype scope remains at
 risk unless the five external controls receive real evidence before then.
 
+## M4 asynchronous iteration review — November 16, 2026
+
+Atlas now composes the exact typed checkpoint execution into a public-safe
+Monday review packet. It demonstrates the blocked 0/5 M4 state, compares the
+authenticated private plan with the delivered localhost synthetic fallback,
+lists the five current dependencies and limits the decision surface to three
+recommendations: adopt the reduced local candidate, defer authenticated private
+acceptance until controls exist, and freeze scope for stabilization on
+November 28.
+
+The [review packet](reviews/2026-11-16-M4-iteration-review.md) is an
+asynchronous briefing, not a completed meeting or approval. No founder response
+or M3/M4 milestone disposition is recorded. The November 14 research update is
+still missing and must be caught up under its actual publication date.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.
@@ -74,7 +89,7 @@ The founder delegated routine project decisions; the following dispositions are 
 - Review workload: engineering owns routine V&V and phase recommendations. Report material exceptions and show usable milestones; stop repeatedly requesting scope, fallback or destination-policy decisions already made here. Preserve the phase checklists as evidence requirements.
 - Existing explicit boundaries remain: no automatic merge, paid purchase, production deployment, outreach or real-money orders. Final prototype release acceptance remains separate.
 
-Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, the exact gap state is visible on the fixed integrated-readiness page, and a typed November 14 checkpoint candidate recommends deferral. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 14 and December 12 remain conditional on private-access and data prerequisites.
+Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, the exact gap state is visible on the fixed integrated-readiness page, and the November 15 execution plus November 16 asynchronous review preserve all five deferrals. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 28 and December 12 remain conditional on private-access and data prerequisites.
 
 ## Mandate and acceptance
 

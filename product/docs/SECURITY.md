@@ -76,6 +76,14 @@ omits the candidate digest and all private or financial values. Founder
 response, acceptance, deployment, private data, release and real-money flags
 remain false and cannot be promoted through constructor input.
 
+The M4 asynchronous review consumes that typed execution rather than accepting
+caller-supplied evidence or decision fields. Its output allowlist contains only
+aggregate control counts, controlled dependency labels, schedule distances and
+three recommendation identifiers. Source hashes, credentials, holdings,
+financial values and private evidence are excluded. A review packet cannot
+record a meeting, founder response, acceptance, deployment, private-data use,
+release or real-money authority.
+
 The checked-in source-rights worksheet is a blank template containing public
 source metadata and required field names only. Completed terms captures,
 reviewer references and legal conclusions belong in the approved private

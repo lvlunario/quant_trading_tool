@@ -1,5 +1,14 @@
 # Architecture and decisions
 
+November 16 M4 asynchronous review boundary:
+`prepare_m4_iteration_review` accepts only the typed checkpoint execution and
+an aware review time on or after the Manila review date. It verifies the bound,
+blocked, 0/5 execution before emitting a fixed three-recommendation packet with
+planned-versus-shipped scope, dependencies and target-date distance. The public
+summary excludes source hashes and private/financial values. All meeting,
+founder-response, acceptance, deployment, private-data, release and real-money
+fields are fixed false; review construction cannot promote a decision.
+
 November 15 M4 checkpoint execution:
 `execute_m4_checkpoint` accepts only the typed candidate and an aware
 execution time at or after the Manila target date. It rejects early or

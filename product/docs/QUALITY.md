@@ -1,5 +1,14 @@
 # Research, QA and release quality
 
+M4 iteration-review tests require the exact typed checkpoint execution, an
+aware post-execution review time and a Manila date on or after November 16.
+They lock the 0/5 demonstration, three planned-versus-shipped rows, five
+dependencies, target-date arithmetic and exactly three recommendations. Wrong,
+early and promoted inputs fail closed; public-output tests exclude hashes,
+credentials, portfolio fields and performance values. CLI coverage requires a
+blocked exit and no meeting, response, approval or acceptance. These tests
+verify review accounting, not the missing controls or founder decisions.
+
 M4 checkpoint-execution tests require the exact candidate, an aware
 post-candidate timestamp and a Manila date on or after November 14. They
 separately cover due and late execution, reject early/backdated/wrong inputs,
