@@ -42,7 +42,8 @@ response exists on the live PR.
 - Twelve direct checkpoint tests and all 38 CLI tests pass in the 56-test
   focused run.
 - Full local suite: 488 tests passed in 17.537 seconds.
-- Hosted verification: pending publication of this increment.
+- Hosted verification: [GitHub Actions run 44071101138](https://github.com/lvlunario/quant_trading_tool/actions/runs/44071101138)
+  passed on exact published review head `632915d`.
 
 These checks prove typed composition, timing, exact recommendation count,
 redaction and fail-closed authority. They do not implement or validate the five
