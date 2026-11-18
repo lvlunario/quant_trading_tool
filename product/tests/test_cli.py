@@ -145,6 +145,36 @@ class CliTests(unittest.TestCase):
                          'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m5_release_candidate_plan_demo_stays_blocked(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--m5-release-candidate-plan-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['scope'], report['candidate_scope_count'],
+             report['deferred_scope_count']),
+            ('scope_freeze_plan', 'blocked',
+             'reduced_local_synthetic_release_candidate', 4, 8))
+        self.assertEqual(
+            (report['acceptance_gates_ready'],
+             report['acceptance_gates_required']),
+            (0, 5))
+        self.assertFalse(report['post_freeze_change_policy']['active'])
+        self.assertIn(
+            'new_feature',
+            report['post_freeze_change_policy']['blocked'])
+        self.assertFalse(report['freeze_activated'])
+        self.assertFalse(report['founder_response_recorded'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('m4_review_sha256', 'plan_sha256', 'account_id',
+                         'credential', 'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)
