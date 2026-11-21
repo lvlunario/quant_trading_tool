@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "experiment_id": "m3-synthetic-metrics-v1",
+  "manifest_sha256": "f68cd3e7e174d6cad70f490d582818ebdcdc9b30b968a558c6681fc9db9d5576",
+  "status": "synthetic_validation_metrics_only",
+  "benchmark": "buy_and_hold",
+  "folds": [
+    {
+      "fold_id": "fold-1",
+      "validation_start": 80,
+      "validation_end": 120,
+      "eligible_decision_count": 35,
+      "candidate_base": {
+        "gross_cumulative_return": "0.002400615334877507170105577",
+        "net_cumulative_return": "-0.0025983815527755464479686689",
+        "maximum_drawdown": "0.0186512027649109498395916617",
+        "turnover_on_initial_capital": "4.956786040808118743501613855",
+        "long_exposure_fraction": "0.475",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "comparator_base": {
+        "gross_cumulative_return": "0.006930646615559735136083425",
+        "net_cumulative_return": "0.005924721893666069067016408",
+        "maximum_drawdown": "0.0208164383116546865440205901",
+        "turnover_on_initial_capital": "0.999000999000999000999000999",
+        "long_exposure_fraction": "0.975",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "candidate_adverse": {
+        "gross_cumulative_return": "0.011579299416167005594648651",
+        "net_cumulative_return": "-0.0009836445425189679226126081",
+        "maximum_drawdown": "0.0154917624001262024934630557",
+        "turnover_on_initial_capital": "4.945830594110303970632871614",
+        "long_exposure_fraction": "0.45",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "comparator_adverse": {
+        "gross_cumulative_return": "0.012698442007131397433845825",
+        "net_cumulative_return": "0.010173009483422840333013292",
+        "maximum_drawdown": "0.016681085752286770384828169",
+        "turnover_on_initial_capital": "0.9975062344139650872817955112",
+        "long_exposure_fraction": "0.95",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      }
+    },
+    {
+      "fold_id": "fold-2",
+      "validation_start": 120,
+      "validation_end": 160,
+      "eligible_decision_count": 35,
+      "candidate_base": {
+        "gross_cumulative_return": "-0.0084224474331492294787686245",
+        "net_cumulative_return": "-0.0104036213643517285207690866",
+        "maximum_drawdown": "0.01630203533876036682776076470",
+        "turnover_on_initial_capital": "1.989587964602248521999232144",
+        "long_exposure_fraction": "0.375",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "comparator_base": {
+        "gross_cumulative_return": "-0.0168185557234957310327780499",
+        "net_cumulative_return": "-0.0178007549685272038289491006",
+        "maximum_drawdown": "0.03566068029729305578469995002",
+        "turnover_on_initial_capital": "0.999000999000999000999000999",
+        "long_exposure_fraction": "0.975",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "candidate_adverse": {
+        "gross_cumulative_return": "-0.0099050534068268955708773839",
+        "net_cumulative_return": "-0.0148431828162691554433418358",
+        "maximum_drawdown": "0.01709267571798204491587829853",
+        "turnover_on_initial_capital": "1.985132116302417061774685901",
+        "long_exposure_fraction": "0.375",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      },
+      "comparator_adverse": {
+        "gross_cumulative_return": "-0.0189741562914121498888600241",
+        "net_cumulative_return": "-0.0214206047794634911609576299",
+        "maximum_drawdown": "0.03566068029729305578469995081",
+        "turnover_on_initial_capital": "0.9975062344139650872817955112",
+        "long_exposure_fraction": "0.95",
+        "marked_session_count": 40,
+        "synthetic_only": true,
+        "holdout_inspected": false,
+        "investment_performance_established": false
+      }
+    }
+  ],
+  "metrics_calculated": true,
+  "comparator_executed": true,
+  "adverse_policy_executed": true,
+  "selection_frozen": false,
+  "holdout_inspected": false,
+  "real_data_validated": false,
+  "investment_performance_established": false,
+  "output_sha256": "50e9979878b39e902bbda24422da8e46f4a77498d010b4df11cbde2df330edb5",
+  "output_bytes_count": 1755
+}
