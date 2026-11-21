@@ -175,6 +175,36 @@ class CliTests(unittest.TestCase):
                          'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m5_workflow_rehearsal_separates_run_from_acceptance(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--m5-workflow-rehearsal-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['workflow']['workstreams_executed'],
+             report['workflow']['workstreams_required']),
+            ('pre_freeze_workflow_rehearsal', 'blocked', 4, 4))
+        self.assertEqual(
+            report['workflow']['automated_execution_failures'], 0)
+        self.assertTrue(report['defect_register']['opened'])
+        self.assertEqual(
+            report['defect_register']['critical_defect_status'],
+            'unknown_pending_formal_review')
+        self.assertFalse(
+            report['defect_register']['zero_defect_conclusion_supported'])
+        self.assertFalse(report['candidate_gate']['ready'])
+        self.assertTrue(report['candidate_gate']['rehearsal_only'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('plan_sha256', 'integrated_readiness_sha256',
+                         'rehearsal_sha256', 'account_id', 'credential',
+                         'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

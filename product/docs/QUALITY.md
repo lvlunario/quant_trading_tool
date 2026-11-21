@@ -1,5 +1,21 @@
 # Research, QA and release quality
 
+M5 workflow-rehearsal tests require the exact blocked scope plan and integrated
+2-row/8-8-0-0-0-0/2-scenario/4-control evidence at one aware execution time.
+They lock all four workstreams in order, zero automated execution failures, an
+opened-but-incomplete defect register and an unknown critical-defect status.
+Wrong times, promoted authority and any attempt to call the candidate frozen or
+gate-ready fail closed. CLI coverage requires exit `3`, while document tests
+distinguish known limitations from defects and reject a zero-defect conclusion.
+These checks prove a pre-freeze rehearsal ran; they do not replace independent
+review, final-candidate regression or founder UAT.
+
+M5 release-plan tests bind the four-workstream/eight-deferral proposal to the
+blocked M4 review, require all five candidate gates to remain blocked and lock
+the inactive post-freeze change policy. They reject automatic freeze,
+acceptance, deployment, private-data, release and trading promotion. These
+checks verify scope accounting, not candidate acceptance.
+
 M4 iteration-review tests require the exact typed checkpoint execution, an
 aware post-execution review time and a Manila date on or after November 16.
 They lock the 0/5 demonstration, three planned-versus-shipped rows, five

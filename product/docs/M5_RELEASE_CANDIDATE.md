@@ -10,6 +10,12 @@ Run the public-safe plan:
 python3 -m atlas --m5-release-candidate-plan-demo
 ```
 
+Run the first pre-freeze workflow rehearsal:
+
+```bash
+python3 -m atlas --m5-workflow-rehearsal-demo
+```
+
 The command exits `3` because the candidate is not frozen or accepted. It binds
 the plan to the typed M4 asynchronous review, reports a 0/5 acceptance-gate
 state and exposes no source, account, holding, credential or approval
@@ -46,6 +52,13 @@ The November 28 decision remains blocked until the exact candidate has:
 The checked-in plan currently reports 0/5 ready. A passing unit-test suite is
 necessary regression evidence, not proof that these human and environment
 checks occurred.
+
+The November 19 rehearsal executes all four proposed workstreams with checked-
+in synthetic inputs and records zero automated execution failures. It also
+opens the [public-safe defect register](M5_DEFECT_REGISTER.md). The critical-
+defect status remains `unknown_pending_formal_review`, the exact candidate build
+is not frozen and the acceptance gate remains blocked. This is rehearsal
+evidence, not UAT or a zero-defect conclusion.
 
 ## Stabilization policy
 

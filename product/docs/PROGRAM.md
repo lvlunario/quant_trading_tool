@@ -90,6 +90,18 @@ weeks for defect, regression, security, acceptance and documentation work. It
 does not claim Fidelity compatibility, private controls, completed independent
 review, founder UAT, deployment, merge or trading authority.
 
+## M5 pre-freeze workflow rehearsal — November 19, 2026
+
+The first typed rehearsal runs the four proposed local/synthetic workstreams in
+order and records zero automated execution failures. It opens the
+[public-safe defect register](M5_DEFECT_REGISTER.md) with zero recorded entries
+while explicitly keeping critical-defect status unknown pending formal review.
+
+This is pre-freeze regression evidence. The exact November 28 build does not
+yet exist, the candidate gate remains blocked and M5 acceptance stays 0/5. No
+zero-defect conclusion, independent review, founder response, acceptance,
+deployment, private-data use, release or trading authority is recorded.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.
@@ -102,7 +114,7 @@ The founder delegated routine project decisions; the following dispositions are 
 - Review workload: engineering owns routine V&V and phase recommendations. Report material exceptions and show usable milestones; stop repeatedly requesting scope, fallback or destination-policy decisions already made here. Preserve the phase checklists as evidence requirements.
 - Existing explicit boundaries remain: no automatic merge, paid purchase, production deployment, outreach or real-money orders. Final prototype release acceptance remains separate.
 
-Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, the exact gap state is visible on the fixed integrated-readiness page, and the November 15 execution plus November 16 asynchronous review preserve all five deferrals. M5 preparation now has a typed reduced scope-freeze plan with four proposed local/synthetic workstreams, eight explicit deferrals and 0/5 candidate-acceptance gates ready. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 28 and December 12 remain conditional on private-access and data prerequisites.
+Current implementation: the October 3 M1 handoff accepts the verified synthetic engineering scope for program progression and defers Fidelity-specific validation until authorized private evidence arrives. M3 engineering evidence is 6/6, but milestone acceptance remains separate. M4 local integration is active: a short-lived request boundary and a typed 0/5 private-environment control receipt exist, the exact gap state is visible on the fixed integrated-readiness page, and the November 15 execution plus November 16 asynchronous review preserve all five deferrals. M5 preparation now has a typed reduced scope-freeze plan with four proposed local/synthetic workstreams, eight explicit deferrals and 0/5 candidate-acceptance gates ready. A pre-freeze rehearsal executes all four slices without an automated execution failure, but the defect register remains open and critical-defect status is unknown. Managed authentication, authorized storage, restore evidence, log redaction and founder UAT remain unimplemented. This is not founder release acceptance; November 28 and December 12 remain conditional on private-access and data prerequisites.
 
 ## Mandate and acceptance
 
