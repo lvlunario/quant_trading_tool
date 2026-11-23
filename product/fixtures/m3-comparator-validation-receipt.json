@@ -1,0 +1,44 @@
+{
+  "experiment_id": "m3-synthetic-comparator-v1",
+  "manifest_sha256": "29a21a96e9a93c6ed8f7df2aaf654e200227610d8a13455e0f811513f9b327c1",
+  "folds": [
+    {
+      "fold_id": "fold-1",
+      "calendar_start": 80,
+      "calendar_end": 120,
+      "eligible_decision_count": 35,
+      "marked_at_session": 119,
+      "base_target_count": 1,
+      "base_fill_count": 1,
+      "adverse_target_count": 1,
+      "adverse_fill_count": 1
+    },
+    {
+      "fold_id": "fold-2",
+      "calendar_start": 120,
+      "calendar_end": 160,
+      "eligible_decision_count": 35,
+      "marked_at_session": 159,
+      "base_target_count": 1,
+      "base_fill_count": 1,
+      "adverse_target_count": 1,
+      "adverse_fill_count": 1
+    }
+  ],
+  "comparator": "buy_and_hold",
+  "base_cost_bps_per_side": 10,
+  "base_delay_sessions": 1,
+  "adverse_cost_bps_per_side": 25,
+  "adverse_delay_sessions": 2,
+  "adverse_overlap_policy": "fifo",
+  "schema_version": 1,
+  "status": "synthetic_plumbing_only",
+  "comparator_executed": true,
+  "base_comparator_executed": true,
+  "adverse_comparator_executed": true,
+  "metrics_calculated": false,
+  "holdout_inspected": false,
+  "investment_performance_established": false,
+  "output_sha256": "0f23675723cab4c4bd4a97798a86ca43a6fb2bb2faecf47bee89a62bf5dd4f9a",
+  "output_bytes_count": 483
+}

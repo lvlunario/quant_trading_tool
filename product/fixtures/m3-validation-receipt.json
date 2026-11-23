@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "experiment_id": "m3-synthetic-validation-v1",
+  "manifest_sha256": "4cda13f1a25b9835c6f5e267d507f9d6469604114baa23ef0d4c81f3a0e2d983",
+  "status": "synthetic_plumbing_only",
+  "base_cost_bps_per_side": 10,
+  "base_delay_sessions": 1,
+  "folds": [
+    {
+      "fold_id": "fold-1",
+      "validation_start": 80,
+      "validation_end": 120,
+      "train_count": 74,
+      "validation_count": 35,
+      "purged_count": 11,
+      "excluded_count": 80,
+      "target_count": 5,
+      "fill_count": 5
+    },
+    {
+      "fold_id": "fold-2",
+      "validation_start": 120,
+      "validation_end": 160,
+      "train_count": 114,
+      "validation_count": 35,
+      "purged_count": 11,
+      "excluded_count": 40,
+      "target_count": 2,
+      "fill_count": 2
+    }
+  ],
+  "comparator_executed": false,
+  "adverse_policy_executed": false,
+  "adverse_blocker": "overlapping_execution_policy_undefined",
+  "metrics_calculated": false,
+  "holdout_inspected": false,
+  "investment_performance_established": false,
+  "output_sha256": "bf0252644229096716aacdb3b68089710d62c2cfa5ac7e573899d980b2c9cb7e",
+  "output_bytes_count": 460
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "mode": "synthetic",
+  "profile_id": "XPF_DEMO12345678",
+  "provider_id": "PRV_DEMO1234",
+  "dataset_id": "DATA_DEMO1234",
+  "extractor_version": "atlas.synthetic_json@1.0.0",
+  "expected_metric": {
+    "metric_id": "MET_REVENUE",
+    "unit": "money",
+    "currency": "USD",
+    "period": "quarter"
+  },
+  "sampling_policy": {
+    "minimum_cases": 6,
+    "required_categories": ["nominal", "missing", "schema", "identity", "unit", "period"],
+    "max_false_accepts": 0,
+    "max_false_rejects": 0,
+    "max_contract_mismatches": 0
+  },
+  "cases": [
+    {
+      "case_id": "XCASE_NOMINAL0001",
+      "category": "nominal",
+      "source": {
+        "schema_version": 1,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_REVENUE",
+          "definition_version": "1.0.0",
+          "formula": "Reported revenue",
+          "unit": "money",
+          "currency": "USD",
+          "period": "quarter",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": "123.40",
+          "missing_reason": null,
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {
+        "status": "accepted",
+        "code": "ready",
+        "value": "123.40"
+      }
+    },
+    {
+      "case_id": "XCASE_MISSING0001",
+      "category": "missing",
+      "source": {
+        "schema_version": 1,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_REVENUE",
+          "definition_version": "1.0.0",
+          "formula": "Reported revenue",
+          "unit": "money",
+          "currency": "USD",
+          "period": "quarter",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": null,
+          "missing_reason": "missing_source",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {"status": "blocked", "code": "metric_unavailable", "value": null}
+    },
+    {
+      "case_id": "XCASE_SCHEMA00001",
+      "category": "schema",
+      "source": {
+        "schema_version": 2,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_REVENUE",
+          "definition_version": "1.0.0",
+          "formula": "Reported revenue",
+          "unit": "money",
+          "currency": "USD",
+          "period": "quarter",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": "123.40",
+          "missing_reason": null,
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {"status": "blocked", "code": "unsupported_synthetic_source_contract", "value": null}
+    },
+    {
+      "case_id": "XCASE_IDENTITY0001",
+      "category": "identity",
+      "source": {
+        "schema_version": 1,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_OTHER",
+          "definition_version": "1.0.0",
+          "formula": "Wrong metric",
+          "unit": "money",
+          "currency": "USD",
+          "period": "quarter",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": "123.40",
+          "missing_reason": null,
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {"status": "blocked", "code": "conformance_metric_mismatch", "value": null}
+    },
+    {
+      "case_id": "XCASE_UNIT0000001",
+      "category": "unit",
+      "source": {
+        "schema_version": 1,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_REVENUE",
+          "definition_version": "1.0.0",
+          "formula": "Reported revenue",
+          "unit": "money",
+          "currency": "EUR",
+          "period": "quarter",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": "123.40",
+          "missing_reason": null,
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {"status": "blocked", "code": "incompatible_metric_currency", "value": null}
+    },
+    {
+      "case_id": "XCASE_PERIOD00001",
+      "category": "period",
+      "source": {
+        "schema_version": 1,
+        "mode": "synthetic",
+        "revision": 0,
+        "metric": {
+          "metric_id": "MET_REVENUE",
+          "definition_version": "1.0.0",
+          "formula": "Reported revenue",
+          "unit": "money",
+          "currency": "USD",
+          "period": "annual",
+          "null_policy": "missing",
+          "transform_version": "reported@1.0.0",
+          "value": "123.40",
+          "missing_reason": null,
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30"
+        }
+      },
+      "expected": {"status": "blocked", "code": "conformance_metric_mismatch", "value": null}
+    }
+  ]
+}
