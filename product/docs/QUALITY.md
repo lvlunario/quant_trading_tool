@@ -1,5 +1,15 @@
 # Research, QA and release quality
 
+M5 regression-manifest tests reproduce the allowlisted candidate bundle across
+the source, fixture, preview and test roots plus five runbooks. They require
+stable ordering and hashing, prove that a byte change changes the bundle,
+reject symlinks, wrong times and every authority promotion, and keep per-file
+paths out of public output. CLI coverage requires the manifest command to exit
+`3` with a replay-ready but unexecuted contract. Review-packet tests preserve
+the three-recommendation limit and explicit no-approval boundary. These checks
+verify content identity and replay instructions; they do not execute the full
+regression, freeze the candidate or complete independent review/UAT.
+
 M5 workflow-rehearsal tests require the exact blocked scope plan and integrated
 2-row/8-8-0-0-0-0/2-scenario/4-control evidence at one aware execution time.
 They lock all four workstreams in order, zero automated execution failures, an

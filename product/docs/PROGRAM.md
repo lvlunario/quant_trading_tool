@@ -102,6 +102,37 @@ yet exist, the candidate gate remains blocked and M5 acceptance stays 0/5. No
 zero-defect conclusion, independent review, founder response, acceptance,
 deployment, private-data use, release or trading authority is recorded.
 
+## November 21 weekly public-equity packet — finalized November 22, 2026
+
+Atlas finalized the separately dated [November 21 weekly packet](research/2026-11-21-weekly-watchlist.html)
+without backdating the implementation record. It uses current primary evidence
+to separate observations, hypotheses and missing decision data for the required
+universe plus AMD and Broadcom as comparison cases. CRBS remains identity
+blocked; authoritative CBRS evidence is not substituted. The packet advances
+research workflows only and contains no verified holdings, licensed market
+prices, actionable options evidence, portfolio optimization or security action.
+
+Six contract tests preserve its evidence cut, identity controls, decision
+boundaries, source provenance and self-contained format. Direct browser/device
+QA remains open because the available Chromium runtime could not create its
+process socket; a seven-page document-render fallback was inspected instead.
+This does not change the November 28 release-candidate gate or record founder
+acceptance.
+
+## M5 content-addressed regression manifest — November 23, 2026
+
+Atlas now converts the typed four-slice workflow rehearsal into a reproducible
+pre-freeze manifest. The manifest binds the complete safe code, fixture,
+preview and test surface plus five release/security runbooks to one aggregate
+digest and fixes three replay commands with expected exits. It deliberately
+records that regression has not been executed on a frozen build.
+
+The [November 23 M5 asynchronous review](reviews/2026-11-23-M5-iteration-review.md)
+compares that progress with the still-blocked private prototype, QA gaps and
+dependencies. Its three decisions are recommendations only. The candidate
+remains unfrozen, acceptance remains 0/5, and no founder response, merge,
+deployment, private-data use, release or trading authority is recorded.
+
 Founder instruction: “I don’t have time, decide on these for me based on best practices so we can move on with project”.
 
 The founder delegated routine project decisions; the following dispositions are engineering decisions under that authority, not claims that the founder personally ran tests or approved a release.

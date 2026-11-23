@@ -1,5 +1,15 @@
 # Backlog and decision register
 
+November 23 evening: added a content-addressed M5 regression manifest over the
+safe code, fixture, preview and test trees plus five release/security runbooks.
+It fixes three replay commands while explicitly recording that regression has
+not run on a frozen build. The Monday asynchronous review compares this with
+the 0/5 private-control state and presents three recommendations without
+approval. Nine focused manifest/CLI/document checks and the full 523-test suite
+pass locally. Next: on the exact November 28 candidate, replay the manifest,
+review calculation/privacy defects and record only actual evidence; do not
+activate the freeze or acceptance by date.
+
 November 15 evening: executed the elapsed November 14 M4 checkpoint without
 backdating it. The typed execution record binds the candidate, reports one day
 late, keeps the private environment at 0/5 and defers all five controls pending
@@ -274,14 +284,12 @@ See [September 22 delegated decisions](PROGRAM.md#delegated-project-decisions--s
 
 ## Next concrete increment
 
-On November 16 prepare the asynchronous concept/iteration review from the
-executed M4 checkpoint: demo the late deferral receipt, compare planned versus
-shipped, report QA and dependencies, and present no more than three recommended
-decisions. Record only an actual founder response as approval. Publish the
-missed public-evidence update as a separately dated catch-up using current
-primary sources; do not backdate it or resolve CRBS without issuer/exchange/
-class evidence. Do not infer acceptance, private-data, deployment, release or
-trading authority from a review packet or elapsed milestone.
+Replay the content-addressed manifest on the exact November 28 candidate and
+record the command exits, full-suite result and bundle digest. Review the open
+defect register for calculation, privacy, security and workflow defects; zero
+recorded entries is not a zero-defect conclusion. Freeze only after an actual
+founder disposition, and keep all private/live capabilities deferred until
+their independent evidence exists.
 
 October 11 evening: added a typed October 17 M2 milestone-readiness snapshot.
 It composes the 6/6 invented technical proof, public 8/8/0/0/0/0 gate trace and

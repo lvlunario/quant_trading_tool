@@ -16,6 +16,12 @@ Run the first pre-freeze workflow rehearsal:
 python3 -m atlas --m5-workflow-rehearsal-demo
 ```
 
+Generate the content-addressed pre-freeze regression manifest:
+
+```bash
+python3 -m atlas --m5-regression-manifest-demo
+```
+
 The command exits `3` because the candidate is not frozen or accepted. It binds
 the plan to the typed M4 asynchronous review, reports a 0/5 acceptance-gate
 state and exposes no source, account, holding, credential or approval
@@ -59,6 +65,14 @@ opens the [public-safe defect register](M5_DEFECT_REGISTER.md). The critical-
 defect status remains `unknown_pending_formal_review`, the exact candidate build
 is not frozen and the acceptance gate remains blocked. This is rehearsal
 evidence, not UAT or a zero-defect conclusion.
+
+The November 23 regression manifest hashes the complete safe candidate surface
+under `atlas/`, `fixtures/`, `preview/` and `tests/` plus five release and
+security runbooks. It fixes three replay commands and their expected exits
+without executing them, freezing a build or claiming a test result. Individual
+file paths and hashes remain inside the typed object; the public receipt exposes
+only aggregate coverage and the content-bundle digest. Symlinks, out-of-root
+files, oversized files and authority promotion fail closed.
 
 ## Stabilization policy
 

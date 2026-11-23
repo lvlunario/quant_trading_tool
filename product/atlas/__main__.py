@@ -79,6 +79,9 @@ def main():
     source.add_argument("--m5-workflow-rehearsal-demo",
                         action="store_true",
                         help="four-slice pre-freeze rehearsal; gate stays blocked")
+    source.add_argument("--m5-regression-manifest-demo",
+                        action="store_true",
+                        help="content-addressed M5 replay contract; not a freeze")
     source.add_argument("--preview-server", action="store_true",
                         help="localhost-only synthetic Options Lab")
     source.add_argument("--snapshot", type=Path)
@@ -102,7 +105,8 @@ def main():
               args.m4_checkpoint_execution_demo or
               args.m4_iteration_review_demo or
               args.m5_release_candidate_plan_demo or
-              args.m5_workflow_rehearsal_demo):
+              args.m5_workflow_rehearsal_demo or
+              args.m5_regression_manifest_demo):
             from .integrated_readiness import (
                 compose_integrated_prototype_readiness,
             )
@@ -115,6 +119,9 @@ def main():
             from .m4_iteration_review import prepare_m4_iteration_review
             from .m5_release_candidate import (
                 prepare_m5_release_candidate_plan,
+            )
+            from .m5_regression_manifest import (
+                build_m5_regression_manifest,
             )
             from .m5_workflow_rehearsal import (
                 execute_m5_workflow_rehearsal,
@@ -170,15 +177,22 @@ def main():
                 local_session=build_local_session_boundary(issued_at=now),
             )
             candidate = assess_m4_checkpoint_candidate(integrated, private)
-            if args.m5_workflow_rehearsal_demo:
+            if (args.m5_workflow_rehearsal_demo or
+                    args.m5_regression_manifest_demo):
                 execution = execute_m4_checkpoint(
                     candidate, executed_at=now)
                 review = prepare_m4_iteration_review(
                     execution, reviewed_at=now)
                 plan = prepare_m5_release_candidate_plan(
                     review, planned_at=now)
-                report = execute_m5_workflow_rehearsal(
-                    plan, integrated, executed_at=now).public_summary()
+                rehearsal = execute_m5_workflow_rehearsal(
+                    plan, integrated, executed_at=now)
+                if args.m5_regression_manifest_demo:
+                    report = build_m5_regression_manifest(
+                        rehearsal, Path(__file__).parents[1],
+                        generated_at=now).public_summary()
+                else:
+                    report = rehearsal.public_summary()
             elif args.m5_release_candidate_plan_demo:
                 execution = execute_m4_checkpoint(
                     candidate, executed_at=now)

@@ -205,6 +205,30 @@ class CliTests(unittest.TestCase):
                          'gross_cumulative_return'):
             self.assertNotIn(excluded, run.stdout.lower())
 
+    def test_m5_regression_manifest_binds_without_freezing(self):
+        run = subprocess.run(
+            [sys.executable, '-m', 'atlas',
+             '--m5-regression-manifest-demo'],
+            capture_output=True, text=True)
+        self.assertEqual(run.returncode, 3)
+        report = json.loads(run.stdout)
+        self.assertEqual(
+            (report['receipt_state'], report['status'],
+             report['regression_contract']['command_count']),
+            ('pre_freeze_regression_manifest', 'blocked', 3))
+        self.assertTrue(report['source_bundle']['content_addressed'])
+        self.assertGreater(report['source_bundle']['file_count'], 100)
+        self.assertTrue(report['regression_contract']['ready_for_replay'])
+        self.assertFalse(report['regression_contract']['execution_recorded'])
+        self.assertFalse(report['candidate_gate']['ready'])
+        self.assertTrue(report['candidate_gate']['manifest_only'])
+        self.assertFalse(report['milestone_acceptance_recorded'])
+        self.assertFalse(report['release_authorized'])
+        for excluded in ('rehearsal_sha256', 'manifest_sha256', 'account_id',
+                         'credential', 'source_uri', 'reserved_cash',
+                         'gross_cumulative_return'):
+            self.assertNotIn(excluded, run.stdout.lower())
+
     def test_research_demo_runs_combined_synthetic_gate(self):
         run = subprocess.run([sys.executable, '-m', 'atlas', '--research-demo'],
                              capture_output=True, text=True)

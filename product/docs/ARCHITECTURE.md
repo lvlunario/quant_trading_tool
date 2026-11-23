@@ -1,5 +1,15 @@
 # Architecture and decisions
 
+November 23 M5 regression-manifest boundary:
+`build_m5_regression_manifest` accepts only the typed blocked workflow
+rehearsal, an aware post-rehearsal timestamp and a local product root. It
+content-addresses the allowlisted source, fixture, preview and test trees plus
+five fixed release/security runbooks. Symlinks, traversal, missing roots,
+oversized files and changed bytes fail or change the bundle identity. The
+public receipt exposes aggregate coverage, one bundle digest and three exact
+replay commands; it records no execution, freeze, acceptance, deployment,
+private-data, release or real-money authority.
+
 November 16 M4 asynchronous review boundary:
 `prepare_m4_iteration_review` accepts only the typed checkpoint execution and
 an aware review time on or after the Manila review date. It verifies the bound,
